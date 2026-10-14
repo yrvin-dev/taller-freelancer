@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/broadsheet-0874cb83-2c80-4afb-991a-e99750c5bdb4/styles.css">
+  <script src="_ds/broadsheet-0874cb83-2c80-4afb-991a-e99750c5bdb4/_ds_bundle.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css">
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; }
+    i.fi { display: inline-flex; line-height: 1; }
+    a { color: var(--color-accent-700); }
+    a:hover { color: var(--color-accent); }
+    [data-theme] { --radius-sm: 6px; --radius-md: 12px; --radius-lg: 20px; }
+    [data-theme="light"] {
+      --color-bg: #cdd5df; --color-surface: #ffffff; --color-text: #2C4059;
+      --color-divider: color-mix(in srgb, #2C4059 14%, transparent);
+      --color-neutral-100: #eef1f5; --color-neutral-200: #dde3ea; --color-neutral-300: #c2ccd8; --color-neutral-400: #9aa8b9; --color-neutral-500: #77879b; --color-neutral-600: #5c6d82; --color-neutral-700: #4a5a6f; --color-neutral-800: #36475e; --color-neutral-900: #2C4059;
+      --color-process-yellow: #FFD461;
+      --shadow-sm: 0 12px 28px -6px rgba(44, 64, 89, .28), 0 3px 8px rgba(44, 64, 89, .10);
+      --shadow-md: 0 18px 38px -8px rgba(44, 64, 89, .34), 0 4px 10px rgba(44, 64, 89, .12);
+      --shadow-lg: 0 26px 56px -10px rgba(44, 64, 89, .40), 0 6px 14px rgba(44, 64, 89, .14);
+      --color-accent: #EF7B3E; --color-accent-2: #EA5455;
+      --color-accent-100: #fff0e6; --color-accent-200: #ffd9c2; --color-accent-300: #f9b48c; --color-accent-400: #f4955f; --color-accent-500: #EF7B3E; --color-accent-600: #d4622a; --color-accent-700: #a84a1d; --color-accent-800: #7a3515; --color-accent-900: #4d220e;
+      --color-accent-2-100: #fdeaea; --color-accent-2-200: #f9cccc; --color-accent-2-300: #f3a2a2; --color-accent-2-400: #ee7778; --color-accent-2-500: #EA5455; --color-accent-2-600: #c93d3e; --color-accent-2-700: #9e2e2f; --color-accent-2-800: #702122; --color-accent-2-900: #451415;
+    }
+    [data-theme] .tag { border-radius: 999px; }
+    [data-theme="light"][data-bg="arena"] { --color-bg: #efe4d2; }
+    [data-theme="dark"][data-bg="arena"] { --color-bg: #1d1a17; --color-surface: #2b2621; }
+    [data-theme="light"][data-bg="salvia"] { --color-bg: #cfdcd6; }
+    [data-theme="dark"][data-bg="salvia"] { --color-bg: #121c1b; --color-surface: #1e2c2a; }
+    [data-theme] .card { box-shadow: var(--shadow-sm); border: 0; }
+    [data-theme] .btn-primary { color: #16202e; font-weight: 700; }
+    [data-theme="dark"] {
+      --color-bg: #18222f; --color-surface: #2C4059; --color-text: #f4efe7;
+      --color-accent: #EF7B3E; --color-accent-2: #EA5455; --color-process-yellow: #FFD461;
+      --color-divider: color-mix(in srgb, #f4efe7 16%, transparent);
+      --color-neutral-100: #22313f; --color-neutral-200: #34485f; --color-neutral-300: #4a5f77; --color-neutral-400: #66798f; --color-neutral-500: #8595a8; --color-neutral-600: #a6b3c2; --color-neutral-700: #c7d0da; --color-neutral-800: #e2e7ec; --color-neutral-900: #f6f8fa;
+      --color-accent-100: #4a2c1c; --color-accent-200: #6b3a20; --color-accent-300: #94502a; --color-accent-400: #c46634; --color-accent-500: #EF7B3E; --color-accent-600: #f4955f; --color-accent-700: #f9b48c; --color-accent-800: #ffd9c2; --color-accent-900: #fff0e6;
+      --color-accent-2-100: #4a2229; --color-accent-2-200: #6a2a30; --color-accent-2-300: #9e3a3c; --color-accent-2-400: #d44a4b; --color-accent-2-500: #EA5455; --color-accent-2-600: #f07f80; --color-accent-2-700: #f6aaab; --color-accent-2-800: #fbd3d3; --color-accent-2-900: #fdeaea;
+      --shadow-sm: 0 12px 30px -6px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05);
+      --shadow-md: 0 18px 40px -8px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06);
+      --shadow-lg: 0 26px 56px -10px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.07);
+      color-scheme: dark;
+    }
+    [data-theme="dark"] .halftone::after { mix-blend-mode: overlay; }
+    [data-accent="terracota"] { --color-accent: #D9643A; --color-accent-100: #fbe9e1; --color-accent-200: #f4cdbd; --color-accent-300: #e9a283; --color-accent-400: #e0815b; --color-accent-500: #D9643A; --color-accent-600: #bd5129; --color-accent-700: #96401f; --color-accent-800: #6c2e16; }
+    [data-theme="dark"][data-accent="terracota"] { --color-accent-100: #4a271a; --color-accent-200: #6b3521; --color-accent-600: #e0815b; --color-accent-700: #e9a283; --color-accent-800: #f4cdbd; }
+    [data-accent="mandarina"] { --color-accent: #FF8F2E; --color-accent-100: #fff1e2; --color-accent-200: #ffdab5; --color-accent-300: #ffbd7e; --color-accent-400: #ffa452; --color-accent-500: #FF8F2E; --color-accent-600: #ec7a14; --color-accent-700: #b25a0c; --color-accent-800: #7d3f08; }
+    [data-theme="dark"][data-accent="mandarina"] { --color-accent-100: #4a2d12; --color-accent-200: #6b3f17; --color-accent-600: #ffa452; --color-accent-700: #ffbd7e; --color-accent-800: #ffdab5; }
+    [data-accent="azul"] { --color-accent: #3D9BE9; --color-accent-100: #e6f2fd; --color-accent-200: #c4e0fa; --color-accent-300: #93c6f4; --color-accent-400: #64b0ef; --color-accent-500: #3D9BE9; --color-accent-600: #2283d6; --color-accent-700: #1a66a8; --color-accent-800: #134a7a; }
+    [data-theme="dark"][data-accent="azul"] { --color-accent-100: #12304d; --color-accent-200: #17426b; --color-accent-600: #64b0ef; --color-accent-700: #93c6f4; --color-accent-800: #c4e0fa; }
+    [data-accent="turquesa"] { --color-accent: #2BB3A8; --color-accent-100: #e2f6f4; --color-accent-200: #bce9e5; --color-accent-300: #86d6cf; --color-accent-400: #55c4bb; --color-accent-500: #2BB3A8; --color-accent-600: #1f968c; --color-accent-700: #18756d; --color-accent-800: #11534e; }
+    [data-theme="dark"][data-accent="turquesa"] { --color-accent-100: #0f3a37; --color-accent-200: #14504b; --color-accent-600: #55c4bb; --color-accent-700: #86d6cf; --color-accent-800: #bce9e5; }
+  </style>
+</helmet>
+<div data-theme="{{ theme }}" data-bg="{{ bgVariant }}" data-accent="{{ accentVariant }}" style="min-height: 100vh; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); display: flex; align-items: flex-start;">
+  <sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="00 Inicio de sesión" style="flex: 1; min-height: 100vh; display: flex; flex-wrap: wrap;">
+      <div style="flex: 1 1 420px; min-height: 320px; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-8); padding: clamp(28px, 5vw, 64px); background: linear-gradient(150deg, #2C4059 0%, #2C4059 45%, var(--color-accent) 140%); color: #fff;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: rgba(255,255,255,.12);"><i class="fi fi-sr-fire-flame-curved" style="font-size: 22px; color: #FFD461;"></i></span>
+          <span style="font-family: 'Nunito', var(--font-body); display: flex; flex-direction: column; line-height: 1;"><span style="font-weight: 800; font-size: 22px;">Taller</span><span style="font-weight: 700; font-size: 10px; letter-spacing: 0.24em; color: #FFD461; margin-top: 3px;">FREELANCER</span></span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: var(--space-3); max-width: 520px;">
+          <h1 style="margin: 0; font-size: clamp(34px, 4.4vw, 54px); line-height: 1.05; color: #fff; text-wrap: balance;">Cada proyecto de cliente, ordenado en una sola ficha.</h1>
+          <p style="margin: 0; font-size: 18px; line-height: 1.5; color: rgba(255,255,255,.82); text-wrap: pretty;">Stack, ruta local, accesos, CMS, pagos y vencimientos de todos tus clientes, en tu propio espacio de trabajo.</p>
+        </div>
+        <span style="font-size: 13px; color: rgba(255,255,255,.6);">Cada cuenta ve solo sus proyectos.</span>
+      </div>
+      <div style="flex: 1 1 380px; display: grid; place-items: center; padding: clamp(28px, 5vw, 64px); background: var(--color-bg);">
+        <div style="width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: var(--space-4);">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <h2 style="margin: 0; font-size: 30px;">Inicia sesión</h2>
+            <p style="margin: 0; color: var(--color-neutral-700);">Entra con tu cuenta de Google. Si es tu primera vez, se crea tu espacio automáticamente.</p>
+          </div>
+          <button onClick="{{ openChooser }}" style="display: flex; align-items: center; justify-content: center; gap: 12px; height: 54px; border: 0; border-radius: 999px; background: var(--color-surface); color: var(--color-text); font: inherit; font-family: 'Nunito', var(--font-body); font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: var(--shadow-sm);" style-hover="box-shadow: var(--shadow-md); transform: translateY(-1px);">
+            <i class="fi fi-brands-google" style="font-size: 20px; color: #EA5455;"></i>Continuar con Google
+          </button>
+          <span style="font-size: 12px; color: var(--color-neutral-700); text-wrap: pretty;">Solo usamos tu nombre, correo y foto de perfil para identificar tu cuenta.</span>
+        </div>
+      </div>
+      <sc-if value="{{ chooser }}" hint-placeholder-val="{{ false }}">
+        <div class="dialog-backdrop" onClick="{{ closeChooser }}" style="position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px;">
+          <div class="dialog" onClick="{{ stop }}" style="border-radius: 24px; max-width: 420px; width: 100%; gap: var(--space-3);">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <i class="fi fi-brands-google" style="font-size: 18px; color: #EA5455;"></i>
+              <span style="font-size: 14px; color: var(--color-neutral-700);">Google</span>
+            </div>
+            <h3 class="dialog-title" style="margin: 0;">Elige una cuenta</h3>
+            <p style="margin: 0; font-size: 14px; color: var(--color-neutral-700);">para continuar a Taller Freelancer</p>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <sc-for list="{{ accounts }}" as="a" hint-placeholder-count="2">
+                <button onClick="{{ a.pick }}" style="display: flex; align-items: center; gap: 12px; padding: 10px; border: 0; border-radius: 14px; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer;" style-hover="background: color-mix(in srgb, var(--color-text) 6%, transparent);">
+                  <span style="width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; background: {{ a.color }}; color: #16202e; font-weight: 800;">{{ a.initials }}</span>
+                  <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3;">
+                    <span style="font-weight: 600;">{{ a.full }}</span>
+                    <span style="font-size: 13px; color: var(--color-neutral-700);">{{ a.email }}</span>
+                  </span>
+                  <sc-if value="{{ a.busy }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; color: var(--color-accent-700);">Entrando…</span></sc-if>
+                  <sc-if value="{{ a.idle }}" hint-placeholder-val="{{ true }}"><span style="font-size: 12px; color: var(--color-neutral-700);">{{ a.count }}</span></sc-if>
+                </button>
+              </sc-for>
+              <button onClick="{{ otherAccount }}" style="display: flex; align-items: center; gap: 12px; padding: 10px; border: 0; border-radius: 14px; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer;" style-hover="background: color-mix(in srgb, var(--color-text) 6%, transparent);">
+                <span style="width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--color-text) 8%, transparent);"><i class="fi fi-rr-user-add" style="font-size: 16px;"></i></span>
+                <span style="font-weight: 600;">Usar otra cuenta</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+        <div class="elev-lg" style="position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); background: var(--color-text); color: var(--color-bg); padding: 10px 18px; border-radius: var(--radius-lg); font-size: 14px; display: flex; align-items: center; gap: 8px; z-index: 50; max-width: calc(100vw - 32px);"><i class="fi fi-rr-info" style="font-size: 16px;"></i>{{ toast }}</div>
+      </sc-if>
+    </section>
+  </sc-if>
+  <sc-if value="{{ loggedIn }}" hint-placeholder-val="{{ true }}">
+
+  <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <aside data-screen-label="Barra lateral" style="font-family: 'Nunito', var(--font-body); width: {{ sideW }}; transition: width .5s cubic-bezier(.32,.72,0,1); will-change: width; overflow: hidden; flex: none; position: sticky; top: 0; margin: 0; height: 100vh; border-radius: 0 28px 28px 0; box-shadow: 5px 0 30px rgba(0,0,0,.08), var(--shadow-sm); display: flex; flex-direction: column; align-items: stretch; gap: var(--space-4); padding: 20px 14px; background: var(--color-surface);">
+      <div style="position: relative; display: flex; align-items: center; min-height: 44px; width: 212px;">
+        <div style="display: flex; align-items: center; gap: var(--space-2); white-space: nowrap; padding-left: 4px; pointer-events: {{ lblPe }}; opacity: {{ lblOp }}; transform: {{ lblTx }}; transition: {{ lblTr }};">
+          <i class="fi fi-rr-fire-flame-curved" style="font-size: 26px; color: var(--color-accent);"></i>
+          <span style="display: flex; flex-direction: column; line-height: 1;"><span style="font-weight: 800; font-size: 20px;">Taller</span><span style="font-weight: 700; font-size: 10px; letter-spacing: 0.22em; color: var(--color-accent-700); margin-top: 2px;">FREELANCER</span></span>
+        </div>
+        <button onClick="{{ toggleSide }}" title="{{ sideTitle }}" aria-label="{{ sideTitle }}" style="position: absolute; top: 0; left: {{ toggleLeft }}; transition: left .5s cubic-bezier(.32,.72,0,1); width: 48px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 22px; background: transparent; color: var(--color-text); cursor: pointer;" style-hover="background: color-mix(in srgb, var(--color-text) 7%, transparent);">
+          <i class="fi fi-rr-angle-left" style="grid-area: 1 / 1; font-size: 22px; opacity: {{ lblOp }}; transform: {{ chevRot }}; transition: opacity .25s ease, transform .4s cubic-bezier(.32,.72,0,1);"></i>
+          <i class="fi fi-rr-menu-burger" style="grid-area: 1 / 1; font-size: 22px; opacity: {{ burgerOp }}; transform: {{ burgerRot }}; transition: opacity .25s ease, transform .4s cubic-bezier(.32,.72,0,1);"></i>
+        </button>
+      </div>
+      <label style="position: relative; display: flex; align-items: center; height: 48px; flex: none; width: 212px;">
+        <button onClick="{{ openSearch }}" title="Buscar" aria-label="Buscar" style="position: absolute; left: 0; z-index: 1; width: 48px; height: 48px; display: grid; place-items: center; border: 0; border-radius: 50%; background: linear-gradient(135deg, #2C4059 0%, var(--color-accent) 100%); color: #fff; cursor: pointer; box-shadow: 0 6px 16px rgba(44, 64, 89, .35);" style-hover="filter: brightness(1.08);"><i class="fi fi-rr-search" style="font-size: 20px;"></i></button>
+        <input id="side-search" class="input" placeholder="Buscar…" value="{{ q }}" onChange="{{ onSearch }}" tabIndex="{{ lblTab }}" style="height: 48px; border-radius: 999px; padding-left: 58px; width: 100%; opacity: {{ lblOp }}; transition: {{ lblTr }};">
+      </label>
+      <nav style="display: flex; flex-direction: column; gap: 6px; margin-top: var(--space-2);">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+          <button onClick="{{ n.go }}" title="{{ n.label }}" style="display: flex; align-items: center; gap: var(--space-3); width: {{ navBtnW }}; transition: width .5s cubic-bezier(.32,.72,0,1), background .2s; height: 48px; white-space: nowrap; overflow: hidden; text-align: left; font: inherit; font-size: 15px; padding: 0 13px; border: 0; border-radius: 999px; cursor: pointer; background: {{ n.bg }}; color: {{ n.color }}; font-weight: {{ n.weight }};" style-hover="background: color-mix(in srgb, var(--color-accent) 10%, transparent); color: var(--color-accent-700);">
+            <i class="{{ n.iconCls }}" style="font-size: 22px; flex: none;"></i>
+            <span style="flex: 1; opacity: {{ lblOp }}; transform: {{ lblTx }}; transition: {{ lblTr }};">{{ n.label }}</span>
+            <sc-if value="{{ n.hasBadge }}" hint-placeholder-val="{{ false }}">
+              <span class="tag tag-accent" style="padding: 1px 8px; opacity: {{ lblOp }}; transition: {{ lblTr }};">{{ n.badge }}</span>
+            </sc-if>
+          </button>
+        </sc-for>
+      </nav>
+      <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; width: 212px; padding: 6px 4px 6px 6px; border-radius: 18px; background: color-mix(in srgb, var(--color-text) 5%, transparent); white-space: nowrap; overflow: hidden; max-height: {{ userMaxH }}; opacity: {{ lblOp }}; pointer-events: {{ lblPe }}; transition: max-height .5s cubic-bezier(.32,.72,0,1), {{ lblTr }};">
+        <span style="width: 36px; height: 36px; flex: none; border-radius: 50%; display: grid; place-items: center; background: {{ userColor }}; color: #16202e; font-weight: 800; font-size: 14px;">{{ initials }}</span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.2;">
+          <span style="font-weight: 700; font-size: 14px; overflow: hidden; text-overflow: ellipsis;">{{ userFull }}</span>
+          <span style="font-size: 11px; color: var(--color-neutral-700); overflow: hidden; text-overflow: ellipsis;">{{ userEmail }}</span>
+        </span>
+        <button onClick="{{ logout }}" title="Cerrar sesión" aria-label="Cerrar sesión" style="width: 34px; height: 34px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--color-neutral-700); cursor: pointer;" style-hover="background: color-mix(in srgb, var(--color-accent-2) 14%, transparent); color: var(--color-accent-2-700);"><i class="fi fi-rr-sign-out-alt" style="font-size: 16px;"></i></button>
+      </div>
+      <button onClick="{{ toggleTheme }}" title="Cambiar tema" style="display: flex; align-items: center; gap: var(--space-3); width: {{ navBtnW }}; transition: width .5s cubic-bezier(.32,.72,0,1); height: 48px; padding: 0 5px; overflow: hidden; white-space: nowrap; font: inherit; font-size: 15px; border: 0; border-radius: 999px; background: transparent; color: var(--color-neutral-700); cursor: pointer;" style-hover="background: color-mix(in srgb, var(--color-text) 7%, transparent); color: var(--color-text);">
+        <svg width="38" height="22" viewBox="0 0 52 30" style="flex: none;"><sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><rect x="1.5" y="1.5" width="49" height="27" rx="13.5" fill="#4b5a8c" stroke="#111111" stroke-width="2"></rect><circle cx="15" cy="15" r="10.5" fill="#6f7fb3" stroke="#111111" stroke-width="2"></circle><path d="M16.5 9.6a5.6 5.6 0 1 0 0 10.8a4.6 4.6 0 0 1 0-10.8z" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round"></path><circle cx="37" cy="15" r="2.8" fill="none" stroke="#ffffff" stroke-width="1.8"></circle><path d="M37 9.6v1.3M37 19.1v1.3M31.6 15h1.3M41.1 15h1.3M33.2 11.2l.9.9M39.9 17.9l.9.9M33.2 18.8l.9-.9M39.9 12.1l.9-.9" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path></sc-if><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><rect x="1.5" y="1.5" width="49" height="27" rx="13.5" fill="#ffd9a8" stroke="#111111" stroke-width="2"></rect><path d="M16.5 9.6a5.6 5.6 0 1 0 0 10.8a4.6 4.6 0 0 1 0-10.8z" fill="none" stroke="#c98a3c" stroke-width="2" stroke-linejoin="round"></path><circle cx="37" cy="15" r="10.5" fill="#f0a24a" stroke="#111111" stroke-width="2"></circle><circle cx="37" cy="15" r="2.8" fill="none" stroke="#ffffff" stroke-width="1.9"></circle><path d="M37 9.6v1.3M37 19.1v1.3M31.6 15h1.3M41.1 15h1.3M33.2 11.2l.9.9M39.9 17.9l.9.9M33.2 18.8l.9-.9M39.9 12.1l.9-.9" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round"></path></sc-if></svg>
+        <span style="opacity: {{ lblOp }}; transition: {{ lblTr }};">{{ themeLabel }}</span>
+      </button>
+    </aside>
+  </sc-if>
+
+  <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; padding: {{ mainPad }};">
+
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <header style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4);">
+      <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+        <span style="width: 36px; height: 36px; flex: none; border-radius: var(--radius-md); background: linear-gradient(135deg, #2C4059, var(--color-accent)); color: #fff; display: grid; place-items: center;"><i class="fi fi-rr-fire-flame-curved" style="font-size: 19px;"></i></span>
+      </sc-if>
+      <div style="margin-left: auto; display: flex; align-items: center; gap: var(--space-2);">
+
+      </div>
+    </header>
+    </sc-if>
+
+    <!-- INICIO -->
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="01 Inicio" style="display: flex; flex-direction: column; gap: var(--space-8);">
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4);">
+          <div style="flex: 1 1 320px;">
+                        <h1 style="margin: 4px 0 6px;">Buenos días, {{ userName }}</h1>
+            <p style="margin: 0; color: var(--color-neutral-700); text-wrap: pretty;">{{ homeSummary }}</p>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2);">
+            <button class="btn btn-primary" style="white-space: nowrap; height: 38px; padding: 0 14px; font-size: 14px;" onClick="{{ newProject }}"><i class="fi fi-rr-plus" style="font-size: 13px;"></i>Nuevo proyecto</button>
+                        <button class="btn btn-ghost btn-icon" style="white-space: nowrap; width: 62px; height: 48px; padding: 0; flex: none; border: 0; background: transparent; box-shadow: none;" onClick="{{ toggleTheme }}" title="Cambiar tema"><svg width="54" height="31" viewBox="0 0 52 30" style="flex: none;"><sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><rect x="1.5" y="1.5" width="49" height="27" rx="13.5" fill="#4b5a8c" stroke="#111111" stroke-width="2"></rect><circle cx="15" cy="15" r="10.5" fill="#6f7fb3" stroke="#111111" stroke-width="2"></circle><path d="M16.5 9.6a5.6 5.6 0 1 0 0 10.8a4.6 4.6 0 0 1 0-10.8z" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round"></path><circle cx="37" cy="15" r="2.8" fill="none" stroke="#ffffff" stroke-width="1.8"></circle><path d="M37 9.6v1.3M37 19.1v1.3M31.6 15h1.3M41.1 15h1.3M33.2 11.2l.9.9M39.9 17.9l.9.9M33.2 18.8l.9-.9M39.9 12.1l.9-.9" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path></sc-if><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><rect x="1.5" y="1.5" width="49" height="27" rx="13.5" fill="#ffd9a8" stroke="#111111" stroke-width="2"></rect><path d="M16.5 9.6a5.6 5.6 0 1 0 0 10.8a4.6 4.6 0 0 1 0-10.8z" fill="none" stroke="#c98a3c" stroke-width="2" stroke-linejoin="round"></path><circle cx="37" cy="15" r="10.5" fill="#f0a24a" stroke="#111111" stroke-width="2"></circle><circle cx="37" cy="15" r="2.8" fill="none" stroke="#ffffff" stroke-width="1.9"></circle><path d="M37 9.6v1.3M37 19.1v1.3M31.6 15h1.3M41.1 15h1.3M33.2 11.2l.9.9M39.9 17.9l.9.9M33.2 18.8l.9-.9M39.9 12.1l.9-.9" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round"></path></sc-if></svg></button>
+          </div>
+        </div>
+
+        <sc-if value="{{ noProjects }}" hint-placeholder-val="{{ false }}">
+          <div class="card" style="padding: clamp(24px, 4vw, 48px); gap: var(--space-3); border-radius: 28px; align-items: flex-start; max-width: 720px;">
+            <span style="width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: var(--color-accent-100);"><i class="fi fi-rr-add-folder" style="font-size: 24px; color: var(--color-accent-700);"></i></span>
+            <h3 style="margin: 0;">Tu espacio está listo</h3>
+            <p style="margin: 0; color: var(--color-neutral-700); text-wrap: pretty;">Registra tu primer proyecto con su cliente, stack, accesos y pagos. Las entregas, vencimientos y saldos aparecerán aquí.</p>
+            <button class="btn btn-primary" style="white-space: nowrap; height: 48px; padding: 0 20px;" onClick="{{ newProject }}"><i class="fi fi-rr-plus" style="font-size: 16px;"></i>Crear mi primer proyecto</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasProjects }}" hint-placeholder-val="{{ true }}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: var(--space-4);">
+          <sc-for list="{{ summary }}" as="c" hint-placeholder-count="3">
+            <div class="card" style="padding: {{ sumPad }}; gap: {{ sumGap }}; border-radius: var(--radius-lg); background: {{ c.bg }}; color: {{ c.fg }}; box-shadow: var(--shadow-sm);">
+              <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <span style="width: {{ sumIcon }}; height: {{ sumIcon }}; border-radius: 50%; display: grid; place-items: center; background: {{ c.iconBg }};"><i class="{{ c.icon }}" style="font-size: {{ sumIconFs }}; color: {{ c.iconColor }};"></i></span>
+                <span style="font-family: var(--font-heading); font-weight: 600; font-size: 16px; flex: 1;">{{ c.title }}</span>
+                <span style="font-size: 12px; color: {{ c.muted }};">{{ c.window }}</span>
+              </div>
+              <div style="display: flex; align-items: baseline; gap: var(--space-2);">
+                <span style="font-family: var(--font-heading); font-weight: 600; font-size: {{ sumBig }}; line-height: 1; letter-spacing: -0.03em;">{{ c.big }}</span>
+                <span style="font-size: 13px; color: {{ c.muted }};">{{ c.sub }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <sc-for list="{{ c.items }}" as="it" hint-placeholder-count="3">
+                  <button onClick="{{ it.open }}" style="display: flex; align-items: center; gap: var(--space-2); font: inherit; text-align: left; color: inherit; background: transparent; border: 0; padding: {{ sumItemPad }}; margin: 0 -6px; border-radius: var(--radius-md); cursor: pointer;" style-hover="background: color-mix(in srgb, currentColor 10%, transparent);">
+                    <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3;">
+                      <span style="font-size: 14px; font-weight: 600;">{{ it.primary }}</span>
+                      <sc-if value="{{ it.secondary }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; color: {{ c.muted }};">{{ it.secondary }}</span></sc-if>
+                    </span>
+                    <span class="{{ it.rightClass }}" style="white-space: nowrap;">{{ it.right }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+          <div style="display: flex; align-items: baseline; gap: var(--space-3);">
+            <h3 style="margin: 0;">Proyectos recientes</h3>
+            <button class="btn btn-ghost" style="white-space: nowrap;" onClick="{{ goProjects }}">Ver todos</button>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <sc-for list="{{ recent }}" as="p" hint-placeholder-count="4">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); padding: var(--space-3) 0;">
+                <div style="width: {{ recentThumbW }}; height: {{ recentThumbH }}; flex: none; border-radius: var(--radius-md); background: var(--color-neutral-200);">
+                  <image-slot style="overflow: hidden; border-radius: inherit;" id="{{ p.thumbId }}" src="{{ p.thumbSrc }}" shape="rect" placeholder="Miniatura"></image-slot>
+                </div>
+                <button onClick="{{ p.open }}" style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; font: inherit; text-align: left; color: inherit; background: transparent; border: 0; padding: 0; cursor: pointer; line-height: 1.3;">
+                  <span style="font-family: var(--font-heading); font-weight: 600; font-size: 17px;">{{ p.name }}</span>
+                  <span style="font-size: 13px; color: var(--color-neutral-700);">{{ p.clientName }} · {{ p.type }} · {{ p.code }}</span>
+                </button>
+                <span class="{{ p.statusClass }}" style="gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: {{ p.dot }};"></span>{{ p.status }}</span>
+                <span style="font-size: 13px; color: var(--color-neutral-700); min-width: 130px;">Actualizado {{ p.updatedLabel }}</span>
+                <button class="btn btn-ghost btn-icon" style="white-space: nowrap;" onClick="{{ p.open }}" title="Abrir ficha"><i class="fi fi-rr-arrow-right" style="font-size: 18px;"></i></button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <!-- PROYECTOS -->
+    <sc-if value="{{ isProjects }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="02 Proyectos" style="display: flex; flex-direction: column; gap: var(--space-6);">
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4);">
+          <div style="flex: 1 1 280px;">
+            <h1 style="margin: 0 0 6px;">Proyectos</h1>
+            <p style="margin: 0; color: var(--color-neutral-700);">{{ countLabel }}</p>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center;">
+            <div class="seg">
+              <label class="seg-opt" style="white-space: nowrap;"><input type="radio" name="view" checked="{{ isCards }}" onChange="{{ setCards }}"><i class="fi fi-rr-apps"></i>Tarjetas</label>
+              <label class="seg-opt" style="white-space: nowrap;"><input type="radio" name="view" checked="{{ isTable }}" onChange="{{ setTable }}"><i class="fi fi-rr-list"></i>Tabla</label>
+            </div>
+            <button class="btn btn-primary" style="white-space: nowrap; height: 38px; padding: 0 14px; font-size: 14px;" onClick="{{ newProject }}"><i class="fi fi-rr-plus" style="font-size: 13px;"></i>Nuevo proyecto</button>
+            <button class="btn btn-ghost btn-icon" style="white-space: nowrap; width: 62px; height: 48px; padding: 0; flex: none; border: 0; background: transparent; box-shadow: none;" onClick="{{ toggleTheme }}" title="Cambiar tema"><svg width="54" height="31" viewBox="0 0 52 30" style="flex: none;"><sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><rect x="1.5" y="1.5" width="49" height="27" rx="13.5" fill="#4b5a8c" stroke="#111111" stroke-width="2"></rect><circle cx="15" cy="15" r="10.5" fill="#6f7fb3" stroke="#111111" stroke-width="2"></circle><path d="M16.5 9.6a5.6 5.6 0 1 0 0 10.8a4.6 4.6 0 0 1 0-10.8z" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round"></path><circle cx="37" cy="15" r="2.8" fill="none" stroke="#ffffff" stroke-width="1.8"></circle><path d="M37 9.6v1.3M37 19.1v1.3M31.6 15h1.3M41.1 15h1.3M33.2 11.2l.9.9M39.9 17.9l.9.9M33.2 18.8l.9-.9M39.9 12.1l.9-.9" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path></sc-if><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><rect x="1.5" y="1.5" width="49" height="27" rx="13.5" fill="#ffd9a8" stroke="#111111" stroke-width="2"></rect><path d="M16.5 9.6a5.6 5.6 0 1 0 0 10.8a4.6 4.6 0 0 1 0-10.8z" fill="none" stroke="#c98a3c" stroke-width="2" stroke-linejoin="round"></path><circle cx="37" cy="15" r="10.5" fill="#f0a24a" stroke="#111111" stroke-width="2"></circle><circle cx="37" cy="15" r="2.8" fill="none" stroke="#ffffff" stroke-width="1.9"></circle><path d="M37 9.6v1.3M37 19.1v1.3M31.6 15h1.3M41.1 15h1.3M33.2 11.2l.9.9M39.9 17.9l.9.9M33.2 18.8l.9-.9M39.9 12.1l.9-.9" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round"></path></sc-if></svg></button>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-3);">
+            <div class="field" style="flex: 0 1 220px;">
+              <label>Estado</label>
+              <select class="input" value="{{ fStatus }}" onChange="{{ onStatus }}">
+                <sc-for list="{{ statusChips }}" as="s" hint-placeholder-count="1"><option value="{{ s.label }}">{{ s.optLabel }}</option></sc-for>
+              </select>
+            </div>
+            <div class="field" style="flex: 0 1 220px;">
+              <label>Stack</label>
+              <select class="input" value="{{ fStack }}" onChange="{{ onStack }}">
+                <sc-for list="{{ stackOptions }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+            </div>
+            <div class="field" style="flex: 0 1 220px;">
+              <label>CMS</label>
+              <select class="input" value="{{ fCms }}" onChange="{{ onCms }}">
+                <sc-for list="{{ cmsOptions }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+            </div>
+            <sc-if value="{{ hasFilters }}" hint-placeholder-val="{{ false }}">
+              <button class="btn btn-ghost" onClick="{{ clearFilters }}" style="white-space: nowrap; align-self: flex-end; margin-bottom: 2px;"><i class="fi fi-rr-cross"></i>Limpiar filtros</button>
+            </sc-if>
+          </div>
+        </div>
+
+        <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: var(--space-8) 0; display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start;">
+            <h3 style="margin: 0;">Ningún proyecto coincide</h3>
+            <p style="margin: 0; color: var(--color-neutral-700);">Prueba con otro término o quita algún filtro.</p>
+            <button class="btn btn-secondary" style="white-space: nowrap;" onClick="{{ clearFilters }}">Limpiar filtros</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showCards }}" hint-placeholder-val="{{ true }}">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-6);">
+            <sc-for list="{{ filtered }}" as="p" hint-placeholder-count="6">
+              <article class="card elev-sm" style="padding: 0; gap: 0; overflow: hidden; border-radius: 28px; background: var(--color-surface);">
+                <div style="aspect-ratio: 16 / 10; position: relative; background: var(--color-neutral-200);">
+                  <image-slot style="overflow: hidden;" id="{{ p.thumbId }}" src="{{ p.thumbSrc }}" shape="rect" placeholder="Arrastra una captura del sitio"></image-slot>
+                </div>
+                <button onClick="{{ p.open }}" style="display: flex; flex-direction: column; gap: 10px; font: inherit; text-align: left; color: inherit; background: color-mix(in srgb, var(--color-neutral-200) 70%, var(--color-surface)); border: 0; padding: 22px 24px 18px; cursor: pointer; flex: 1;" style-hover="background: color-mix(in srgb, var(--color-neutral-300) 60%, var(--color-surface));">
+                  <span style="display: flex; flex-direction: column; gap: 4px;">
+                    <span style="font-family: 'Nunito', var(--font-body); font-weight: 800; font-size: 26px; line-height: 1.05; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance;">{{ p.name }}</span>
+                    <span style="font-family: 'Nunito', var(--font-body); font-size: 18px; color: var(--color-neutral-600);">{{ p.type }} · {{ p.cms }}</span>
+                  </span>
+                  <span style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px;">
+                    <sc-for list="{{ p.chipObjs }}" as="t" hint-placeholder-count="3"><span style="font-family: 'Nunito', var(--font-body); font-weight: 600; font-size: 14px; padding: 6px 14px; border-radius: 999px; background: {{ t.bg }}; box-shadow: inset 0 0 0 1.5px {{ t.bd }}; color: var(--color-text); white-space: nowrap;">{{ t.label }}</span></sc-for>
+                  </span>
+                  <span style="display: flex; align-items: center; gap: var(--space-2); margin-top: auto; padding-top: 6px; font-size: 13px; color: var(--color-neutral-700);">
+                    <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ p.clientName }}</span>
+                    <span class="{{ p.statusClass }}" style="gap: 6px; white-space: nowrap;"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{ p.dot }};"></span>{{ p.status }}</span>
+                  </span>
+                </button>
+              </article>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showTable }}" hint-placeholder-val="{{ false }}">
+          <div style="overflow-x: auto;">
+            <table class="table" style="min-width: 860px;">
+              <thead>
+                <tr><th>Proyecto</th><th>Cliente</th><th>Tipo</th><th>Estado</th><th>Stack</th><th>CMS</th><th>Entrega</th><th></th></tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ filtered }}" as="p" hint-placeholder-count="6">
+                  <tr>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: var(--space-2);">
+                        <div style="width: {{ tableThumbW }}; height: {{ tableThumbH }}; flex: none; background: var(--color-neutral-200); border-radius: var(--radius-sm); overflow: hidden;"><image-slot style="overflow: hidden; border-radius: inherit;" id="{{ p.thumbId }}" src="{{ p.thumbSrc }}" shape="rect" placeholder=" "></image-slot></div>
+                        <div style="display: flex; flex-direction: column; line-height: 1.25;">
+                          <span style="font-weight: 600;">{{ p.name }}</span>
+                          <span style="font-size: 12px; color: var(--color-neutral-700);">{{ p.code }}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ p.clientName }}</td>
+                    <td>{{ p.type }}</td>
+                    <td><span class="{{ p.statusClass }}" style="gap: 6px; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: {{ p.dot }};"></span>{{ p.status }}</span></td>
+                    <td><div style="display: flex; flex-wrap: wrap; gap: 4px;"><sc-for list="{{ p.chips }}" as="t" hint-placeholder-count="2"><span class="tag tag-neutral">{{ t }}</span></sc-for></div></td>
+                    <td>{{ p.cms }}</td>
+                    <td style="white-space: nowrap;">{{ p.deliveryLabel }}</td>
+                    <td><button class="btn btn-ghost" style="white-space: nowrap;" onClick="{{ p.open }}">Abrir</button></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <!-- FICHA -->
+    <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="03 Ficha del proyecto" style="display: flex; flex-direction: column; gap: var(--space-6);">
+        <div style="display: flex; align-items: center; gap: var(--space-2);">
+          <button class="btn btn-ghost" style="white-space: nowrap;" onClick="{{ goProjects }}"><i class="fi fi-rr-arrow-left"></i>Proyectos</button>
+          <span style="margin-left: auto;"></span>
+          <button class="btn btn-ghost" style="white-space: nowrap; color: var(--color-accent-2-700);" onClick="{{ askDelete }}"><i class="fi fi-rr-trash"></i>Eliminar</button>
+          <button class="btn btn-secondary" style="white-space: nowrap;" onClick="{{ editProject }}"><i class="fi fi-rr-pencil"></i>Editar</button>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-end;">
+          <div class="elev-md" style="flex: 0 1 400px; min-width: 240px; aspect-ratio: 16 / 10; position: relative; background: var(--color-neutral-200); border-radius: var(--radius-lg);">
+            <image-slot style="overflow: hidden; border-radius: inherit;" id="{{ cur.thumbId }}" src="{{ cur.thumbSrc }}" shape="rect" placeholder="Arrastra una captura del sitio"></image-slot>
+          </div>
+          <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: var(--space-2);">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2);">
+              <span style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent-700);">{{ cur.code }}</span>
+              <span class="tag tag-neutral">{{ cur.type }}</span>
+              <span class="{{ cur.statusClass }}" style="gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: {{ cur.dot }};"></span>{{ cur.status }}</span>
+            </div>
+            <h1 style="margin: 0; font-size: 46px;">{{ cur.name }}</h1>
+            <span style="color: var(--color-neutral-700);">{{ cur.clientName }} · {{ cur.clientCountry }} · Entrega {{ cur.deliveryLabel }}</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: var(--space-1); overflow-x: auto; box-shadow: inset 0 -1px 0 var(--color-divider);">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="7">
+            <button onClick="{{ t.pick }}" style="font: inherit; font-size: 15px; white-space: nowrap; padding: var(--space-2) var(--space-3); background: transparent; border: 0; cursor: pointer; color: {{ t.color }}; font-weight: {{ t.weight }}; box-shadow: {{ t.bar }};" style-hover="color: var(--color-accent);">{{ t.label }}</button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ tabResumen }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+            <p style="margin: 0; font-size: 19px; line-height: 1.5; max-width: 62ch; text-wrap: pretty;">{{ cur.desc }}</p>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+              <a class="btn btn-primary" style="white-space: nowrap;" href="{{ cur.siteHref }}" target="_blank"><i class="fi fi-rr-globe"></i>Abrir sitio</a>
+              <a class="btn btn-secondary" style="white-space: nowrap;" href="{{ cur.cmsHref }}" target="_blank"><i class="fi fi-rr-edit"></i>Abrir CMS</a>
+              <a class="btn btn-secondary" style="white-space: nowrap;" href="{{ cur.designHref }}" target="_blank"><i class="fi fi-rr-pen-nib"></i>Abrir diseño</a>
+              <button class="btn btn-secondary" style="white-space: nowrap;" onClick="{{ copyLocal }}"><i class="fi fi-rr-copy-alt"></i>Copiar ruta local</button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-6) var(--space-8);">
+              <sc-for list="{{ glance }}" as="g" hint-placeholder-count="8">
+                <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+                  <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);"><i class="{{ g.icon }}" style="font-size: 16px; color: var(--color-accent);"></i>{{ g.label }}</span>
+                  <sc-if value="{{ g.hasChips }}" hint-placeholder-val="{{ false }}">
+                    <span style="display: flex; flex-wrap: wrap; gap: 6px;"><sc-for list="{{ g.chips }}" as="c" hint-placeholder-count="3"><span class="tag tag-neutral">{{ c }}</span></sc-for></span>
+                  </sc-if>
+                  <sc-if value="{{ g.hasText }}" hint-placeholder-val="{{ true }}">
+                    <span style="display: flex; align-items: center; gap: var(--space-1); min-width: 0;">
+                      <sc-if value="{{ g.hasHref }}" hint-placeholder-val="{{ false }}">
+                        <a href="{{ g.href }}" target="_blank" style="font-size: 16px; overflow-wrap: anywhere;">{{ g.text }}</a>
+                      </sc-if>
+                      <sc-if value="{{ g.plain }}" hint-placeholder-val="{{ true }}">
+                        <span style="font-size: 16px; overflow-wrap: anywhere;">{{ g.text }}</span>
+                      </sc-if>
+                      <sc-if value="{{ g.hasCopy }}" hint-placeholder-val="{{ false }}">
+                        <button class="btn btn-ghost" onClick="{{ g.copy }}" title="Copiar" style="white-space: nowrap; padding: 2px 6px;"><i class="fi fi-rr-copy-alt" style="font-size: 16px;"></i></button>
+                      </sc-if>
+                    </span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabCliente }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; max-width: 720px;">
+            <sc-for list="{{ clientRows }}" as="r" hint-placeholder-count="5">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); padding: var(--space-3) 0; align-items: baseline;">
+                <span style="flex: 0 0 170px; font-size: 13px; color: var(--color-neutral-700);">{{ r.label }}</span>
+                <sc-if value="{{ r.hasHref }}" hint-placeholder-val="{{ false }}"><a href="{{ r.href }}" target="_blank" style="font-size: 17px;">{{ r.value }}</a></sc-if>
+                <sc-if value="{{ r.plain }}" hint-placeholder-val="{{ true }}"><span style="font-size: 17px;">{{ r.value }}</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabStack }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; max-width: 720px;">
+            <sc-for list="{{ stackRows }}" as="r" hint-placeholder-count="5">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); padding: var(--space-3) 0; align-items: center;">
+                <span style="flex: 0 0 170px; font-size: 13px; color: var(--color-neutral-700);">{{ r.label }}</span>
+                <span style="display: flex; flex-wrap: wrap; gap: 6px;"><sc-for list="{{ r.chips }}" as="c" hint-placeholder-count="2"><span class="{{ r.chipClass }}" style="font-size: 13px; padding: 4px 12px;">{{ c }}</span></sc-for></span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabAccesos }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: var(--space-6); max-width: 900px;">
+            <div style="display: flex; flex-direction: column;">
+              <sc-for list="{{ accessRows }}" as="r" hint-placeholder-count="6">
+                <div style="display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); padding: var(--space-3) 0; align-items: center;">
+                  <span style="flex: 0 0 170px; display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--color-neutral-700);"><i class="{{ r.icon }}" style="font-size: 17px; color: var(--color-accent);"></i>{{ r.label }}</span>
+                  <span style="flex: 1 1 240px; font-size: 16px; overflow-wrap: anywhere;">{{ r.value }}</span>
+                  <span style="display: flex; gap: 4px;">
+                    <sc-if value="{{ r.hasHref }}" hint-placeholder-val="{{ false }}"><a class="btn btn-ghost" style="white-space: nowrap;" href="{{ r.href }}" target="_blank"><i class="fi fi-rr-arrow-up-right-from-square"></i>Abrir</a></sc-if>
+                    <button class="btn btn-ghost" style="white-space: nowrap;" onClick="{{ r.copy }}"><i class="fi fi-rr-copy-alt"></i>Copiar</button>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+              <h4 style="margin: 0;">Vencimientos</h4>
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-4);">
+                <sc-for list="{{ expiries }}" as="e" hint-placeholder-count="2">
+                  <div class="card" style="flex: 1 1 240px; padding: var(--space-4); border-radius: var(--radius-lg);">
+                    <span class="card-kicker">{{ e.label }}</span>
+                    <span style="font-family: var(--font-heading); font-weight: 600; font-size: 24px;">{{ e.date }}</span>
+                    <span class="{{ e.tagClass }}" style="align-self: flex-start;">{{ e.left }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabEditores }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: var(--space-4); max-width: 760px;">
+            <sc-if value="{{ hasEditors }}" hint-placeholder-val="{{ true }}">
+              <p style="margin: 0; color: var(--color-neutral-700);">Personas con acceso a {{ cur.cms }} para editar el contenido del sitio.</p>
+              <table class="table">
+                <thead><tr><th>Correo</th><th>Rol</th><th></th></tr></thead>
+                <tbody>
+                  <sc-for list="{{ editors }}" as="e" hint-placeholder-count="2">
+                    <tr>
+                      <td style="overflow-wrap: anywhere;"><a href="{{ e.mailto }}">{{ e.email }}</a></td>
+                      <td><span class="{{ e.roleClass }}">{{ e.role }}</span></td>
+                      <td style="text-align: right;"><button class="btn btn-ghost" style="white-space: nowrap;" onClick="{{ e.copy }}"><i class="fi fi-rr-copy-alt"></i>Copiar</button></td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </sc-if>
+            <sc-if value="{{ noEditors }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <h4 style="margin: 0;">Sin editores de contenido</h4>
+                <p style="margin: 0; color: var(--color-neutral-700);">{{ noEditorsText }}</p>
+              </div>
+            </sc-if>
+            <sc-if value="{{ hasGuide }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; flex-direction: column; gap: var(--space-6); margin-top: var(--space-6);">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2);">
+                  <h3 style="margin: 0; flex: 1 1 240px;">Guía de edición</h3>
+                  <a class="btn btn-secondary" href="{{ cur.cmsHref }}" target="_blank" style="white-space: nowrap;"><i class="fi fi-rr-arrow-up-right-from-square"></i>Abrir Studio</a>
+                  <button class="btn btn-primary" onClick="{{ copyGuide }}" style="white-space: nowrap;"><i class="fi fi-rr-copy-alt"></i>Copiar guía para el cliente</button>
+                </div>
+                <p style="margin: 0; font-size: 17px; text-wrap: pretty;">{{ guide.scope }}</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4);">
+                  <sc-for list="{{ guide.types }}" as="t" hint-placeholder-count="2">
+                    <div class="card" style="padding: var(--space-4); gap: var(--space-3); border-radius: var(--radius-lg);">
+                      <div style="display: flex; align-items: baseline; gap: var(--space-2);">
+                        <span style="font-family: var(--font-heading); font-weight: 600; font-size: 19px; flex: 1;">{{ t.name }}</span>
+                        <span class="tag tag-accent">{{ t.count }}</span>
+                      </div>
+                      <span style="font-size: 14px; color: var(--color-neutral-700);">{{ t.desc }}</span>
+                      <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                        <sc-for list="{{ t.fields }}" as="x" hint-placeholder-count="3">
+                          <div style="display: flex; flex-direction: column; line-height: 1.35;">
+                            <span style="font-size: 14px; font-weight: 600;">{{ x.f }}</span>
+                            <span style="font-size: 14px; color: var(--color-neutral-700); text-wrap: pretty;">{{ x.n }}</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-6);">
+                  <sc-for list="{{ guide.flows }}" as="fl" hint-placeholder-count="3">
+                    <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                      <h4 style="margin: 0;">{{ fl.title }}</h4>
+                      <sc-for list="{{ fl.steps }}" as="st" hint-placeholder-count="4">
+                        <div style="display: flex; gap: var(--space-2); align-items: flex-start;">
+                          <span style="width: 22px; height: 22px; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 600; background: var(--color-accent-100); color: var(--color-accent-800);">{{ st.n }}</span>
+                          <span style="font-size: 14px; line-height: 1.45; text-wrap: pretty;">{{ st.text }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4); border-radius: var(--radius-lg); background: var(--color-accent-2-100); color: var(--color-accent-2-800);">
+                  <span style="display: flex; align-items: center; gap: 6px; font-weight: 600;"><i class="fi fi-rr-exclamation" style="font-size: 18px;"></i>Importante</span>
+                  <sc-for list="{{ guide.tips }}" as="tp" hint-placeholder-count="4">
+                    <span style="font-size: 14px; line-height: 1.45; text-wrap: pretty;">• {{ tp }}</span>
+                  </sc-for>
+                </div>
+                <span style="font-size: 13px; color: var(--color-neutral-700);">Gestionar miembros: {{ guide.manage }}</span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabPagos }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: var(--space-6); max-width: 820px;">
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-6) var(--space-8);">
+              <sc-for list="{{ payFigures }}" as="f" hint-placeholder-count="3">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <span style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);">{{ f.label }}</span>
+                  <span style="font-family: var(--font-heading); font-weight: 600; font-size: 40px; line-height: 1; letter-spacing: -0.02em; color: {{ f.color }};">{{ f.value }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+              <div style="height: 8px; background: var(--color-neutral-200); border-radius: var(--radius-md); overflow: hidden;">
+                <div style="height: 100%; width: {{ payPct }}; background: linear-gradient(90deg, #FFD461, var(--color-accent)); border-radius: var(--radius-md);"></div>
+              </div>
+              <span style="font-size: 13px; color: var(--color-neutral-700);">{{ payLabel }}</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabNotas }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: var(--space-6); max-width: 820px;">
+            <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: flex-start;">
+                <select class="input" value="{{ noteKind }}" onChange="{{ onNoteKind }}" style="width: 140px;">
+                  <option value="Pedido">Pedido</option><option value="Cambio">Cambio</option><option value="Nota">Nota</option>
+                </select>
+                <textarea class="input" value="{{ noteDraft }}" onChange="{{ onNoteDraft }}" placeholder="Qué pidió el cliente o qué cambiaste hoy…" style="flex: 1 1 300px; min-height: 70px;"></textarea>
+              </div>
+              <button class="btn btn-primary" onClick="{{ addNote }}" style="white-space: nowrap; align-self: flex-start;"><i class="fi fi-rr-plus"></i>Agregar a la bitácora</button>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <sc-for list="{{ notes }}" as="n" hint-placeholder-count="3">
+                <div style="display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); padding: var(--space-3) 0;">
+                  <span style="flex: 0 0 120px; font-size: 13px; color: var(--color-neutral-700);">{{ n.dateLabel }}</span>
+                  <span style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                    <span class="{{ n.kindClass }}">{{ n.kind }}</span>
+                    <span style="font-size: 16px; text-wrap: pretty;">{{ n.text }}</span>
+                  </span>
+                  <sc-if value="{{ n.idle }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ n.ask }}" title="Borrar entrada" aria-label="Borrar entrada" style="width: 34px; height: 34px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--color-neutral-700); cursor: pointer;" style-hover="background: color-mix(in oklch, #c0392b 12%, transparent); color: #c0392b;"><i class="fi fi-rr-trash" style="font-size: 15px; line-height: 1;"></i></button>
+                  </sc-if>
+                  <sc-if value="{{ n.asking }}" hint-placeholder-val="{{ false }}">
+                    <span style="display: flex; align-items: center; gap: var(--space-2); flex: none;">
+                      <span style="font-size: 13px; color: var(--color-neutral-700);">¿Borrar?</span>
+                      <button class="btn btn-ghost" style="white-space: nowrap; height: 32px; padding: 0 10px; font-size: 13px;" onClick="{{ n.cancel }}">No</button>
+                      <button class="btn btn-primary" style="white-space: nowrap; height: 32px; padding: 0 12px; font-size: 13px; background: #c0392b;" onClick="{{ n.del }}">Sí, borrar</button>
+                    </span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <!-- FORMULARIO -->
+    <sc-if value="{{ isForm }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="04 Formulario de proyecto" style="display: flex; flex-direction: column; gap: var(--space-6);">
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4);">
+          <div style="flex: 1 1 300px;">
+            <button class="btn btn-ghost" onClick="{{ cancelForm }}" style="white-space: nowrap; margin-bottom: var(--space-2);"><i class="fi fi-rr-arrow-left"></i>Cancelar</button>
+            <h1 style="margin: 0;">{{ formTitle }}</h1>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+            <button class="btn btn-secondary" style="white-space: nowrap;" onClick="{{ cancelForm }}">Descartar</button>
+            <button class="btn btn-primary" style="white-space: nowrap;" onClick="{{ saveForm }}"><i class="fi fi-rr-check"></i>Guardar proyecto</button>
+          </div>
+        </div>
+        <sc-if value="{{ hasFormError }}" hint-placeholder-val="{{ false }}">
+          <span class="tag tag-accent-2" style="align-self: flex-start; font-size: 13px; padding: 6px 12px;">{{ formError }}</span>
+        </sc-if>
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: flex-start;">
+          <div style="flex: 1 1 260px; max-width: 360px; display: flex; flex-direction: column; gap: var(--space-2);">
+            <h4 style="margin: 0;">Miniatura</h4>
+            <div style="aspect-ratio: 16 / 10; position: relative; background: var(--color-neutral-200); border-radius: var(--radius-md);">
+              <image-slot style="overflow: hidden; border-radius: inherit;" id="{{ formThumbId }}" src="{{ formThumbSrc }}" shape="rect" placeholder="Arrastra o haz clic para subir una captura"></image-slot>
+            </div>
+            <span style="font-size: 12px; color: var(--color-neutral-700);">PNG o JPG, idealmente 1600 × 1000.</span>
+          </div>
+          <div style="flex: 3 1 420px; display: flex; flex-direction: column; gap: var(--space-8);">
+            <sc-for list="{{ formSections }}" as="sec" hint-placeholder-count="3">
+              <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                <h4 style="margin: 0;">{{ sec.title }}</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-3) var(--space-4);">
+                  <sc-for list="{{ sec.fields }}" as="f" hint-placeholder-count="4">
+                    <div class="field" style="grid-column: {{ f.span }};">
+                      <label>{{ f.label }}</label>
+                      <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ true }}">
+                        <input class="input" name="{{ f.name }}" type="{{ f.inputType }}" value="{{ f.value }}" placeholder="{{ f.ph }}" onChange="{{ onFormChange }}">
+                      </sc-if>
+                      <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                        <select class="input" name="{{ f.name }}" value="{{ f.value }}" onChange="{{ onFormChange }}">
+                          <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="2"><option value="{{ o }}">{{ o }}</option></sc-for>
+                        </select>
+                      </sc-if>
+                      <sc-if value="{{ f.isArea }}" hint-placeholder-val="{{ false }}">
+                        <textarea class="input" name="{{ f.name }}" value="{{ f.value }}" placeholder="{{ f.ph }}" onChange="{{ onFormChange }}"></textarea>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+              <button class="btn btn-primary" style="white-space: nowrap;" onClick="{{ saveForm }}"><i class="fi fi-rr-check"></i>Guardar proyecto</button>
+              <button class="btn btn-secondary" style="white-space: nowrap;" onClick="{{ cancelForm }}">Descartar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- CALENDARIO -->
+    <sc-if value="{{ isCalendar }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="05 Calendario" style="display: flex; flex-direction: column; gap: var(--space-6); max-width: 820px;">
+        <div>
+          <h1 style="margin: 0 0 6px;">Calendario</h1>
+          <p style="margin: 0; color: var(--color-neutral-700);">Entregas y vencimientos de dominio y hosting, en orden.</p>
+        </div>
+        <sc-for list="{{ agenda }}" as="m" hint-placeholder-count="2">
+          <div style="display: flex; flex-direction: column; gap: var(--space-1);">
+            <h3 style="margin: 0 0 var(--space-2);">{{ m.month }}</h3>
+            <sc-for list="{{ m.events }}" as="e" hint-placeholder-count="3">
+              <button onClick="{{ e.open }}" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); font: inherit; color: inherit; text-align: left; background: transparent; border: 0; padding: var(--space-2) 6px; margin: 0 -6px; border-radius: var(--radius-md); cursor: pointer;" style-hover="background: color-mix(in srgb, var(--color-text) 6%, transparent);">
+                <span style="width: 56px; display: flex; flex-direction: column; line-height: 1.05;">
+                  <span style="font-family: var(--font-heading); font-weight: 600; font-size: 28px;">{{ e.day }}</span>
+                  <span style="font-size: 12px; color: var(--color-neutral-700);">{{ e.wd }}</span>
+                </span>
+                <span style="flex: 1 1 220px; display: flex; flex-direction: column; line-height: 1.3;">
+                  <span style="font-size: 16px; font-weight: 600;">{{ e.title }}</span>
+                  <span style="font-size: 13px; color: var(--color-neutral-700);">{{ e.detail }}</span>
+                </span>
+                <span class="{{ e.tagClass }}">{{ e.kind }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-for>
+      </section>
+    </sc-if>
+
+    <!-- CUENTA -->
+    <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="06 Cuenta" style="display: flex; flex-direction: column; gap: var(--space-8); max-width: 680px;">
+        <h1 style="margin: 0;">Cuenta</h1>
+        <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+          <h4 style="margin: 0;">Perfil</h4>
+          <div class="card" style="flex-direction: row; flex-wrap: wrap; align-items: center; gap: var(--space-4); padding: var(--space-6); border-radius: var(--radius-lg);">
+            <span style="width: 64px; height: 64px; flex: none; border-radius: 50%; display: grid; place-items: center; background: {{ userColor }}; color: #16202e; font-weight: 800; font-size: 22px;">{{ initials }}</span>
+            <span style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 2px; line-height: 1.3;">
+              <span style="font-weight: 700; font-size: 18px;">{{ userFull }}</span>
+              <span style="font-size: 14px; color: var(--color-neutral-700);">{{ userEmail }}</span>
+              <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 12px; color: var(--color-neutral-700); margin-top: 6px;">
+                <span style="display: flex; align-items: center; gap: 6px;"><i class="fi fi-brands-google" style="font-size: 12px;"></i>Conectado con Google</span>
+                <span>Miembro desde {{ memberSince }}</span>
+              </span>
+            </span>
+            <button class="btn btn-secondary" style="white-space: nowrap;" onClick="{{ logout }}"><i class="fi fi-rr-sign-out-alt"></i>Cerrar sesión</button>
+          </div>
+          <p style="margin: 0; font-size: 13px; color: var(--color-neutral-700);">El nombre, el correo y la foto vienen de tu cuenta de Google. Para cambiarlos, edítalos en Google.</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+          <h4 style="margin: 0;">Preferencias</h4>
+          <div class="field">
+            <label>Nombre para el saludo</label>
+            <input class="input" value="{{ userName }}" onChange="{{ onUserName }}">
+          </div>
+          <div class="field">
+            <label>Carpeta base de proyectos</label>
+            <input class="input" value="{{ basePath }}" onChange="{{ onBasePath }}">
+          </div>
+          <div class="field">
+            <label>Tema</label>
+            <div class="seg">
+              <label class="seg-opt" style="white-space: nowrap;"><input type="radio" name="theme-set" checked="{{ isLight }}" onChange="{{ setLight }}"><i class="fi fi-rr-sun"></i>Claro</label>
+              <label class="seg-opt" style="white-space: nowrap;"><input type="radio" name="theme-set" checked="{{ isDark }}" onChange="{{ setDark }}"><i class="fi fi-rr-moon"></i>Oscuro</label>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+          <h4 style="margin: 0;">Tus datos</h4>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);">
+            <span style="flex: 1 1 260px; font-size: 14px; color: var(--color-neutral-700);">Descarga tus proyectos, clientes y pagos en un archivo JSON.</span>
+            <button class="btn btn-secondary" style="white-space: nowrap;" onClick="{{ exportData }}"><i class="fi fi-rr-download"></i>Exportar datos</button>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);">
+            <span style="flex: 1 1 260px; font-size: 14px; color: var(--color-neutral-700);">Borra tu cuenta y todos tus proyectos. No se puede deshacer.</span>
+            <button class="btn btn-ghost" style="white-space: nowrap; color: #c0392b;" onClick="{{ askDelAcc }}"><i class="fi fi-rr-trash"></i>Borrar cuenta</button>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- 403 SIN ACCESO -->
+    <sc-if value="{{ isForbidden }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="07 Sin acceso (403)" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: var(--space-4); max-width: 520px; padding: var(--space-8) 0;">
+        <span style="width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in oklch, var(--color-accent) 16%, transparent); color: var(--color-accent);"><i class="fi fi-rr-lock" style="font-size: 26px; line-height: 1;"></i></span>
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--color-neutral-700);">ERROR 403</span>
+        <h1 style="margin: 0;">No tienes acceso a este proyecto</h1>
+        <p style="margin: 0; color: var(--color-neutral-700); text-wrap: pretty;">Este proyecto pertenece a otra cuenta. Si crees que es un error, revisa que entraste con el correo correcto.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2);">
+          <button class="btn btn-primary" style="white-space: nowrap;" onClick="{{ goProjects }}">Ir a mis proyectos</button>
+          <button class="btn btn-secondary" style="white-space: nowrap;" onClick="{{ logout }}">Cambiar de cuenta</button>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+
+  <sc-if value="{{ confirmDelAcc }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop" style="position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: var(--space-4);">
+      <div class="dialog" style="max-width: 440px; border-radius: var(--radius-lg);">
+        <h3 class="dialog-title" style="margin: 0;">¿Borrar tu cuenta?</h3>
+        <p class="dialog-body" style="margin: 0;">Se eliminarán {{ projCount }} proyectos con sus clientes, pagos y notas. Esta acción no se puede deshacer.</p>
+        <div class="dialog-actions" style="display: flex; justify-content: flex-end; gap: var(--space-2);">
+          <button class="btn btn-secondary" style="white-space: nowrap;" onClick="{{ cancelDelAcc }}">Cancelar</button>
+          <button class="btn btn-primary" style="white-space: nowrap; background: #c0392b;" onClick="{{ doDelAcc }}">Sí, borrar cuenta</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isExpired }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="08 Sesión expirada (401)" style="position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: var(--space-4); background: color-mix(in oklch, var(--color-bg) 70%, transparent); backdrop-filter: blur(8px);">
+      <div class="card" style="max-width: 420px; padding: var(--space-6); gap: var(--space-3); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); align-items: flex-start;">
+        <span style="width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in oklch, var(--color-accent) 16%, transparent); color: var(--color-accent);"><i class="fi fi-rr-time-past" style="font-size: 24px; line-height: 1;"></i></span>
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--color-neutral-700);">ERROR 401</span>
+        <h2 style="margin: 0;">Tu sesión expiró</h2>
+        <p style="margin: 0; color: var(--color-neutral-700); text-wrap: pretty;">Por seguridad cerramos tu sesión tras un tiempo sin actividad. Vuelve a entrar para seguir donde te quedaste.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2);">
+          <button class="btn btn-primary" style="white-space: nowrap;" onClick="{{ reLogin }}"><i class="fi fi-brands-google"></i>Entrar de nuevo con Google</button>
+          <button class="btn btn-ghost" style="white-space: nowrap;" onClick="{{ logout }}">Salir</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <nav style="font-family: 'Nunito', var(--font-body); position: fixed; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); background: var(--color-surface); box-shadow: var(--shadow-md); padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); z-index: 20;">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+        <button onClick="{{ n.go }}" style="display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 52px; justify-content: center; font: inherit; font-size: 12px; background: transparent; border: 0; cursor: pointer; color: {{ n.color }}; font-weight: {{ n.weight }};">
+          <i class="{{ n.iconCls }}" style="font-size: 22px;"></i>{{ n.label }}
+        </button>
+      </sc-for>
+    </nav>
+  </sc-if>
+
+  <sc-if value="{{ confirmDel }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop" onClick="{{ cancelDelete }}" style="position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px;">
+      <div class="dialog" onClick="{{ stop }}" style="border-radius: var(--radius-lg); max-width: 440px; width: 100%;">
+        <h3 class="dialog-title" style="margin: 0;">¿Eliminar {{ cur.name }}?</h3>
+        <p class="dialog-body" style="margin: 0; text-wrap: pretty;">Se borrará la ficha con sus accesos, pagos y bitácora. Si solo quieres sacarlo de la vista, cámbialo a Archivado.</p>
+        <div class="dialog-actions" style="display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: flex-end;">
+          <button class="btn btn-secondary" style="white-space: nowrap;" onClick="{{ archiveInstead }}">Archivar</button>
+          <button class="btn btn-ghost" style="white-space: nowrap;" onClick="{{ cancelDelete }}">Cancelar</button>
+          <button class="btn btn-primary" style="white-space: nowrap; background: var(--color-accent-2); border-color: var(--color-accent-2);" onClick="{{ doDelete }}"><i class="fi fi-rr-trash"></i>Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div class="elev-lg" style="position: fixed; left: 50%; bottom: {{ toastBottom }}; transform: translateX(-50%); background: var(--color-text); color: var(--color-bg); padding: 10px 18px; border-radius: var(--radius-lg); font-size: 14px; display: flex; align-items: center; gap: 8px; z-index: 30; max-width: calc(100vw - 32px);">
+      <i class="fi fi-rr-check-circle" style="font-size: 18px;"></i>{{ toast }}
+    </div>
+  </sc-if>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;verLogin&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Vista&quot;},&quot;estado&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Ninguna&quot;,&quot;Sesión expirada (401)&quot;,&quot;Sin acceso (403)&quot;],&quot;default&quot;:&quot;Ninguna&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Vista&quot;},&quot;acento&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Naranja&quot;,&quot;Terracota&quot;,&quot;Mandarina&quot;,&quot;Azul (complementario)&quot;,&quot;Turquesa (complementario dividido)&quot;],&quot;default&quot;:&quot;Naranja&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Estilo&quot;},&quot;fondo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Pizarra&quot;,&quot;Arena&quot;,&quot;Salvia&quot;],&quot;default&quot;:&quot;Arena&quot;,&quot;tsType&quot;:&quot;'Pizarra' | 'Arena' | 'Salvia'&quot;,&quot;section&quot;:&quot;Estilo&quot;}}">
+const TODAY = new Date(2026, 9, 5);
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const MESL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DIA = ['dom','lun','mar','mié','jue','vie','sáb'];
+const STATUSES = ['En desarrollo','Revisión','Producción','Mantenimiento','Archivado'];
+const ST = {
+  'En desarrollo': { cls: 'tag tag-accent', dot: 'var(--color-accent)' },
+  'Revisión': { cls: 'tag tag-neutral', dot: 'var(--color-process-yellow)' },
+  'Producción': { cls: 'tag tag-neutral', dot: '#22a55b' },
+  'Mantenimiento': { cls: 'tag tag-accent-2', dot: 'var(--color-accent-2)' },
+  'Archivado': { cls: 'tag tag-neutral', dot: 'var(--color-neutral-400)' },
+};
+const TYPES = ['Landing','Sistema','App'];
+const CMSS = ['Sin CMS','Sanity','Strapi 5','WordPress','Decap CMS','Webflow','Otro'];
+const TABS = ['Resumen','Cliente','Stack','Accesos','Editores CMS','Pagos','Notas'];
+
+const PAL = ['#EF7B3E', '#5aa9a3', '#4a90c9', '#FFD461', '#EA5455', '#2C4059'];
+const TECH = { 'Astro': 0, 'Tailwind': 1, 'React': 2, 'React Native': 2, 'Next.js 15': 5, 'Next.js': 5, 'Spring Boot': 1, 'Angular': 4, 'PostgreSQL': 2, 'MySQL': 2, 'Framer Motion': 4, 'GSAP': 1, 'Medusa.js': 5, 'Redis': 4, 'NestJS': 4, 'Prisma': 5, 'Mapbox': 2, 'Node.js': 1, 'Firebase': 3, 'Expo': 5 };
+const chipColor = t => { let i = TECH[t]; if (i === undefined) { i = 0; for (const ch of t) i = (i + ch.charCodeAt(0)) % PAL.length; } const c = PAL[i]; return { label: t, bg: `color-mix(in srgb, ${c} 20%, var(--color-surface))`, bd: `color-mix(in srgb, ${c} 55%, transparent)` }; };
+const parse = s => { if (!s) return null; const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const fmt = s => { const d = parse(s); return d ? `${d.getDate()} ${MES[d.getMonth()]} ${d.getFullYear()}` : '—'; };
+const fmtShort = s => { const d = parse(s); return d ? `${d.getDate()} ${MES[d.getMonth()]}` : '—'; };
+const days = s => { const d = parse(s); return d ? Math.round((d - TODAY) / 86400000) : null; };
+const money = (n, c) => (c === 'EUR' ? '€ ' : 'S/ ') + Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 0 });
+const href = u => !u || u.startsWith('—') ? '' : (u.startsWith('http') ? u : 'https://' + u);
+const ahead = s => { const n = days(s); return n !== null && n >= 0; };
+const inDays = n => n === 0 ? 'hoy' : n === 1 ? 'mañana' : n < 0 ? `hace ${-n} días` : `en ${n} días`;
+
+const SEED = [
+  { id: 'agb', thumb: 'assets/thumb-agb.png', code: 'AGB-2026', name: 'Colegio Guillermo Brown', type: 'Landing', status: 'Producción',
+    desc: 'Landing institucional (Conócenos, Propuesta, Niveles, Eventos y Contacto). Desde Sanity Studio el colegio edita el comunicado que aparece como modal y los eventos de la home. En producción en Vercel; falta comprar el dominio.',
+    client: { name: 'Colegio Guillermo Brown', contact: '', email: '', whatsapp: '', country: 'Perú' },
+    stack: { frontend: ['Astro','Tailwind','React'], backend: [], db: [], cms: 'Sanity', hosting: ['Vercel'] },
+    access: { local: '', repo: '', site: 'landing-colegio-agb.vercel.app', cms: 'landing-colegio-agb.vercel.app/sanity', design: '', panel: 'vercel.com/dashboard', domainExp: '', hostingExp: '', domainPending: true },
+    editors: [],
+    guide: {
+      scope: 'Desde el Studio se editan solo el Comunicado y los Eventos. Conócenos, Propuesta, Niveles y Contacto viven en el código.',
+      manage: 'sanity.io/manage → proyecto coleguio-agb → Members',
+      types: [
+        { name: 'Comunicado', desc: 'Modal que aparece al entrar al sitio.', fields: [
+          { f: 'Título, cuerpo, imagen', n: 'Contenido del modal.' },
+          { f: 'Fecha de inicio / retorno', n: 'Fechas que muestra el comunicado.' },
+          { f: 'Activo', n: 'Tildado = se muestra. Si hay varios activos, gana el editado más recientemente.' } ] },
+        { name: 'Evento', desc: 'Cards y banner de la sección Eventos de la home.', fields: [
+          { f: 'Título, descripción, imagen', n: 'Contenido de la card.' },
+          { f: 'Badge', n: 'Etiqueta corta de las cards normales (ej. "Setiembre", "Todo el año").' },
+          { f: 'Destacado', n: 'Banner grande en vez de card. Uno solo a la vez.' },
+          { f: 'Fecha y Lugar', n: 'Solo se usan si el evento es Destacado.' },
+          { f: 'Orden', n: 'Número de posición: menor = primero.' } ] } ],
+      flows: [
+        { title: 'Cómo editar', steps: ['Ir a landing-colegio-agb.vercel.app/sanity.', 'Iniciar sesión con la cuenta de Sanity (Google, GitHub o email).', 'Elegir Comunicado o Evento en el menú izquierdo.', 'Pulsar "+" para crear o abrir un documento para editarlo.', 'Completar los campos y pulsar Publish.'] },
+        { title: 'Dar acceso al colegio (una vez)', steps: ['Ir a sanity.io/manage → proyecto coleguio-agb → Members.', 'Pulsar Invite members.', 'Cargar el email del colegio con rol Editor (no Administrator).', 'Enviar la invitación.'] },
+        { title: 'Cómo entra el colegio', steps: ['Aceptar el mail de invitación de Sanity.', 'Ir a landing-colegio-agb.vercel.app/sanity.', 'Iniciar sesión con el mismo método usado al aceptar.', 'Elegir Comunicado o Evento → crear o editar → Publish.'] } ],
+      tips: ['Hay que pulsar Publish: guardar sin publicar deja el cambio como borrador invisible.', 'No es instantáneo: tras publicar, el sitio tarda unos minutos (rebuild automático).', 'Un solo comunicado activo y un solo evento destacado a la vez.', 'La imagen se sube directo en el campo Imagen del Studio.'] },
+    pay: { currency: 'PEN', total: 0, advance: 0 }, delivery: '', updated: '2026-10-03',
+    notes: [
+      { date: '2026-10-05', kind: 'Cambio', text: 'Pasa a Producción: sitio en vivo en landing-colegio-agb.vercel.app. Pendiente: compra del dominio.' },
+      { date: '2026-10-03', kind: 'Nota', text: 'Desplegado en Vercel (landing-colegio-agb.vercel.app).' },
+      { date: '2026-10-02', kind: 'Cambio', text: 'Guía de edición de Sanity documentada: Comunicado y Eventos editables, acceso del colegio con rol Editor.' } ] },
+  { id: 'agw', thumb: 'assets/thumb-agw.png', code: 'AGW-2026', name: 'Landing de servicios', type: 'Landing', status: 'En desarrollo',
+    desc: 'Landing de servicios con contenido administrable desde Strapi. Front en Vercel y Strapi en Railway; falta comprar el dominio.',
+    client: { name: 'AgenciaWeb', contact: '', email: '', whatsapp: '', country: '' },
+    stack: { frontend: ['Astro','React','Tailwind'], backend: [], db: [], cms: 'Strapi 5', hosting: ['Vercel','Railway'] },
+    access: { local: '', repo: '', site: '', cms: '', design: '', panel: 'railway.app/dashboard', domainExp: '', hostingExp: '', domainPending: true },
+    editors: [], pay: { currency: 'PEN', total: 0, advance: 0 }, delivery: '', updated: '2026-10-03',
+    notes: [ { date: '2026-10-03', kind: 'Nota', text: 'Front desplegado en Vercel y Strapi 5 en Railway. Pendiente: compra del dominio.' } ] },
+  { id: 'dfl', thumb: 'assets/thumb-dashboard-freelance.png', code: 'DFL-2026', name: 'Dashboard freelance', type: 'App', status: 'En desarrollo',
+    desc: 'Plataforma propia para administrar mis proyectos web por cliente: stack, ruta local, accesos, CMS, editores, pagos, vencimientos y bitácora en una sola ficha.',
+    client: { name: 'Proyecto propio', contact: '', email: '', whatsapp: '', country: 'Perú' },
+    stack: { frontend: [], backend: [], db: [], cms: 'Sin CMS', hosting: [] },
+    access: { local: '', repo: '', site: '', cms: '', design: '', panel: '', domainExp: '', hostingExp: '' },
+    editors: [], pay: { currency: 'PEN', total: 0, advance: 0 }, delivery: '', updated: '2026-10-03',
+    notes: [ { date: '2026-10-03', kind: 'Nota', text: 'Prototipo de diseño listo: Inicio, Proyectos, Ficha con pestañas, Formulario, Calendario y modo oscuro. Siguiente: definir stack.' } ] },
+  { id: 'snd', thumb: 'assets/thumb-snd.png', code: 'SND-2026', name: '(F) Sonrident · Control de citas', type: 'Sistema', status: 'En desarrollo',
+    desc: 'Sistema de reservas para la clínica dental Sonrident: agenda por odontólogo, historial del paciente, recordatorios y cobro de la cita en línea. Roles: admin, recepción, odontólogo y paciente.',
+    client: { name: 'Clínica Dental Sonrident', contact: 'Dra. Paola Ríos', email: 'admin@sonrident.pe', whatsapp: '+51 954 228 017', country: 'Perú' },
+    stack: { frontend: ['Angular','Tailwind'], backend: ['Spring Boot','Spring Security + JWT','Spring Data JPA'], db: ['PostgreSQL'], cms: 'Sin CMS', hosting: ['Railway','Vercel'] },
+    access: { local: 'D:\\Proyectos\\clientes\\sonrident-citas', repo: 'github.com/devfreelance/sonrident-citas', site: 'sonrident-citas.vercel.app', cms: '', design: 'figma.com/design/sonrident-citas', panel: 'railway.app/dashboard', domainExp: '2026-10-28', hostingExp: '2026-11-15' },
+    editors: [], pay: { currency: 'PEN', total: 9500, advance: 3800 }, delivery: '2026-11-20', updated: '2026-10-04',
+    notes: [
+      { date: '2026-10-04', kind: 'Cambio', text: 'Pasarela Culqi integrada en sandbox: cobro de la cita y webhook que confirma la reserva.' },
+      { date: '2026-09-29', kind: 'Cambio', text: 'Autenticación con JWT y autorización por roles (@PreAuthorize) lista.' },
+      { date: '2026-09-20', kind: 'Pedido', text: 'Recordatorio por WhatsApp 24 h antes de cada cita.' } ] },
+  { id: 'plv', thumb: 'assets/thumb-plv.png', code: 'PLV-2026', name: '(F) Polera Studio · E-commerce', type: 'App', status: 'Revisión',
+    desc: 'Tienda de polos con transiciones entre páginas, zoom de producto en alta calidad, selector de tallas y colores, carrito persistente y checkout con pasarela de pagos.',
+    client: { name: 'Polera Studio', contact: 'Andrés Cárdenas', email: 'andres@polerastudio.pe', whatsapp: '+51 933 410 776', country: 'Perú' },
+    stack: { frontend: ['Next.js','Tailwind','Motion','Lenis'], backend: ['Medusa v2','Culqi (módulo propio)'], db: ['PostgreSQL','Redis'], cms: 'Medusa Admin', hosting: ['Vercel','Railway','Cloudinary'] },
+    access: { local: 'D:\\Proyectos\\clientes\\polera-studio', repo: 'github.com/devfreelance/polera-studio', site: 'polerastudio.pe', cms: 'admin.polerastudio.pe', design: 'figma.com/design/polera-shop', panel: 'railway.app/dashboard', domainExp: '2027-02-10', hostingExp: '2026-10-19' },
+    editors: [{ email: 'andres@polerastudio.pe', role: 'Admin' }, { email: 'catalogo@polerastudio.pe', role: 'Editor' }],
+    pay: { currency: 'PEN', total: 7800, advance: 3900 }, delivery: '2026-10-12', updated: '2026-10-03',
+    notes: [
+      { date: '2026-10-03', kind: 'Nota', text: 'Demo enviada al cliente. Imágenes servidas por Cloudinary en AVIF/WebP con blur placeholder.' },
+      { date: '2026-09-30', kind: 'Cambio', text: 'Módulo de pago Culqi para Medusa v2 (tarjetas y Yape) en modo prueba, con webhooks y correos de confirmación.' },
+      { date: '2026-09-24', kind: 'Pedido', text: 'Galería de producto con zoom y vista 360 del polo.' } ] },
+  { id: 'alq', thumb: 'assets/thumb-alq.png', code: 'ALQ-2026', name: '(F) Alquila Ya · Marketplace', type: 'App', status: 'En desarrollo',
+    desc: 'Marketplace donde los propietarios publican sus alquileres (cuartos, departamentos, locales) y los interesados filtran por mapa y precio, chatean y reservan visitas. Plan destacado de pago para propietarios.',
+    client: { name: 'Proyecto de portafolio', contact: '', email: '', whatsapp: '', country: 'Perú' },
+    stack: { frontend: ['Next.js 15','Tailwind','Mapbox'], backend: ['NestJS','Prisma'], db: ['PostgreSQL','Supabase Storage'], cms: 'Sin CMS', hosting: ['Vercel','Render'] },
+    access: { local: 'D:\\Proyectos\\portafolio\\alquila-ya', repo: 'github.com/devfreelance/alquila-ya', site: 'alquila-ya.vercel.app', cms: '', design: 'figma.com/design/alquila-ya', panel: 'dashboard.render.com', domainExp: '', hostingExp: '' },
+    editors: [], pay: { currency: 'PEN', total: 6000, advance: 1500 }, delivery: '2026-12-01', updated: '2026-10-02',
+    notes: [
+      { date: '2026-10-02', kind: 'Cambio', text: 'Búsqueda por mapa con clusters y filtros por distrito, precio y tipo.' },
+      { date: '2026-09-26', kind: 'Nota', text: 'Pago del plan destacado con Culqi en modo prueba.' } ] },
+];
+
+const ACCOUNTS = [
+  { id: 'yrvin', name: 'Yrvin', full: 'Yrvin Huamán', email: 'yrvin.dev@gmail.com', color: '#EF7B3E' },
+  { id: 'camila', name: 'Camila', full: 'Camila Torres', email: 'camila.torres@gmail.com', color: '#5aa9a3' },
+];
+const BLANK = { id: '_blank', code: '', name: '', type: 'Landing', status: 'En desarrollo', desc: '', client: { name: '', contact: '', email: '', whatsapp: '', country: '' },
+  stack: { frontend: [], backend: [], db: [], cms: 'Sin CMS', hosting: [] }, access: { local: '', repo: '', site: '', cms: '', design: '', panel: '', domainExp: '', hostingExp: '' },
+  editors: [], pay: { currency: 'PEN', total: 0, advance: 0 }, delivery: '', updated: '', notes: [] };
+
+class Component extends DCLogic {
+  state = {
+    screen: 'inicio', theme: 'light', view: 'cards', q: '', fStatus: 'Todos', fStack: 'Todos', fCms: 'Todos',
+    currentId: 'agb', tab: 'Resumen', projects: [], user: null, chooser: false, signing: '', store: { yrvin: SEED, camila: [] }, form: {}, formMode: 'new', formError: '', toast: '',
+    isMobile: false, side: false, confirmDel: false, noteDraft: '', noteKind: 'Pedido', userName: 'Yrvin', basePath: '', confirmDelAcc: false, expired: false, delNote: -1,
+  };
+
+  componentDidMount() {
+    try { const u = localStorage.getItem('tf-user'); const acc = ACCOUNTS.find(a => a.id === u); if (acc) this.login(acc, true); } catch (e) {}
+    try { const t = localStorage.getItem('fl-dash-theme'); if (t) this.setState({ theme: t }); if (localStorage.getItem('fl-dash-side') === '1') this.setState({ side: true }); } catch (e) {}
+    this.onResize = () => this.setState({ isMobile: window.innerWidth < 820 });
+    this.onResize();
+    window.addEventListener('resize', this.onResize);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); }
+
+  login(acc, instant) {
+    const go = () => { this.setState(st => ({ user: acc, userName: acc.name, projects: st.store[acc.id] || [], chooser: false, signing: '', screen: 'inicio', currentId: (st.store[acc.id] || [])[0]?.id })); try { localStorage.setItem('tf-user', acc.id); } catch (e) {} };
+    if (instant) return go();
+    this.setState({ signing: acc.id }); setTimeout(go, 700);
+  }
+  logout() {
+    this.setState(st => ({ store: { ...st.store, [st.user.id]: st.projects }, user: null, projects: [], screen: 'inicio', confirmDel: false }));
+    try { localStorage.removeItem('tf-user'); } catch (e) {}
+  }
+  setTheme(t) { this.setState({ theme: t }); try { localStorage.setItem('fl-dash-theme', t); } catch (e) {} }
+  go(screen) { this.setState({ screen }); window.scrollTo(0, 0); }
+  open(id) { this.setState({ screen: 'ficha', currentId: id, tab: 'Resumen', noteDraft: '' }); window.scrollTo(0, 0); }
+  flash(msg) { this.setState({ toast: msg }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 2200); }
+  copy(text, label) { try { navigator.clipboard.writeText(text).catch(() => {}); } catch (e) {} this.flash(label + ' copiado'); }
+
+  deco(p) {
+    const st = ST[p.status];
+    return { ...p, statusClass: st.cls, dot: st.dot, clientName: p.client.name, clientCountry: p.client.country,
+      thumbId: p.id === 'dfl' ? 'thumb-dfl-v2' : 'thumb-' + p.id, thumbSrc: p.thumb || '', cms: p.stack.cms,
+      chips: [...p.stack.frontend, ...p.stack.backend, ...p.stack.db].slice(0, 4),
+      chipObjs: [...p.stack.frontend, ...p.stack.backend, ...p.stack.db].slice(0, 4).map(chipColor),
+      updatedLabel: fmtShort(p.updated), deliveryLabel: fmt(p.delivery), open: () => this.open(p.id) };
+  }
+
+  toForm(p) {
+    if (!p) return { name: '', code: '', type: 'Landing', status: 'En desarrollo', desc: '', delivery: '', clientName: '', contact: '', email: '', whatsapp: '', country: 'Perú',
+      frontend: '', backend: '', db: '', cms: 'Sin CMS', hosting: '', local: this.state.basePath + '\\', repo: '', site: '', cmsUrl: '', design: '', panel: '', domainExp: '', hostingExp: '',
+      ed1Email: '', ed1Role: 'Admin', ed2Email: '', ed2Role: 'Editor', total: '', advance: '', currency: 'PEN', note: '' };
+    const e = p.editors;
+    return { name: p.name, code: p.code, type: p.type, status: p.status, desc: p.desc, delivery: p.delivery, clientName: p.client.name, contact: p.client.contact, email: p.client.email, whatsapp: p.client.whatsapp, country: p.client.country,
+      frontend: p.stack.frontend.join(', '), backend: p.stack.backend.join(', '), db: p.stack.db.join(', '), cms: p.stack.cms, hosting: p.stack.hosting.join(', '),
+      local: p.access.local, repo: p.access.repo, site: p.access.site, cmsUrl: p.access.cms, design: p.access.design, panel: p.access.panel, domainExp: p.access.domainExp, hostingExp: p.access.hostingExp,
+      ed1Email: e[0]?.email || '', ed1Role: e[0]?.role || 'Admin', ed2Email: e[1]?.email || '', ed2Role: e[1]?.role || 'Editor',
+      total: String(p.pay.total), advance: String(p.pay.advance), currency: p.pay.currency, note: '' };
+  }
+
+  save() {
+    const f = this.state.form;
+    if (!f.name?.trim() || !f.clientName?.trim()) { this.setState({ formError: 'Completa el nombre del proyecto y el cliente.' }); window.scrollTo(0, 0); return; }
+    const list = s => (s || '').split(',').map(x => x.trim()).filter(Boolean);
+    const isNew = this.state.formMode === 'new';
+    const base = isNew ? { id: this.state.formId, notes: [] } : this.state.projects.find(p => p.id === this.state.currentId);
+    const iso = `${TODAY.getFullYear()}-${String(TODAY.getMonth()+1).padStart(2,'0')}-${String(TODAY.getDate()).padStart(2,'0')}`;
+    const p = { ...base, name: f.name.trim(), code: f.code || f.name.slice(0,3).toUpperCase() + '-' + TODAY.getFullYear(), type: f.type, status: f.status, desc: f.desc, delivery: f.delivery,
+      client: { name: f.clientName, contact: f.contact, email: f.email, whatsapp: f.whatsapp, country: f.country },
+      stack: { frontend: list(f.frontend), backend: list(f.backend), db: list(f.db), cms: f.cms, hosting: list(f.hosting) },
+      access: { local: f.local, repo: f.repo, site: f.site, cms: f.cmsUrl, design: f.design, panel: f.panel, domainExp: f.domainExp, hostingExp: f.hostingExp },
+      editors: [[f.ed1Email, f.ed1Role], [f.ed2Email, f.ed2Role]].filter(x => x[0]).map(([email, role]) => ({ email, role })),
+      pay: { currency: f.currency, total: Number(f.total) || 0, advance: Number(f.advance) || 0 }, updated: iso,
+      notes: f.note?.trim() ? [{ date: iso, kind: 'Nota', text: f.note.trim() }, ...(base.notes || [])] : (base.notes || []) };
+    this.setState(s => ({ projects: isNew ? [p, ...s.projects] : s.projects.map(x => x.id === p.id ? p : x), screen: 'ficha', currentId: p.id, tab: 'Resumen', formError: '' }));
+    window.scrollTo(0, 0);
+    this.flash(isNew ? 'Proyecto creado' : 'Cambios guardados');
+  }
+
+  renderVals() {
+    const v = this.renderVals0(), s = this.state, est = this.props.estado ?? 'Ninguna';
+    const forb = est === 'Sin acceso (403)' || s.screen === '403';
+    if (forb) ['isHome','isProjects','isDetail','isForm','isCalendar','isSettings'].forEach(k => v[k] = false);
+    return { ...v, isForbidden: forb, isExpired: est === 'Sesión expirada (401)' || s.expired,
+      memberSince: 'marzo 2026', projCount: s.projects.length,
+      goProjects: () => this.go('proyectos'),
+      reLogin: () => { this.setState({ expired: false }); this.flash('Sesión renovada'); },
+      exportData: () => { try { const b = new Blob([JSON.stringify({ usuario: s.user?.email, proyectos: s.projects }, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'taller-freelancer-datos.json'; a.click(); } catch (e) {} this.flash('Datos exportados'); },
+      askDelAcc: () => this.setState({ confirmDelAcc: true }), cancelDelAcc: () => this.setState({ confirmDelAcc: false }), confirmDelAcc: s.confirmDelAcc,
+      doDelAcc: () => { const id = s.user.id; this.setState(st => ({ confirmDelAcc: false, projects: [], store: { ...st.store, [id]: [] } }), () => this.logout()); },
+    };
+  }
+  renderVals0() {
+    const s = this.state;
+    const all = s.projects.map(p => this.deco(p));
+    const dark = s.theme === 'dark';
+    const navDefs = [['inicio','Inicio','fi fi-rr-home'],['proyectos','Proyectos','fi fi-rr-folder'],['calendario','Calendario','fi fi-rr-calendar'],['ajustes','Cuenta','fi fi-rr-user']];
+    const activeNav = s.screen === 'ficha' || s.screen === 'form' ? 'proyectos' : s.screen;
+    const nav = navDefs.map(([k, label, icon]) => { const a = activeNav === k; return { label, icon, iconCls: a ? icon.replace('fi-rr-', 'fi-sr-') : icon, go: () => this.go(k),
+      bg: a ? 'color-mix(in srgb, var(--color-accent) 12%, transparent)' : 'transparent',
+      color: a ? 'var(--color-accent-700)' : 'var(--color-text)', weight: a ? 600 : 400,
+      bar: 'none',
+      hasBadge: k === 'proyectos', badge: String(all.filter(p => p.status !== 'Archivado').length) }; });
+
+    // home
+    const upcoming = all.filter(p => !['Archivado','Producción'].includes(p.status) && ahead(p.delivery)).sort((a, b) => days(a.delivery) - days(b.delivery));
+    const exp = [];
+    all.forEach(p => [['Dominio', p.access.domainExp, p.access.site], ['Hosting', p.access.hostingExp, p.stack.hosting.join(' + ')]].forEach(([k, d, what]) => {
+      const n = days(d); if (n !== null && n >= 0 && n <= 30 && p.status !== 'Archivado') exp.push({ p, k, d, n, what });
+    }));
+    all.forEach(p => { if (p.access.domainPending && p.status !== 'Archivado') exp.push({ p, k: 'Dominio', d: '', n: -1, what: 'Pendiente de compra', pending: true }); });
+    exp.sort((a, b) => a.n - b.n);
+    const owing = all.filter(p => p.pay.total - p.pay.advance > 0 && p.status !== 'Archivado');
+    const sumCur = c => owing.filter(p => p.pay.currency === c).reduce((t, p) => t + p.pay.total - p.pay.advance, 0);
+    const urg = n => n <= 7 ? 'tag tag-accent-2' : 'tag tag-neutral';
+    const summary = [
+      { title: 'Entregas próximas', icon: 'fi fi-rr-rocket-lunch', bg: 'linear-gradient(135deg, #FFD461 0%, var(--color-accent) 70%)', fg: '#16202e', muted: 'rgba(22,32,46,.82)', iconBg: 'rgba(255,255,255,.4)', iconColor: '#16202e', window: 'Por fecha', big: String(upcoming.length), sub: upcoming.length === 1 ? 'proyecto' : 'proyectos',
+        items: upcoming.slice(0, 3).map(p => ({ primary: p.name, secondary: '', right: inDays(days(p.delivery)), rightClass: 'tag tag-accent', open: p.open })) },
+      { title: 'Por vencer', icon: 'fi fi-rr-alarm-clock', bg: dark ? 'linear-gradient(160deg, color-mix(in srgb, var(--color-accent-2) 34%, var(--color-surface)) 0%, color-mix(in srgb, var(--color-accent-2) 14%, var(--color-surface)) 100%)' : 'linear-gradient(160deg, color-mix(in srgb, var(--color-accent-2) 7%, var(--color-surface)) 0%, var(--color-surface) 55%)', fg: 'var(--color-text)', muted: 'var(--color-neutral-700)', iconBg: 'var(--color-accent-2-100)', iconColor: 'var(--color-accent-2)', window: 'Próximos 30 días', big: String(exp.length), sub: 'dominios y hosting',
+        items: exp.slice(0, 3).map(e => ({ primary: `${e.k} · ${e.p.name}`, secondary: '', right: e.pending ? 'Comprar' : inDays(e.n), rightClass: e.pending ? 'tag tag-accent-2' : urg(e.n), open: e.p.open })) },
+      { title: 'Pagos pendientes', icon: 'fi fi-rr-credit-card', bg: dark ? 'linear-gradient(160deg, color-mix(in srgb, #FFD461 26%, var(--color-surface)) 0%, color-mix(in srgb, #FFD461 8%, var(--color-surface)) 100%)' : 'linear-gradient(160deg, color-mix(in srgb, #FFD461 22%, var(--color-surface)) 0%, var(--color-surface) 60%)', fg: 'var(--color-text)', muted: 'var(--color-neutral-700)', iconBg: 'color-mix(in srgb, #FFD461 40%, transparent)', iconColor: 'var(--color-text)', window: 'Saldos', big: String(owing.length), sub: ['PEN','EUR'].filter(c => sumCur(c) > 0).map(c => money(sumCur(c), c)).join(' · ') || 'S/ 0',
+        items: owing.slice(0, 3).map(p => ({ primary: p.name, secondary: `Adelanto ${money(p.pay.advance, p.pay.currency)} de ${money(p.pay.total, p.pay.currency)}`, right: money(p.pay.total - p.pay.advance, p.pay.currency), rightClass: 'tag tag-neutral', open: p.open })) },
+    ];
+    const recent = [...all].sort((a, b) => (b.updated > a.updated ? 1 : -1)).slice(0, 4);
+    const d0 = TODAY; const wdL = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+
+    // list
+    const q = s.q.trim().toLowerCase();
+    const techOf = p => [...p.stack.frontend, ...p.stack.backend, ...p.stack.db, ...p.stack.hosting];
+    const base = all.filter(p => (!q || [p.name, p.clientName, p.code].join(' ').toLowerCase().includes(q))
+      && (s.fStack === 'Todos' || techOf(p).includes(s.fStack)) && (s.fCms === 'Todos' || p.cms === s.fCms));
+    const filtered = base.filter(p => s.fStatus === 'Todos' || p.status === s.fStatus);
+    const statusChips = ['Todos', ...STATUSES].map(l => ({ label: l, count: String(l === 'Todos' ? base.length : base.filter(p => p.status === l).length),
+      optLabel: `${l} (${l === 'Todos' ? base.length : base.filter(p => p.status === l).length})`, cls: s.fStatus === l ? 'btn btn-primary' : 'btn btn-secondary', dot: l === 'Todos' ? 'transparent' : ST[l].dot, pick: () => this.setState({ fStatus: l }) }));
+    const stackOptions = ['Todos', ...[...new Set(s.projects.flatMap(techOf))].sort()];
+    const cmsOptions = ['Todos', ...[...new Set(s.projects.map(p => p.stack.cms))].sort()];
+
+    // detail
+    const cur = all.find(p => p.id === s.currentId) || all[0] || this.deco(BLANK);
+    const A = cur.access;
+    const noCms = cur.cms === 'Sin CMS';
+    const curVals = { ...cur, siteHref: href(A.site) || '#', cmsHref: href(A.cms) || '#', designHref: href(A.design) || '#' };
+    const G = (label, icon, text, o = {}) => ({ label, icon, text, hasText: !o.chips, hasChips: !!o.chips, chips: o.chips || [], hasHref: !!o.href, plain: !o.href, href: o.href || '', hasCopy: !!o.copy, copy: o.copy || null });
+    const glance = [
+      G('Stack', 'fi fi-rr-layers', '', { chips: [...cur.stack.frontend, ...cur.stack.backend, ...cur.stack.db].length ? [...cur.stack.frontend, ...cur.stack.backend, ...cur.stack.db] : ['Por definir'] }),
+      G('CMS', 'fi fi-rr-database', cur.cms),
+      G('Ruta local', 'fi fi-rr-folder-open', A.local, { copy: () => this.copy(A.local, 'Ruta') }),
+      G('Editar contenido', 'fi fi-rr-edit', noCms ? 'No aplica' : A.cms, { href: noCms ? '' : href(A.cms) }),
+      G('Editar diseño', 'fi fi-rr-pen-nib', A.design, { href: href(A.design) }),
+      G('Editor del CMS', 'fi fi-rr-user', cur.editors.length ? cur.editors.map(e => `${e.email} (${e.role})`).join(', ') : 'Sin editores'),
+      G('Sitio en producción', 'fi fi-rr-globe', A.site || '—', { href: href(A.site) }),
+      G('Hosting', 'fi fi-rr-cloud', cur.stack.hosting.join(' + ') || '—'),
+    ];
+    const R = (label, value, h) => ({ label, value: value || '—', href: h || '', hasHref: !!h, plain: !h });
+    const clientRows = [R('Cliente', cur.client.name), R('Contacto', cur.client.contact), R('Correo', cur.client.email, cur.client.email ? 'mailto:' + cur.client.email : ''),
+      R('WhatsApp', cur.client.whatsapp, cur.client.whatsapp ? 'https://wa.me/' + cur.client.whatsapp.replace(/\D/g, '') : ''), R('País', cur.client.country)];
+    const SR = (label, arr, cls = 'tag tag-neutral') => ({ label, chips: arr.length ? arr : ['—'], chipClass: arr.length ? cls : 'tag tag-neutral' });
+    const stackRows = [SR('Frontend', cur.stack.frontend, 'tag tag-accent'), SR('Backend', cur.stack.backend), SR('Base de datos', cur.stack.db), SR('CMS', noCms ? [] : [cur.cms], 'tag tag-accent-2'), SR('Hosting', cur.stack.hosting)];
+    const AR = (label, icon, value, isLink) => ({ label, icon, value: value || '—', href: isLink ? href(value) : '', hasHref: isLink && !!href(value), copy: () => this.copy(value || '', label) });
+    const accessRows = [AR('Ruta local', 'fi fi-rr-folder-open', A.local), AR('Repositorio', 'fi fi-rr-code-branch', A.repo, true), AR('Sitio en producción', 'fi fi-rr-globe', A.site, true),
+      AR('Link del CMS', 'fi fi-rr-edit', A.cms, true), AR('Link del diseño', 'fi fi-rr-pen-nib', A.design, true), AR('Panel de hosting', 'fi fi-rr-cloud', A.panel, true)];
+    const E = (label, d) => { const n = days(d); return { label, date: d ? fmt(d) : 'Sin fecha', left: n === null ? 'No aplica' : n < 0 ? 'Vencido' : `Vence ${inDays(n)}`, tagClass: n !== null && n <= 30 ? 'tag tag-accent-2' : 'tag tag-neutral' }; };
+    const expiries = [A.domainPending ? { label: 'Dominio', date: 'Pendiente de compra', left: 'Por comprar', tagClass: 'tag tag-accent-2' } : E('Dominio', A.domainExp), E('Hosting', A.hostingExp)];
+    const gd = cur.guide;
+    const guide = gd ? { scope: gd.scope, manage: gd.manage, tips: gd.tips,
+      types: gd.types.map(t => ({ ...t, count: t.fields.length + ' campos' })),
+      flows: gd.flows.map(fl => ({ title: fl.title, steps: fl.steps.map((x, i) => ({ n: String(i + 1), text: x })) })) } : null;
+    const guideText = gd ? ['Guía: cómo editar contenido (' + cur.cms + ')', 'Acceso: ' + href(A.cms), '', gd.scope, '',
+      ...gd.types.flatMap(t => [t.name + ' — ' + t.desc, ...t.fields.map(x => '• ' + x.f + ': ' + x.n), '']),
+      ...gd.flows.flatMap(fl => [fl.title, ...fl.steps.map((x, i) => (i + 1) + '. ' + x), '']),
+      'Importante', ...gd.tips.map(x => '• ' + x)].join('\n') : '';
+    const editors = cur.editors.map(e => ({ ...e, mailto: 'mailto:' + e.email, roleClass: e.role === 'Admin' ? 'tag tag-accent' : 'tag tag-neutral', copy: () => this.copy(e.email, 'Correo') }));
+    const saldo = cur.pay.total - cur.pay.advance;
+    const pct = cur.pay.total ? Math.round(cur.pay.advance / cur.pay.total * 100) : 0;
+    const noPay = !cur.pay.total;
+    const payFigures = noPay ? [{ label: 'Monto total', value: 'Sin registrar', color: 'var(--color-neutral-700)' }] : [{ label: 'Monto total', value: money(cur.pay.total, cur.pay.currency), color: 'var(--color-text)' },
+      { label: 'Adelanto', value: money(cur.pay.advance, cur.pay.currency), color: 'var(--color-text)' },
+      { label: 'Saldo', value: money(saldo, cur.pay.currency), color: saldo > 0 ? 'var(--color-accent-2-700)' : 'var(--color-text)' }];
+    const kindCls = { Pedido: 'tag tag-accent-2', Cambio: 'tag tag-accent', Nota: 'tag tag-neutral' };
+    const notes = cur.notes.map((n, i) => ({ ...n, dateLabel: fmt(n.date), kindClass: kindCls[n.kind] || 'tag tag-neutral',
+      asking: s.delNote === i, idle: s.delNote !== i,
+      ask: () => this.setState({ delNote: i }), cancel: () => this.setState({ delNote: -1 }),
+      del: () => { this.setState(st => ({ delNote: -1, projects: st.projects.map(p => p.id === cur.id ? { ...p, notes: p.notes.filter((_, j) => j !== i) } : p) })); this.flash('Entrada borrada'); } }));
+    const tabs = TABS.map(t => ({ label: t, pick: () => this.setState({ tab: t }), color: s.tab === t ? 'var(--color-accent-700)' : 'var(--color-text)', weight: s.tab === t ? 600 : 400, bar: s.tab === t ? 'inset 0 -2px 0 var(--color-accent)' : 'none' }));
+
+    // form
+    const f = s.form;
+    const F = (name, label, o = {}) => ({ name, label, value: f[name] ?? '', ph: o.ph || '', inputType: o.type || 'text', options: o.options || [],
+      isText: !o.options && !o.area, isSelect: !!o.options, isArea: !!o.area, span: o.area || o.wide ? '1 / -1' : 'auto' });
+    const formSections = [
+      { title: 'General', fields: [F('name', 'Nombre del proyecto *', { ph: 'Colegio AGB' }), F('code', 'Código', { ph: 'AGB-2026' }), F('type', 'Tipo', { options: TYPES }), F('status', 'Estado', { options: STATUSES }), F('delivery', 'Fecha de entrega', { type: 'date' }), F('desc', 'Descripción corta', { area: true, ph: 'Qué es y qué resuelve' })] },
+      { title: 'Cliente', fields: [F('clientName', 'Cliente *', { ph: 'Nombre o empresa' }), F('contact', 'Contacto'), F('email', 'Correo', { type: 'email' }), F('whatsapp', 'WhatsApp', { ph: '+51 …' }), F('country', 'País')] },
+      { title: 'Stack', fields: [F('frontend', 'Frontend', { ph: 'Astro, Tailwind, React' }), F('backend', 'Backend', { ph: 'Spring Boot' }), F('db', 'Base de datos', { ph: 'MySQL' }), F('cms', 'CMS', { options: CMSS }), F('hosting', 'Hosting', { ph: 'Vercel' })] },
+      { title: 'Accesos', fields: [F('local', 'Ruta local en la PC', { wide: true }), F('repo', 'Repositorio'), F('site', 'Sitio en producción'), F('cmsUrl', 'Link del CMS'), F('design', 'Link del diseño'), F('panel', 'Panel de hosting'), F('domainExp', 'Vence dominio', { type: 'date' }), F('hostingExp', 'Vence hosting', { type: 'date' })] },
+      { title: 'Editores CMS', fields: [F('ed1Email', 'Correo editor 1', { type: 'email' }), F('ed1Role', 'Rol', { options: ['Admin','Editor'] }), F('ed2Email', 'Correo editor 2', { type: 'email' }), F('ed2Role', 'Rol', { options: ['Admin','Editor'] })] },
+      { title: 'Pagos', fields: [F('total', 'Monto total', { type: 'number' }), F('advance', 'Adelanto', { type: 'number' }), F('currency', 'Moneda', { options: ['PEN','EUR'] })] },
+      { title: 'Notas', fields: [F('note', 'Primera entrada de la bitácora', { area: true, ph: 'Pedido inicial del cliente, acuerdos…' })] },
+    ];
+
+    // agenda
+    const evs = [];
+    all.filter(p => p.status !== 'Archivado').forEach(p => {
+      if (ahead(p.delivery)) evs.push({ d: p.delivery, title: p.name, detail: `Entrega · ${p.clientName}`, kind: 'Entrega', tagClass: 'tag tag-accent', open: p.open });
+      if (ahead(p.access.domainExp)) evs.push({ d: p.access.domainExp, title: p.name, detail: `Dominio ${p.access.site}`, kind: 'Dominio', tagClass: 'tag tag-accent-2', open: p.open });
+      if (ahead(p.access.hostingExp)) evs.push({ d: p.access.hostingExp, title: p.name, detail: `Hosting ${p.stack.hosting.join(' + ')}`, kind: 'Hosting', tagClass: 'tag tag-accent-2', open: p.open });
+    });
+    evs.sort((a, b) => a.d > b.d ? 1 : -1);
+    const agenda = [];
+    evs.forEach(e => { const d = parse(e.d); const m = `${MESL[d.getMonth()]} ${d.getFullYear()}`; let g = agenda.find(x => x.month === m); if (!g) agenda.push(g = { month: m, events: [] });
+      g.events.push({ ...e, day: String(d.getDate()).padStart(2, '0'), wd: DIA[d.getDay()] }); });
+
+    const hasFilters = !!q || s.fStatus !== 'Todos' || s.fStack !== 'Todos' || s.fCms !== 'Todos';
+    const u = s.user || ACCOUNTS[0];
+    const initials = u.full.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+    return {
+      theme: s.theme, isLight: !dark, isDark: dark, setLight: () => this.setTheme('light'), setDark: () => this.setTheme('dark'),
+      toggleTheme: () => this.setTheme(dark ? 'light' : 'dark'), themeIcon: dark ? 'fi fi-sr-toggle-on' : 'fi fi-rr-toggle-off',
+      bgVariant: ({ 'Pizarra': 'pizarra', 'Arena': 'arena', 'Salvia': 'salvia' })[this.props.fondo ?? 'Arena'] || 'arena',
+      accentVariant: ({ 'Naranja': 'naranja', 'Terracota': 'terracota', 'Mandarina': 'mandarina', 'Azul (complementario)': 'azul', 'Turquesa (complementario dividido)': 'turquesa' })[this.props.acento ?? 'Terracota'] || 'terracota',
+      isMobile: s.isMobile, isDesktop: !s.isMobile,
+      sumPad: s.isMobile ? 'var(--space-4)' : '14px 16px', sumGap: s.isMobile ? 'var(--space-3)' : '8px', sumBig: s.isMobile ? '48px' : '34px', sumIcon: s.isMobile ? '46px' : '40px', sumIconFs: s.isMobile ? '26px' : '24px', sumItemPad: s.isMobile ? '8px 6px' : '4px 6px',
+      recentThumbW: s.isMobile ? '88px' : '176px', recentThumbH: s.isMobile ? '55px' : '110px', tableThumbW: s.isMobile ? '60px' : '120px', tableThumbH: s.isMobile ? '38px' : '76px',
+      sideOpen: s.side, sideClosed: !s.side, sideW: s.side ? '240px' : '76px', navBtnW: s.side ? '212px' : '48px', userMaxH: s.side ? '64px' : '0px',
+      lblOp: s.side ? 1 : 0, lblTx: s.side ? 'translateX(0)' : 'translateX(-6px)', lblTab: s.side ? 0 : -1, toggleLeft: s.side ? '164px' : '0px', lblPe: s.side ? 'auto' : 'none', burgerOp: s.side ? 0 : 1, chevRot: s.side ? 'rotate(0deg)' : 'rotate(-90deg)', burgerRot: s.side ? 'rotate(90deg)' : 'rotate(0deg)',
+      lblTr: s.side ? 'opacity .3s ease .18s, transform .4s cubic-bezier(.32,.72,0,1) .12s' : 'opacity .14s ease, transform .2s ease', themeLabel: dark ? 'Modo claro' : 'Modo oscuro',
+      openSearch: () => { this.setState({ side: true }); try { localStorage.setItem('fl-dash-side', '1'); } catch (e) {} setTimeout(() => { const el = document.getElementById('side-search'); if (el) el.focus(); }, 60); },
+      brandDir: s.side ? 'row' : 'column', navJustify: s.side ? 'flex-start' : 'center',
+      sideIcon: 'fi fi-rr-angle-left', sideTitle: s.side ? 'Esconder menú' : 'Mostrar menú',
+      toggleSide: () => { const v = !s.side; this.setState({ side: v }); try { localStorage.setItem('fl-dash-side', v ? '1' : '0'); } catch (e) {} }, themeMt: s.side ? '0' : 'auto', mainPad: s.isMobile ? '16px 16px 96px' : '22px 40px 60px',
+      nav, userName: s.userName, initials, q: s.q,
+      loggedIn: !!s.user && !this.props.verLogin, loggedOut: !s.user || !!this.props.verLogin, userFull: u.full, userEmail: u.email, userColor: u.color,
+      openChooser: () => this.setState({ chooser: true }), closeChooser: () => this.setState({ chooser: false, signing: '' }), chooser: s.chooser,
+      accounts: ACCOUNTS.map(a => ({ ...a, initials: a.full.split(' ').map(w => w[0]).join(''), pick: () => this.login(a), busy: s.signing === a.id, idle: s.signing !== a.id, count: (s.store[a.id] || []).length + ' proyectos' })),
+      otherAccount: () => { this.setState({ chooser: false }); this.flash('Disponible al conectar Google real'); },
+      logout: () => this.logout(), noProjects: all.length === 0, hasProjects: all.length > 0,
+      onSearch: e => this.setState({ q: e.target.value, screen: ['proyectos'].includes(s.screen) ? s.screen : 'proyectos' }),
+      isHome: s.screen === 'inicio', isProjects: s.screen === 'proyectos', isDetail: s.screen === 'ficha', isForm: s.screen === 'form', isCalendar: s.screen === 'calendario', isSettings: s.screen === 'ajustes',
+      todayLabel: `${wdL[d0.getDay()]}, ${d0.getDate()} de ${MESL[d0.getMonth()].toLowerCase()} de ${d0.getFullYear()}`,
+      homeSummary: `${all.filter(p => p.status === 'En desarrollo').length} proyectos en desarrollo · ${exp.filter(e => e.pending).length} dominios por comprar · ${owing.length} saldos por cobrar.`,
+      summary, recent, goProjects: () => this.go('proyectos'),
+      newProject: () => { const id = 'p' + Date.now(); this.setState({ screen: 'form', formMode: 'new', formId: id, form: this.toForm(null), formError: '' }); window.scrollTo(0, 0); },
+      countLabel: `${filtered.length} de ${all.length} proyectos`,
+      isCards: s.view === 'cards', isTable: s.view === 'tabla', setCards: () => this.setState({ view: 'cards' }), setTable: () => this.setState({ view: 'tabla' }),
+      statusChips, fStatus: s.fStatus, onStatus: e => this.setState({ fStatus: e.target.value }), stackOptions, cmsOptions, fStack: s.fStack, fCms: s.fCms,
+      onStack: e => this.setState({ fStack: e.target.value }), onCms: e => this.setState({ fCms: e.target.value }),
+      hasFilters, clearFilters: () => this.setState({ q: '', fStatus: 'Todos', fStack: 'Todos', fCms: 'Todos' }),
+      filtered, isEmpty: filtered.length === 0, showCards: s.view === 'cards' && filtered.length > 0, showTable: s.view === 'tabla' && filtered.length > 0,
+      cur: curVals, tabs, glance, clientRows, stackRows, accessRows, expiries, editors, hasEditors: editors.length > 0, noEditors: editors.length === 0, noEditorsText: noCms ? 'Este proyecto no usa CMS.' : `Aún no hay editores invitados en ${cur.cms}. Agrégalos desde Editar.`,
+      hasGuide: !!guide, guide: guide || { types: [], flows: [], tips: [] }, copyGuide: () => this.copy(guideText, 'Guía'),
+      payFigures, payPct: pct + '%', payLabel: noPay ? 'Registra el monto desde Editar.' : `${pct}% cobrado · moneda ${cur.pay.currency === 'PEN' ? 'soles (PEN)' : 'euros (EUR)'}`,
+      notes, noteDraft: s.noteDraft, noteKind: s.noteKind,
+      onNoteDraft: e => this.setState({ noteDraft: e.target.value }), onNoteKind: e => this.setState({ noteKind: e.target.value }),
+      addNote: () => { const t = s.noteDraft.trim(); if (!t) return; const iso = `${TODAY.getFullYear()}-${String(TODAY.getMonth()+1).padStart(2,'0')}-${String(TODAY.getDate()).padStart(2,'0')}`;
+        this.setState(st => ({ noteDraft: '', projects: st.projects.map(p => p.id === cur.id ? { ...p, updated: iso, notes: [{ date: iso, kind: st.noteKind, text: t }, ...p.notes] } : p) })); this.flash('Nota agregada'); },
+      confirmDel: s.confirmDel, askDelete: () => this.setState({ confirmDel: true }), cancelDelete: () => this.setState({ confirmDel: false }), stop: e => e.stopPropagation(),
+      doDelete: () => { const name = cur.name; this.setState(st => ({ confirmDel: false, screen: 'proyectos', projects: st.projects.filter(p => p.id !== cur.id), currentId: (st.projects.find(p => p.id !== cur.id) || {}).id })); window.scrollTo(0, 0); this.flash(name + ' eliminado'); },
+      archiveInstead: () => { this.setState(st => ({ confirmDel: false, projects: st.projects.map(p => p.id === cur.id ? { ...p, status: 'Archivado' } : p) })); this.flash('Proyecto archivado'); },
+      copyLocal: () => this.copy(A.local, 'Ruta local'),
+      editProject: () => { this.setState({ screen: 'form', formMode: 'edit', form: this.toForm(s.projects.find(p => p.id === cur.id)), formError: '' }); window.scrollTo(0, 0); },
+      tabResumen: s.tab === 'Resumen', tabCliente: s.tab === 'Cliente', tabStack: s.tab === 'Stack', tabAccesos: s.tab === 'Accesos', tabEditores: s.tab === 'Editores CMS', tabPagos: s.tab === 'Pagos', tabNotas: s.tab === 'Notas',
+      formTitle: s.formMode === 'new' ? 'Nuevo proyecto' : `Editar · ${cur.name}`, formThumbId: s.formMode === 'new' ? 'thumb-' + s.formId : cur.thumbId,
+      formThumbSrc: s.formMode === 'new' ? '' : cur.thumbSrc,
+      formSections, onFormChange: e => { const { name, value } = e.target; this.setState(st => ({ form: { ...st.form, [name]: value } })); },
+      saveForm: () => this.save(), cancelForm: () => this.go(s.formMode === 'edit' ? 'ficha' : 'proyectos'),
+      hasFormError: !!s.formError, formError: s.formError,
+      agenda, basePath: s.basePath, onUserName: e => this.setState({ userName: e.target.value }), onBasePath: e => this.setState({ basePath: e.target.value }),
+      hasToast: !!s.toast, toast: s.toast, toastBottom: s.isMobile ? '84px' : '28px',
+    };
+  }
+}
+</script>
+</body>
+</html>

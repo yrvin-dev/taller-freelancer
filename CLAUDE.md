@@ -1,0 +1,83 @@
+# CLAUDE.md — Taller Freelancer
+
+> Cerebro del proyecto. Léelo entero antes de cada tanda.
+> Specs: `01-requerimientos.md` (qué) · `02-design-system.md` (cómo se ve) · `03-arquitectura.md` (cómo se construye) · `04-plan.md` (en qué orden).
+
+## Qué es
+
+Dashboard web para que freelancers administren sus proyectos de cliente: stack, accesos, enlaces, pagos, vencimientos y bitácora. Es multiusuario con login de Google, y cada usuario ve solo sus datos. No hay roles en el MVP.
+Además de herramienta personal, es una **pieza de portafolio**: el código tiene que leerse como el de un senior (tipado estricto, tests y CI, seguridad bien resuelta).
+
+## Stack y por qué
+
+| Capa | Herramienta | Por qué |
+|---|---|---|
+| Framework | **Next.js 15 (App Router) + React 19 + TypeScript strict** | App detrás de login, muy interactiva. Server Components y Server Actions evitan una API aparte. Es lo que más piden las ofertas de frontend y full stack. |
+| Estilos | **Tailwind CSS v3.4** mapeado a CSS vars | Los tokens del export se usan tal cual. Tailwind solo referencia `var(--*)`. |
+| Datos y auth | **Supabase**: Postgres + Auth (Google OAuth) + RLS + Storage | Auth y base de datos listos. La autorización vive en la base (RLS), así que aunque falle el frontend nadie lee datos ajenos. |
+| Acceso a datos | `@supabase/ssr` + tipos generados (`supabase gen types`) | Queries tipadas de punta a punta. |
+| Validación | **Zod** (compartido entre form y server action) | Un solo esquema para el cliente y el servidor. |
+| Formularios | React Hook Form + `@hookform/resolvers/zod` | |
+| Estado en el cliente | Estado de URL (`searchParams`) para los filtros; nada de un store global | Filtros que se pueden compartir y que no se pierden al recargar. |
+| Cifrado | AES-256-GCM con `node:crypto` en el servidor, clave en `CREDENTIALS_KEY` | Las credenciales de clientes nunca llegan en claro a la base. |
+| Tests | **Vitest** + Testing Library (unitarios) · **Playwright** (e2e) | |
+| Calidad | ESLint (con una regla que prohíbe hex) · Prettier · `tsc --noEmit` | |
+| CI/CD | GitHub Actions (lint, typecheck, tests y build) → Vercel (previews por PR, producción en `main`) | |
+| Observabilidad | Vercel Analytics · Sentry (fase 2) | |
+
+> Se descartó **Astro**: no aporta SEO detrás de un login y todo terminaría como isla. Se descartó **Spring Boot**: el Java del portafolio va en el proyecto de la clínica dental, donde tiene reglas de negocio de verdad.
+
+## Reglas duras
+
+1. **Cero valores hex o rgb fuera de `src/styles/tokens.css`.** Todo color, sombra y radio sale de `var(--*)` o de una clase de Tailwind mapeada a un token. ESLint y un `grep` en CI lo bloquean.
+2. **Los componentes se portan del export** (`Taller Freelancer.dc.html`), nunca se inventan. Si falta uno, se agrega primero al export o al 02, y después se porta.
+3. **Fuente única de verdad:**
+   - Tokens → `src/styles/tokens.css`.
+   - Íconos → `src/lib/icons.ts`.
+   - Estados, tipos y labels → `src/lib/domain.ts`.
+   - Esquemas → `src/lib/schemas.ts`.
+   - Tipos de la base → `src/lib/database.types.ts` (generado, no se edita a mano).
+4. **Espaciado solo con tokens existentes** (`--space-1/2/3/4/6/8`). No existen `space-5` ni `space-10`.
+5. **Toda query pasa por RLS.** Nunca se usa la `service_role` key en código que corra en el navegador, y en el servidor solo para tareas de admin documentadas.
+6. **Las credenciales se descifran solo en el servidor** y solo cuando el usuario pide verlas (botón "Mostrar"). Nunca van en logs ni en el HTML inicial.
+7. **TypeScript strict, sin `any`.** Se puede usar `unknown` y validar con Zod.
+8. **Accesibilidad AA**: contraste de 4.5:1, foco visible, objetivos táctiles de 44px en mobile y labels en todos los inputs.
+
+## Método por tandas (obligatorio)
+
+Una tanda es una unidad de trabajo cerrada:
+
+1. **Prompt acotado**: una tanda del `04-plan.md`, por ID (por ejemplo `T03`).
+2. **Plan**: Claude lista los archivos que va a crear o tocar y qué cambia en cada uno. No se escribe código todavía.
+3. **Aprobación**: en *manual mode*, cada edición se aprueba por separado.
+4. **Verificación por código**: `pnpm lint && pnpm typecheck && pnpm test`.
+5. **Verificación visual**: abrir en el navegador (`pnpm dev`), comparar con el export en light y dark, y en 375px y 1440px.
+6. **Commit atómico**: `git add <archivos explícitos>` y luego `git commit -m "T03: …"`. **Nunca `git add .` ni `git add -A`.**
+7. Actualizar la casilla de la tanda en `04-plan.md` y, si salió algo nuevo, la sección *Gotchas*.
+
+**Prohibido encadenar tandas.** Al terminar una se para y se espera el siguiente prompt. Si una tanda crece, se parte en `T03a` y `T03b`.
+
+## Orden de construcción
+
+Ver `04-plan.md`. Resumen: scaffold y tokens → componentes base → layout → páginas → datos y auth → interactividad → accesibilidad → deploy.
+
+## Convenciones
+
+- Carpetas y archivos en `kebab-case`; componentes en `PascalCase.tsx`.
+- Server Components por defecto. `"use client"` solo donde hay estado o eventos.
+- Server Actions en `src/app/(app)/**/actions.ts`, siempre validadas con Zod y devolviendo `{ ok, error }`.
+- Commits: `T<nn>: <verbo> <qué>` (por ejemplo `T05: porta ProjectCard desde el export`).
+- La UI va en español (es-PE), los montos en soles (`Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' })`) y las fechas con `Intl.DateTimeFormat('es-PE')`.
+
+## Seguridad
+
+- **Credenciales de clientes y secretos nunca a git.** `.env*` está en `.gitignore` (excepto `.env.example`, que solo tiene claves vacías).
+- Las credenciales se guardan cifradas con AES-256-GCM. La clave `CREDENTIALS_KEY` vive solo en Vercel (Production y Preview separadas) y en tu `.env.local`.
+- Si una clave se filtra: rotarla y re-cifrar los datos con el script `scripts/rotate-key.ts`.
+- `pnpm audit` y Dependabot activos. Antes de cada commit, revisa en el diff que no haya tokens ni URLs con credenciales.
+- Cabeceras de seguridad en `next.config.ts`: CSP, `X-Frame-Options: DENY` y `Referrer-Policy`.
+
+## Gotchas / aprendizajes
+
+<!-- Agregar una línea por aprendizaje: fecha · tanda · qué pasó · regla nueva -->
+-
