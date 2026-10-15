@@ -1,0 +1,7 @@
+design/
+docs/
+CLAUDE.md
+pnpm-lock.yaml
+.next/
+coverage/
+next-env.d.ts

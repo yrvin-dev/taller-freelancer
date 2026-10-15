@@ -5,9 +5,9 @@
 
 ## Fase 0 · Fundaciones
 
-### [ ] T01 · Scaffold
+### [x] T01 · Scaffold
 - **Objetivo:** proyecto Next.js 15 con TypeScript strict, Tailwind 3.4, ESLint, Prettier y Vitest.
-- **Archivos:** `package.json`, `tsconfig.json`, `next.config.ts`, `tailwind.config.ts`, `postcss.config.js`, `.eslintrc`, `.prettierrc`, `.gitignore`, `.env.example`, `vitest.config.ts`, `src/app/layout.tsx`, `src/app/page.tsx`.
+- **Archivos:** `package.json`, `tsconfig.json`, `next.config.ts`, `tailwind.config.ts`, `postcss.config.js`, `eslint.config.mjs`, `.prettierrc`, `.gitignore`, `.env.example`, `vitest.config.ts`, `src/app/layout.tsx`, `src/app/page.tsx`.
 - **Hecho cuando:** `pnpm dev` levanta, `pnpm build` pasa y `.env*` está ignorado (excepto `.env.example`).
 
 ### [ ] T02 · Tokens
