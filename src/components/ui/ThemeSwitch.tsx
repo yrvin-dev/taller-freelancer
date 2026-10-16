@@ -14,8 +14,11 @@ const SUN_RAYS =
   'M37 9.6v1.3M37 19.1v1.3M31.6 15h1.3M41.1 15h1.3M33.2 11.2l.9.9M39.9 17.9l.9.9M33.2 18.8l.9-.9M39.9 12.1l.9-.9';
 const MOON = 'M16.5 9.6a5.6 5.6 0 1 0 0 10.8a4.6 4.6 0 0 1 0-10.8z';
 
-/** El SVG del export (pista 52×30 con luna y sol). Los colores salen de --switch-*. */
-function SwitchGraphic({ dark, size }: { dark: boolean; size: 'sm' | 'md' }) {
+/**
+ * El SVG del export (pista 52×30 con luna y sol). Los colores salen de --switch-*.
+ * Se exporta para la sidebar, que lo pone dentro de su propio botón con texto.
+ */
+export function ThemeSwitchGraphic({ dark, size }: { dark: boolean; size: 'sm' | 'md' }) {
   const stroke = { stroke: 'var(--switch-stroke)', strokeWidth: 2 };
   const glyph = 'var(--switch-glyph)';
 
@@ -89,7 +92,7 @@ export function ThemeSwitch({ theme, onToggle, size = 'md' }: ThemeSwitchProps) 
         BUTTON[size],
       )}
     >
-      <SwitchGraphic dark={dark} size={size} />
+      <ThemeSwitchGraphic dark={dark} size={size} />
     </button>
   );
 }

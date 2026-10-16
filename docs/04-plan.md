@@ -44,10 +44,15 @@
 
 ## Fase 2 · Layout
 
-### [ ] T07 · Shell de la app
-- **Objetivo:** `Sidebar` colapsable unida al header (transición de 280ms), `AppHeader` y `PageHeader`. En mobile, menú tipo drawer.
-- **Archivos:** `src/components/layout/*`, `src/app/(app)/layout.tsx`.
-- **Hecho cuando:** colapsar y expandir es fluido, el estado persiste y todo es usable a 375px.
+### [x] T07a · Shell de la app · desktop
+- **Objetivo:** layout `(app)` y `Sidebar` colapsable del export (76 ↔ 240px, 500ms `cubic-bezier(.32,.72,0,1)`), con el estado en la cookie `tf-side`. La home pasa a `(app)/page.tsx`.
+- **Archivos:** `src/components/layout/Sidebar.tsx`, `src/app/(app)/{layout,page}.tsx`, `src/lib/{nav,layout-prefs}.ts`, `src/lib/mock/user.ts`.
+- **Hecho cuando:** colapsar y expandir es fluido, el estado persiste al recargar sin salto y el ítem activo lleva `aria-current`.
+
+### [ ] T07b · Shell de la app · mobile y encabezado
+- **Objetivo:** debajo de 820px, `AppHeader` (marca) y `BottomNav` fija de 4 ítems, como en el export (no drawer). `PageHeader` (título, bajada, acciones y switch de tema). El toast sube sobre la barra inferior.
+- **Archivos:** `src/components/layout/{AppHeader,BottomNav,PageHeader}.tsx`, `src/app/(app)/layout.tsx`, `src/components/ui/Toast.tsx`.
+- **Hecho cuando:** todo es usable a 375px, con objetivos de 44px y la barra respetando `safe-area-inset-bottom`.
 
 ## Fase 3 · Páginas (con datos mock tipados)
 

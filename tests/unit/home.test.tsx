@@ -1,16 +1,9 @@
 import { render, screen } from '@testing-library/react';
-import Home from '@/app/page';
-import { ThemeProvider } from '@/components/ThemeProvider';
+import Home from '@/app/(app)/page';
 
 describe('Home', () => {
-  it('muestra el título de la app', () => {
-    render(
-      <ThemeProvider initialTheme="light">
-        <Home />
-      </ThemeProvider>,
-    );
-    expect(
-      screen.getByRole('heading', { level: 1, name: 'Taller Freelancer' }),
-    ).toBeInTheDocument();
+  it('muestra el título de la página', () => {
+    render(<Home />);
+    expect(screen.getByRole('heading', { level: 1, name: 'Inicio' })).toBeInTheDocument();
   });
 });

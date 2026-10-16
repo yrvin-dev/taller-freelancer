@@ -42,6 +42,9 @@ const config: Config = {
         'accent-hover': 'var(--state-accent-hover)',
         'accent-pressed': 'var(--state-accent-pressed)',
         'border-hover': 'var(--state-border-hover)',
+        subtle: 'var(--state-subtle)',
+        'accent-active': 'var(--state-accent-active)',
+        'danger-hover': 'var(--state-danger-hover)',
       },
       accent: { DEFAULT: 'var(--color-accent)', ...ramp('accent') },
       'accent-2': { DEFAULT: 'var(--color-accent-2)', ...ramp('accent-2') },
@@ -72,6 +75,7 @@ const config: Config = {
       sm: 'var(--radius-sm)',
       md: 'var(--radius-md)',
       lg: 'var(--radius-lg)',
+      xl: 'var(--radius-xl)',
       pill: 'var(--radius-pill)',
       full: '50%',
     },
@@ -80,6 +84,8 @@ const config: Config = {
       sm: 'var(--shadow-sm)',
       md: 'var(--shadow-md)',
       lg: 'var(--shadow-lg)',
+      sidebar: 'var(--shadow-sidebar)',
+      search: 'var(--shadow-search)',
     },
     fontFamily: {
       heading: 'var(--font-heading)',
@@ -115,7 +121,10 @@ const config: Config = {
       avatar: 'var(--gradient-avatar)',
     },
     extend: {
-      transitionTimingFunction: { out: 'var(--ease-out)' },
+      transitionTimingFunction: { out: 'var(--ease-out)', shell: 'var(--ease-shell)' },
+      transitionDuration: { shell: 'var(--duration-shell)' },
+      // Corte del export entre sidebar (desktop) y barra inferior (mobile).
+      screens: { shell: '820px' },
     },
   },
   plugins: [],

@@ -72,3 +72,96 @@
     outline-offset: 2px;
   }
 }
+
+/* Sidebar (export): la coreografía de colapsar/expandir, guiada por data-expanded.
+   Valores del export: ancho 76 → 240px en 500ms; las etiquetas entran con retraso
+   (opacidad .3s tras .18s) y salen rápido (.14s). */
+@layer components {
+  .sidebar {
+    width: 76px;
+    transition: width var(--duration-shell) var(--ease-shell);
+  }
+  .sidebar[data-expanded='true'] {
+    width: 240px;
+  }
+
+  .sidebar-row {
+    width: 48px;
+    transition:
+      width var(--duration-shell) var(--ease-shell),
+      background-color 0.2s;
+  }
+  .sidebar[data-expanded='true'] .sidebar-row {
+    width: 212px;
+  }
+
+  .sidebar-label {
+    opacity: 0;
+    transform: translateX(-6px);
+    pointer-events: none;
+    transition:
+      opacity 0.14s ease,
+      transform 0.2s ease;
+  }
+  .sidebar[data-expanded='true'] .sidebar-label {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition:
+      opacity 0.3s ease 0.18s,
+      transform 0.4s var(--ease-shell) 0.12s;
+  }
+
+  .sidebar-user {
+    max-height: 0;
+  }
+  .sidebar[data-expanded='true'] .sidebar-user {
+    max-height: 64px;
+  }
+  .sidebar .sidebar-user {
+    transition-property: opacity, transform, max-height;
+    transition-duration: 0.14s, 0.2s, var(--duration-shell);
+    transition-timing-function: ease, ease, var(--ease-shell);
+  }
+  .sidebar[data-expanded='true'] .sidebar-user {
+    transition-duration: 0.3s, 0.4s, var(--duration-shell);
+    transition-delay: 0.18s, 0.12s, 0s;
+    transition-timing-function: ease, var(--ease-shell), var(--ease-shell);
+  }
+
+  .sidebar-toggle {
+    left: 0;
+    transition: left var(--duration-shell) var(--ease-shell);
+  }
+  .sidebar[data-expanded='true'] .sidebar-toggle {
+    left: 164px;
+  }
+
+  .sidebar-chevron,
+  .sidebar-burger {
+    grid-area: 1 / 1;
+    transition:
+      opacity 0.25s ease,
+      transform 0.4s var(--ease-shell);
+  }
+  .sidebar-chevron {
+    opacity: 0;
+    transform: rotate(-90deg);
+  }
+  .sidebar[data-expanded='true'] .sidebar-chevron {
+    opacity: 1;
+    transform: none;
+  }
+  .sidebar[data-expanded='true'] .sidebar-burger {
+    opacity: 0;
+    transform: rotate(90deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sidebar,
+    .sidebar * {
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
+  }
+}

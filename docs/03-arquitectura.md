@@ -97,7 +97,7 @@ type AvatarProps = { name: string; src?: string; size?: 36|40|64 }; // tamaños 
 type StatusDotProps = { status: ProjectStatus };
 
 // layout
-type SidebarProps = { collapsed: boolean; onToggle(): void; active: NavKey; user: { name: string; avatarUrl?: string } };
+type SidebarProps = { user: { name: string; email: string; avatarUrl?: string }; activeCount: number; initialExpanded: boolean }; // estado propio + cookie tf-side; activo por usePathname()
 type PageHeaderProps = { title: string; actions?: ReactNode };
 
 // projects

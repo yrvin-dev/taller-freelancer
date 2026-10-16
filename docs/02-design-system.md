@@ -176,7 +176,7 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 7. **Jerarquía por tamaño y espacio**, no por cajas dentro de cajas. Una sección no es una card.
 8. **Densidad 1.25×**: no apretar el espaciado para que entre más.
 9. **Miniaturas reales** (captura del sitio, 1600×1000, 16:10). Nunca un gradiente genérico en su lugar.
-10. **Microinteracciones discretas**: hover con sombra y 1px de elevación; sidebar con `transition` de 280ms `cubic-bezier(.2,.8,.2,1)`. Nada de rebotes.
+10. **Microinteracciones discretas**: hover con sombra y 1px de elevación; sidebar con `transition` de 500ms `cubic-bezier(.32,.72,0,1)` (`--ease-shell`, `--duration-shell`), como el export; las etiquetas entran con retraso y salen rápido. Nada de rebotes. ✅ T07a (antes decía 280ms `cubic-bezier(.2,.8,.2,1)`; ganó el export).
 
 ## 10. Estados de interacción
 

@@ -52,6 +52,7 @@
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 20px;
+  --radius-xl: 28px; /* sidebar y cards grandes del export */
   --radius-pill: 999px;
 
   /* Colores fijos en los dos temas */
@@ -70,6 +71,11 @@
   --switch-light-knob: #f0a24a;
 
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-shell: cubic-bezier(0.32, 0.72, 0, 1); /* sidebar del export (500ms) */
+  --duration-shell: 500ms;
+
+  /* Botón de búsqueda de la sidebar (export: inline, igual en los dos temas) */
+  --shadow-search: 0 6px 16px rgba(44, 64, 89, 0.35);
 }
 
 /* ── Derivados (se recalculan en cada contenedor con tema) ───────────── */
@@ -86,6 +92,12 @@
   --state-accent-hover: color-mix(in srgb, var(--color-accent) 10%, transparent);
   --state-accent-pressed: color-mix(in srgb, var(--color-accent) 18%, transparent);
   --state-border-hover: color-mix(in srgb, var(--color-text) 45%, transparent);
+  --state-subtle: color-mix(in srgb, var(--color-text) 5%, transparent);
+  --state-accent-active: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  --state-danger-hover: color-mix(in srgb, var(--color-accent-2) 14%, transparent);
+
+  /* Sidebar: sombra lateral del export + shadow-sm del tema */
+  --shadow-sidebar: 5px 0 30px rgba(0, 0, 0, 0.08), var(--shadow-sm);
 
   /* Formularios (export: .field > label y .input::placeholder) */
   --color-label: color-mix(in srgb, var(--color-text) 70%, transparent);
