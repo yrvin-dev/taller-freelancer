@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/Card';
 import { StatusDot } from '@/components/ui/StatusDot';
 import { Tag } from '@/components/ui/Tag';
 import { PROJECT_STATUSES } from '@/lib/domain';
+import { Interactive } from './Interactive';
 
 // Galería de componentes para comparar con el export (light y dark lado a lado).
 // La carpeta es `%5Fui` por la misma razón que `%5Ftokens`. Solo existe en desarrollo.
@@ -69,6 +70,12 @@ function Panel({ theme }: { theme: 'light' | 'dark' }) {
         <Avatar name="Yrvin Huamán" />
         <Avatar name="Camila Torres" size={40} />
         <Avatar name="Yrvin Huamán" size={64} />
+      </Row>
+
+      <Row title="Field · Input · Select · Textarea · Seg">
+        <div className="w-full">
+          <Interactive id={theme} />
+        </div>
       </Row>
 
       <div className="grid gap-4 sm:grid-cols-3">

@@ -92,3 +92,5 @@ Ver `04-plan.md`. Resumen: scaffold y tokens → componentes base → layout →
 - 2026-10-16 · T04 · En Tailwind 3, `@layer base` no es una capa nativa de CSS: gana la especificidad. `a:hover` (0,1,1) le gana a `.text-text` (0,1,0), así que un componente que se renderiza como `<a>` necesita también `hover:text-*`.
 - 2026-10-16 · T04 · No mezclar en la misma clase dos utilidades que tocan la misma propiedad (`px-1` y `px-[…]`, `font-semibold` y `font-bold`): gana la que Tailwind genera después, no la que va última en el string. Se resuelve eligiendo una sola en código (ver `buttonClass`).
 - 2026-10-16 · T04 · Los valores de espaciado del export que no son tokens (6px, 3px, 18px) se escriben como el export: `calc(var(--space-*) * n)` en un valor arbitrario. Los tamaños fijos (36px, 7px, 44px) van en px.
+- 2026-10-16 · T05a · `pnpm dev` no recarga los cambios de `tailwind.config.ts` (colores nuevos): las clases no se generan hasta reiniciar el servidor. Tras tocar la config, reiniciar `pnpm dev` antes de la revisión visual.
+- 2026-10-16 · T05a · No correr `pnpm build` con `pnpm dev` levantado: los dos usan `.next` y se pisan.

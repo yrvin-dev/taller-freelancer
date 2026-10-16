@@ -88,7 +88,7 @@ type ButtonProps = { variant?: 'primary'|'secondary'|'ghost'; size?: 'sm'|'md'; 
   & ({ iconOnly?: false; children: ReactNode } | { iconOnly: true; icon: IconName; 'aria-label': string }); // + buttonClass() para <Link>
 type TagProps = { tone?: 'accent'|'accent-2'|'neutral'|'outline'; children: ReactNode };
 type FieldProps = { label: string; htmlFor: string; error?: string; hint?: string; children: ReactNode };
-type SegProps<T extends string> = { name: string; value: T; options: { value: T; label: string; icon?: IconName }[]; onChange(v: T): void };
+type SegProps<T extends string> = { name: string; label: string; value: T; options: { value: T; label: string; icon?: IconName }[]; onChange(v: T): void };
 type CardProps = { elevation?: 'sm'|'md'|'lg'; featured?: boolean; children: ReactNode } & ({ as?: 'div'|'article' } | { as: 'a'; href: string }); // 'a' usa next/link
 type DialogProps = { open: boolean; title: string; onClose(): void; children: ReactNode; actions?: ReactNode };
 type ToastProps = { message: string; icon?: IconName };

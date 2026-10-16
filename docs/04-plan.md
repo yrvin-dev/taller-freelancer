@@ -27,10 +27,15 @@
 - **Archivos:** `src/components/ui/{Button,Tag,StatusDot,Avatar,Card}.tsx` y sus tests.
 - **Hecho cuando:** hover, pressed, focus y disabled coinciden con el export, y no queda ningún hex.
 
-### [ ] T05 · UI primitives II
-- **Objetivo:** `Field`, `Input`, `Select`, `Textarea`, `Seg`, `Dialog` y `Toast`.
-- **Archivos:** `src/components/ui/*`.
-- **Hecho cuando:** el `Dialog` atrapa el foco y cierra con Esc, y cada label está asociado a su input.
+### [x] T05a · UI primitives II · formularios
+- **Objetivo:** `Field`, `Input`, `Select`, `Textarea` y `Seg`.
+- **Archivos:** `src/components/ui/{Field,Input,Select,Textarea,Seg}.tsx` y sus tests.
+- **Hecho cuando:** cada label está asociado a su input, y la ayuda y el error quedan en `aria-describedby`.
+
+### [ ] T05b · UI primitives II · overlays
+- **Objetivo:** `Dialog` (nativo, `showModal`) y `Toast` (`ToastProvider` + `useToast`).
+- **Archivos:** `src/components/ui/{Dialog,Toast}.tsx` y sus tests.
+- **Hecho cuando:** el `Dialog` atrapa el foco y cierra con Esc, y el `Toast` se anuncia en una región `role="status"`.
 
 ### [ ] T06 · ThemeSwitch
 - **Objetivo:** el switch con luna y sol en SVG (tamaños `sm` y `md`), con persistencia en una cookie para que no haya parpadeo al cargar.

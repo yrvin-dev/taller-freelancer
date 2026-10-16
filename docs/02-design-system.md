@@ -156,6 +156,15 @@ Las cards no llevan borde (`border: 0`), solo `--shadow-sm`. Hover → `--shadow
 
 `Button` (primary / secondary / ghost / icon) · `Tag` (accent / accent-2 / neutral / outline, en pill) · `Field` + `Input` / `Select` / `Textarea` · `Seg` (control segmentado) · `Card` · `Dialog` · `Table` · `Toast` · `Sidebar` (colapsable, unida al header) · `ThemeSwitch` · `SummaryCard` · `ProjectCard` (miniatura 16:10) · `ProjectRow` · `StatusDot` · `Avatar` (iniciales sobre degradado o color) · `EmptyState` · `ErrorScreen` (401/403).
 
+### 8.1 Field: ayuda y error (no están en el export) ✅ T05a
+
+El export solo muestra un tag coral arriba del formulario ("Completa el nombre del proyecto y el cliente."). Para validar por campo se agrega:
+
+- **Ayuda:** debajo del control, 12px, `--color-label` (texto al 70%), con un margen de `--space-1`.
+- **Error:** debajo del control (después de la ayuda), 12px, `--color-danger-text`, con el ícono `warning` delante. El borde del control pasa a `--color-danger`.
+- Los dos van en `aria-describedby` del control, y el error además pone `aria-invalid`.
+- **Seg:** la opción elegida lleva texto `--color-on-accent`, no `--color-bg` como en el export (2.2:1 sobre el acento en arena).
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.
