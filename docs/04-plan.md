@@ -22,7 +22,7 @@
 
 ## Fase 1 · Componentes base (portados del export)
 
-### [ ] T04 · UI primitives I
+### [x] T04 · UI primitives I
 - **Objetivo:** `Button`, `Tag`, `StatusDot`, `Avatar` y `Card`.
 - **Archivos:** `src/components/ui/{Button,Tag,StatusDot,Avatar,Card}.tsx` y sus tests.
 - **Hecho cuando:** hover, pressed, focus y disabled coinciden con el export, y no queda ningún hex.

@@ -84,15 +84,16 @@ taller-freelancer/
 
 ```ts
 // ui
-type ButtonProps = { variant?: 'primary'|'secondary'|'ghost'; size?: 'sm'|'md'; icon?: IconName; iconOnly?: boolean; loading?: boolean } & ButtonHTMLAttributes<HTMLButtonElement>;
+type ButtonProps = { variant?: 'primary'|'secondary'|'ghost'; size?: 'sm'|'md'; tone?: 'default'|'danger'; icon?: IconName; loading?: boolean } & ButtonHTMLAttributes<HTMLButtonElement>
+  & ({ iconOnly?: false; children: ReactNode } | { iconOnly: true; icon: IconName; 'aria-label': string }); // + buttonClass() para <Link>
 type TagProps = { tone?: 'accent'|'accent-2'|'neutral'|'outline'; children: ReactNode };
 type FieldProps = { label: string; htmlFor: string; error?: string; hint?: string; children: ReactNode };
 type SegProps<T extends string> = { name: string; value: T; options: { value: T; label: string; icon?: IconName }[]; onChange(v: T): void };
-type CardProps = { as?: 'div'|'article'|'a'; href?: string; elevation?: 'sm'|'md'|'lg'; featured?: boolean; children: ReactNode };
+type CardProps = { elevation?: 'sm'|'md'|'lg'; featured?: boolean; children: ReactNode } & ({ as?: 'div'|'article' } | { as: 'a'; href: string }); // 'a' usa next/link
 type DialogProps = { open: boolean; title: string; onClose(): void; children: ReactNode; actions?: ReactNode };
 type ToastProps = { message: string; icon?: IconName };
 type ThemeSwitchProps = { theme: 'light'|'dark'; onToggle(): void; size?: 'sm'|'md' };
-type AvatarProps = { name: string; src?: string; size?: number };
+type AvatarProps = { name: string; src?: string; size?: 36|40|64 }; // tamaños del export
 type StatusDotProps = { status: ProjectStatus };
 
 // layout

@@ -24,7 +24,21 @@ const config: Config = {
       divider: 'var(--color-divider)',
       'ink-deep': 'var(--color-ink-deep)',
       'on-accent': 'var(--color-on-accent)',
+      'on-ink': 'var(--color-on-ink)',
       'process-yellow': 'var(--color-process-yellow)',
+      danger: {
+        DEFAULT: 'var(--color-danger)',
+        hover: 'var(--color-danger-hover)',
+        pressed: 'var(--color-danger-pressed)',
+      },
+      'on-danger': 'var(--color-on-danger)',
+      'danger-text': 'var(--color-danger-text)',
+      state: {
+        hover: 'var(--state-hover)',
+        pressed: 'var(--state-pressed)',
+        'accent-hover': 'var(--state-accent-hover)',
+        'accent-pressed': 'var(--state-accent-pressed)',
+      },
       accent: { DEFAULT: 'var(--color-accent)', ...ramp('accent') },
       'accent-2': { DEFAULT: 'var(--color-accent-2)', ...ramp('accent-2') },
       neutral: ramp('neutral'),
@@ -90,6 +104,11 @@ const config: Config = {
       normal: '0',
       heading: 'var(--tracking-heading)',
       caps: 'var(--tracking-caps)',
+    },
+    backgroundImage: {
+      none: 'none',
+      featured: 'var(--gradient-featured)',
+      avatar: 'var(--gradient-avatar)',
     },
     extend: {
       transitionTimingFunction: { out: 'var(--ease-out)' },

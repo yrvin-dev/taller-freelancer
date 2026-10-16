@@ -57,6 +57,7 @@
   /* Colores fijos en los dos temas */
   --color-ink-deep: #2c4059;
   --color-on-accent: #16202e;
+  --color-on-ink: #ffffff; /* texto sobre ink-deep y el degradado del avatar */
   --color-process-yellow: #ffd461;
 
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -69,6 +70,20 @@
   --status-prod: var(--color-success-500);
   --status-maint: var(--color-info-500);
   --status-archived: var(--color-neutral-500);
+
+  /* Hover y pressed sobre superficies (botón secundario y ghost) */
+  --state-hover: color-mix(in srgb, var(--color-text) 7%, transparent);
+  --state-pressed: color-mix(in srgb, var(--color-text) 14%, transparent);
+  --state-accent-hover: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  --state-accent-pressed: color-mix(in srgb, var(--color-accent) 18%, transparent);
+
+  /* Degradados permitidos (02 §2.6) */
+  --gradient-featured: linear-gradient(
+    135deg,
+    var(--color-process-yellow) 0%,
+    var(--color-accent) 70%
+  );
+  --gradient-avatar: linear-gradient(135deg, var(--color-ink-deep), var(--color-accent));
 }
 
 /* ── Light ───────────────────────────────────────────────────────────── */
@@ -137,6 +152,13 @@
   --shadow-sm: 0 12px 28px -6px rgba(44, 64, 89, 0.28), 0 3px 8px rgba(44, 64, 89, 0.1);
   --shadow-md: 0 18px 38px -8px rgba(44, 64, 89, 0.34), 0 4px 10px rgba(44, 64, 89, 0.12);
   --shadow-lg: 0 26px 56px -10px rgba(44, 64, 89, 0.4), 0 6px 14px rgba(44, 64, 89, 0.14);
+
+  /* Destructivo: reemplaza el #c0392b del export (3.02:1 con texto oscuro, no AA) */
+  --color-danger: var(--color-accent-2-600); /* 4.98:1 con blanco */
+  --color-on-danger: #ffffff;
+  --color-danger-hover: var(--color-accent-2-700);
+  --color-danger-pressed: var(--color-accent-2-800);
+  --color-danger-text: var(--color-accent-2-700); /* 4.91:1 o más sobre los fondos light */
 }
 
 /* ── Dark (rampas invertidas: 100 es el más oscuro) ──────────────────── */
@@ -204,6 +226,12 @@
   --shadow-sm: 0 12px 30px -6px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.05);
   --shadow-md: 0 18px 40px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
   --shadow-lg: 0 26px 56px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.07);
+
+  --color-danger: var(--color-accent-2-500); /* 4.61:1 con on-accent */
+  --color-on-danger: var(--color-on-accent);
+  --color-danger-hover: var(--color-accent-2-600);
+  --color-danger-pressed: var(--color-accent-2-700);
+  --color-danger-text: var(--color-accent-2-700); /* 5.67:1 o más sobre las superficies dark */
 }
 
 /* ── Variantes de fondo (data-bg). "arena" es el default de arriba ───── */

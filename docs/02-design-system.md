@@ -172,10 +172,16 @@ Las cards no llevan borde (`border: 0`), solo `--shadow-sm`. Hover → `--shadow
 ## 10. Estados de interacción
 
 - Hover: tinte de la rampa (100–200) o la sombra siguiente.
-- Pressed: un paso más (`accent-600` en light, `accent-400` en dark).
+- Hover y pressed del primario: `accent-600` y `accent-700` de la rampa del tema, como el export (en dark la rampa está invertida, así que son tonos más claros). ✅ T04
+- Hover y pressed sobre superficie (secundario y ghost): `--state-hover`/`--state-pressed` (texto al 7% y 14%) y `--state-accent-*` (acento al 10% y 18%). ✅ T04
+- Destructivo: `--color-danger`, `--color-on-danger` y `--color-danger-text` (ver §11). ✅ T04
 - Foco: `:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }`. Nunca el anillo azul del navegador.
 - Disabled: `opacity: .45`, sin hover.
 
 ## 11. Pendientes (resumen 🔶)
 
-Todos resueltos en T02. Quedan abiertos: el rojo destructivo `#c0392b`, hardcodeado en el export (se resuelve en T04 con `Button`); y la paleta de chips `PAL` (T03).
+Todos resueltos en T02, salvo:
+
+- ✅ T04 · El rojo destructivo `#c0392b` del export con texto oscuro daba 3.02:1 (no AA). Se reemplaza por tokens del coral: en light, fondo `accent-2-600` con texto blanco (4.98:1); en dark, `accent-2-500` con `on-accent` (4.61:1). El texto destructivo (ghost) usa `accent-2-700` en los dos temas (≥ 4.91:1).
+- ✅ T04 · El texto del botón ghost y del tag outline usa `accent-700`, no `accent`: el acento puro da 2.77:1 sobre blanco.
+- 🔶 La paleta de chips de stack `PAL` (asignada a T03, que no la resolvió) pasa a la tanda de `ProjectCard`.

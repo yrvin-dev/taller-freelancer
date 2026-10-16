@@ -10,7 +10,7 @@ import '@/styles/globals.css';
 // Las familias se exponen como variables; tokens.css las compone en --font-*.
 const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
-  weight: ['400', '600'],
+  weight: ['400', '600', '700'], // 700: botón primario
   style: ['normal', 'italic'],
   variable: '--font-source-serif',
   display: 'swap',
