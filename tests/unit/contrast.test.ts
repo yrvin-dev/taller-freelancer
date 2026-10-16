@@ -26,6 +26,22 @@ function luminance(hex: string): number {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
+/** color-mix(in srgb, a p%, b) en sRGB, como lo calcula el navegador. */
+function mix(a: string, b: string, weight: number): string {
+  const ca = a
+    .replace('#', '')
+    .match(/../g)!
+    .map((c) => parseInt(c, 16));
+  const cb = b
+    .replace('#', '')
+    .match(/../g)!
+    .map((c) => parseInt(c, 16));
+  return `#${ca
+    .map((v, i) => Math.round(v * weight + cb[i]! * (1 - weight)))
+    .map((v) => v.toString(16).padStart(2, '0'))
+    .join('')}`;
+}
+
 function contrast(a: string, b: string): number {
   const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x) as [number, number];
   return (hi + 0.05) / (lo + 0.05);
@@ -51,6 +67,14 @@ describe('contraste del texto secundario (AA 4.5:1)', () => {
       const label = tokens['--color-neutral-700']!;
       expect(contrast(label, tokens['--color-bg']!)).toBeGreaterThanOrEqual(4.5);
       expect(contrast(label, tokens['--color-surface']!)).toBeGreaterThanOrEqual(4.5);
+    });
+
+    it.each(Object.entries(palettes))('fondo %s: texto de los chips de stack', (_, tokens) => {
+      const root = block(':root');
+      for (const n of [1, 2, 3, 4, 5, 6]) {
+        const chipBg = mix(root[`--chip-${n}`]!, tokens['--color-surface']!, 0.2);
+        expect(contrast(tokens['--color-text']!, chipBg)).toBeGreaterThanOrEqual(4.5);
+      }
     });
 
     it.each(Object.entries(palettes))('fondo %s: placeholder sobre surface', (_, tokens) => {

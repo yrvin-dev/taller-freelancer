@@ -70,6 +70,15 @@
   --state-current-hover: color-mix(in srgb, currentColor 10%, transparent);
   --color-process-yellow: #ffd461;
 
+  /* Chips de stack: la paleta PAL del export (iguales en los dos temas; el chip las
+     mezcla al 20% con la superficie, ver .tech-chip en globals.css) */
+  --chip-1: #ef7b3e;
+  --chip-2: #5aa9a3;
+  --chip-3: #4a90c9;
+  --chip-4: #ffd461;
+  --chip-5: #ea5455;
+  --chip-6: #2c4059;
+
   /* ThemeSwitch: SVG propio del export, se dibuja igual en los dos temas (02 §7) */
   --switch-stroke: #111111;
   --switch-glyph: #ffffff;
@@ -104,6 +113,14 @@
   --state-subtle: color-mix(in srgb, var(--color-text) 5%, transparent);
   --state-accent-active: color-mix(in srgb, var(--color-accent) 12%, transparent);
   --state-danger-hover: color-mix(in srgb, var(--color-accent-2) 14%, transparent);
+
+  /* ProjectCard: la parte inferior de la tarjeta (export) */
+  --color-card-foot: color-mix(in srgb, var(--color-neutral-200) 70%, var(--color-surface));
+  --color-card-foot-hover: color-mix(in srgb, var(--color-neutral-300) 60%, var(--color-surface));
+
+  /* Table (export: .table) */
+  --color-table-row-border: color-mix(in srgb, var(--color-text) 8%, transparent);
+  --color-table-row-hover: color-mix(in srgb, var(--color-text) 4%, transparent);
 
   /* Sidebar: sombra lateral del export + shadow-sm del tema */
   --shadow-sidebar: 5px 0 30px rgba(0, 0, 0, 0.08), var(--shadow-sm);

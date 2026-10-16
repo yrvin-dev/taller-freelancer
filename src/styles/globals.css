@@ -165,3 +165,13 @@
     }
   }
 }
+
+/* Chip de stack (export: chipColor): el color --chip lo pone el componente
+   (var(--chip-1…6)); fondo al 20% sobre la superficie y anillo al 55%. */
+@layer components {
+  .tech-chip {
+    background: color-mix(in srgb, var(--chip) 20%, var(--color-surface));
+    box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--chip) 55%, transparent);
+    color: var(--color-text);
+  }
+}

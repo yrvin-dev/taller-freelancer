@@ -30,6 +30,11 @@ const config: Config = {
       'on-accent-muted': 'var(--color-on-accent-muted)',
       'on-accent-chip': 'var(--color-on-accent-chip)',
       'chip-yellow': 'var(--color-chip-yellow)',
+      'card-foot': { DEFAULT: 'var(--color-card-foot)', hover: 'var(--color-card-foot-hover)' },
+      'table-row': {
+        border: 'var(--color-table-row-border)',
+        hover: 'var(--color-table-row-hover)',
+      },
       'process-yellow': 'var(--color-process-yellow)',
       danger: {
         DEFAULT: 'var(--color-danger)',

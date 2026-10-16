@@ -76,7 +76,7 @@
 - **Archivos:** `src/components/projects/{HomeDashboard,SummaryCard,RecentProjects,HomeEmptyState}.tsx`, `src/app/(app)/page.tsx`.
 - **Hecho cuando:** coincide con el export en light y dark, a 375px y 1440px.
 
-### [ ] T10 · Lista de proyectos
+### [x] T10 · Lista de proyectos
 - **Objetivo:** `ProjectCard` (miniatura 16:10), `ProjectRow` y el switch entre tarjetas y tabla.
 - **Archivos:** `src/components/projects/{ProjectCard,ProjectRow}.tsx`, `src/app/(app)/proyectos/page.tsx`.
 - **Hecho cuando:** las dos vistas muestran los mismos datos y el estado de producción lleva el punto verde.

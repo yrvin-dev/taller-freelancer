@@ -194,4 +194,4 @@ Todos resueltos en T02, salvo:
 
 - ✅ T04 · El rojo destructivo `#c0392b` del export con texto oscuro daba 3.02:1 (no AA). Se reemplaza por tokens del coral: en light, fondo `accent-2-600` con texto blanco (4.98:1); en dark, `accent-2-500` con `on-accent` (4.61:1). El texto destructivo (ghost) usa `accent-2-700` en los dos temas (≥ 4.91:1).
 - ✅ T04 · El texto del botón ghost y del tag outline usa `accent-700`, no `accent`: el acento puro da 2.77:1 sobre blanco.
-- 🔶 La paleta de chips de stack `PAL` (asignada a T03, que no la resolvió) pasa a la tanda de `ProjectCard`.
+- ✅ T10 · La paleta de chips de stack `PAL` son los tokens `--chip-1` a `--chip-6` (iguales en los dos temas). `src/lib/chips.ts` porta el mapa `TECH` y el hash del export; `.tech-chip` mezcla el color al 20% con la superficie y pone un anillo al 55%. El texto del chip pasa AA en todos los fondos (`contrast.test.ts`).

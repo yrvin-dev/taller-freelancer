@@ -103,8 +103,9 @@ type PageHeaderProps = { title: string; description?: ReactNode; actions?: React
 
 // projects
 type SummaryCardProps = { title: string; icon: IconName; iconTone: 'featured'|'danger'|'yellow'; window: string; count: number; sub: string; featured?: boolean; items: { id: string; href: string; primary: string; secondary?: string; badge: string; tone: TagVariant }[] }; // armadas por homeCards(projects, today)
-type ProjectCardProps = { project: ProjectListItem };   // miniatura 16:10, nombre, cliente, StatusDot, tags de stack
-type ProjectRowProps = { project: ProjectListItem };    // fila de tabla
+type ProjectCardProps = { project: Project };   // miniatura 16:10, nombre, "tipo · CMS", chips de stack (stackChips), cliente y StatusDot; un solo enlace a la ficha
+type ProjectRowProps = { project: Project };    // fila de tabla (ui/Table); "Abrir" lleva el nombre oculto
+// /proyectos: la vista va en la URL (?vista=tabla) con ViewSwitch; parseProjectView()
 type ProjectFiltersProps = { value: ProjectFilters; stacks: string[]; cmsOptions: string[]; counts: Record<ProjectStatus|'todos', number> }; // escribe en la URL
 type ProjectFormProps = { initial?: ProjectInput; action(input: ProjectInput): Promise<ActionResult<{ id: string }>> };
 type CredentialRowProps = { credential: { id: string; label: string; username: string; url?: string } }; // "Mostrar" llama a revealCredential(id)
