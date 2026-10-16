@@ -32,7 +32,7 @@
 - **Archivos:** `src/components/ui/{Field,Input,Select,Textarea,Seg}.tsx` y sus tests.
 - **Hecho cuando:** cada label está asociado a su input, y la ayuda y el error quedan en `aria-describedby`.
 
-### [ ] T05b · UI primitives II · overlays
+### [x] T05b · UI primitives II · overlays
 - **Objetivo:** `Dialog` (nativo, `showModal`) y `Toast` (`ToastProvider` + `useToast`).
 - **Archivos:** `src/components/ui/{Dialog,Toast}.tsx` y sus tests.
 - **Hecho cuando:** el `Dialog` atrapa el foco y cierra con Esc, y el `Toast` se anuncia en una región `role="status"`.

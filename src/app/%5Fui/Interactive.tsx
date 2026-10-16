@@ -1,11 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@/components/ui/Button';
+import { Dialog } from '@/components/ui/Dialog';
 import { Field } from '@/components/ui/Field';
 import { Input } from '@/components/ui/Input';
 import { Seg } from '@/components/ui/Seg';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
+import { ToastProvider, useToast } from '@/components/ui/Toast';
 import { PROJECT_STATUSES, STATUS_META } from '@/lib/domain';
 
 type View = 'tarjetas' | 'tabla';
@@ -53,6 +56,50 @@ export function Interactive({ id }: { id: string }) {
         ]}
         onChange={setView}
       />
+
+      <ToastProvider>
+        <Overlays />
+      </ToastProvider>
+    </div>
+  );
+}
+
+// Copia del diálogo "¿Eliminar …?" del export, con sus dos salidas.
+function Overlays() {
+  const [open, setOpen] = useState(false);
+  const toast = useToast();
+
+  function close(message?: string) {
+    setOpen(false);
+    if (message) toast.show(message);
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button variant="secondary" tone="danger" icon="trash" onClick={() => setOpen(true)}>
+        Eliminar proyecto
+      </Button>
+      <Button variant="secondary" icon="copy" onClick={() => toast.show('Enlace copiado')}>
+        Mostrar toast
+      </Button>
+      <Dialog
+        open={open}
+        title="¿Eliminar Colegio Guillermo Brown?"
+        onClose={() => close()}
+        actions={
+          <>
+            <Button variant="secondary" onClick={() => close('Proyecto archivado')}>
+              Archivar en su lugar
+            </Button>
+            <Button tone="danger" onClick={() => close('Proyecto eliminado')}>
+              Eliminar
+            </Button>
+          </>
+        }
+      >
+        Se borrará la ficha con sus accesos, pagos y bitácora. Si solo quieres sacarlo de la vista,
+        cámbialo a Archivado.
+      </Dialog>
     </div>
   );
 }
