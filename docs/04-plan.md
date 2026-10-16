@@ -49,7 +49,7 @@
 - **Archivos:** `src/components/layout/Sidebar.tsx`, `src/app/(app)/{layout,page}.tsx`, `src/lib/{nav,layout-prefs}.ts`, `src/lib/mock/user.ts`.
 - **Hecho cuando:** colapsar y expandir es fluido, el estado persiste al recargar sin salto y el ítem activo lleva `aria-current`.
 
-### [ ] T07b · Shell de la app · mobile y encabezado
+### [x] T07b · Shell de la app · mobile y encabezado
 - **Objetivo:** debajo de 820px, `AppHeader` (marca) y `BottomNav` fija de 4 ítems, como en el export (no drawer). `PageHeader` (título, bajada, acciones y switch de tema). El toast sube sobre la barra inferior.
 - **Archivos:** `src/components/layout/{AppHeader,BottomNav,PageHeader}.tsx`, `src/app/(app)/layout.tsx`, `src/components/ui/Toast.tsx`.
 - **Hecho cuando:** todo es usable a 375px, con objetivos de 44px y la barra respetando `safe-area-inset-bottom`.

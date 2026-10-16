@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Nunito, Source_Serif_4 } from 'next/font/google';
 import { cookies } from 'next/headers';
 import type { ReactNode } from 'react';
@@ -31,6 +31,10 @@ export const metadata: Metadata = {
   description:
     'Administra tus proyectos de cliente: stack, accesos, enlaces, pagos y vencimientos.',
 };
+
+// viewport-fit=cover: sin esto env(safe-area-inset-*) vale 0 y la BottomNav queda
+// bajo la barra de inicio del iPhone.
+export const viewport: Viewport = { viewportFit: 'cover' };
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   // El tema llega en el HTML del servidor (cookie), así no hay parpadeo al cargar.

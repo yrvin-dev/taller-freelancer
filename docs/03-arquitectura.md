@@ -98,7 +98,8 @@ type StatusDotProps = { status: ProjectStatus };
 
 // layout
 type SidebarProps = { user: { name: string; email: string; avatarUrl?: string }; activeCount: number; initialExpanded: boolean }; // estado propio + cookie tf-side; activo por usePathname()
-type PageHeaderProps = { title: string; actions?: ReactNode };
+type PageHeaderProps = { title: string; description?: ReactNode; actions?: ReactNode }; // + switch de tema al final de las acciones (export)
+// mobile (< 820px): AppHeader (marca) + BottomNav fija de 4 ítems; sin props
 
 // projects
 type SummaryCardProps = { kind: 'entregas'|'vencimientos'|'pagos'; featured?: boolean; items: { id: string; primary: string; badge: string; tone: 'accent'|'accent-2'|'neutral' }[]; total?: number };
