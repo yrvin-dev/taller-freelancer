@@ -152,6 +152,7 @@ create table projects (
   local_path text,
   link_repo text, link_deploy text, link_design text, link_cms text, link_panel text,
   domain_name text, domain_expires date, hosting_expires date,
+  domain_pending boolean not null default false, -- dominio por comprar ("Comprar" en Por vencer)
   budget_pen numeric(10,2) check (budget_pen >= 0),
   thumbnail_path text,                    -- Supabase Storage: thumbnails/{owner}/{id}.webp
   created_at timestamptz not null default now(),

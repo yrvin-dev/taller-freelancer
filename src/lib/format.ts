@@ -64,3 +64,16 @@ export function formatRelativeDays(days: number): string {
   if (days === -1) return 'ayer';
   return days < 0 ? `hace ${-days} días` : `en ${days} días`;
 }
+
+/** Fecha local → `'YYYY-MM-DD'` (la inversa de `parseDate`; no pasa por UTC). */
+export function toISODate(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+/** Suma días de calendario a una fecha local (respeta cambios de mes y año). */
+export function addDays(date: Date, days: number): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
+}

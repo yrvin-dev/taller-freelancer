@@ -61,10 +61,15 @@
 - **Archivos:** `src/app/(auth)/login/page.tsx`.
 - **Hecho cuando:** coincide visualmente con el export en desktop y en mobile.
 
-### [ ] T09 · Home
-- **Objetivo:** saludo, las 3 `SummaryCard` (una destacada) y proyectos recientes.
-- **Archivos:** `src/components/projects/SummaryCard.tsx`, `src/app/(app)/page.tsx`, `src/lib/mock.ts`.
-- **Hecho cuando:** los badges ("en 3 días", "vencido") se calculan y no están hardcodeados.
+### [x] T09a · Home · datos y lógica
+- **Objetivo:** tipo `Project`, los 6 proyectos del export como mock (fechas relativas a hoy) y la lógica de resumen: entregas próximas, por vencer (30 días + dominios por comprar) y pagos pendientes. Miniaturas en WebP.
+- **Archivos:** `src/lib/{projects,summary}.ts`, `src/lib/mock/projects.ts`, `src/lib/format.ts`, `public/mock/thumbs/*.webp`, `tests/unit/summary.test.ts`.
+- **Hecho cuando:** los badges ("en 3 días", "Comprar") y los totales se calculan desde los datos, con tests en fechas fijas.
+
+### [ ] T09b · Home · UI
+- **Objetivo:** saludo, las 3 `SummaryCard` (solo "Entregas próximas" destacada; las otras en surface plano, 02 §9), proyectos recientes y estado vacío.
+- **Archivos:** `src/components/projects/{SummaryCard,RecentProjects}.tsx`, `src/app/(app)/page.tsx`.
+- **Hecho cuando:** coincide con el export en light y dark, a 375px y 1440px.
 
 ### [ ] T10 · Lista de proyectos
 - **Objetivo:** `ProjectCard` (miniatura 16:10), `ProjectRow` y el switch entre tarjetas y tabla.

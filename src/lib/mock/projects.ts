@@ -1,0 +1,174 @@
+// Datos de prueba hasta la tanda de datos (Supabase): los 6 proyectos del export,
+// adaptados al modelo del 03 (enums, solo PEN, presupuesto + pagos).
+//
+// Las fechas son relativas a `today` con los mismos desfases que el export tenía
+// respecto de su "hoy" fijo (2026-10-05): así la demo siempre tiene entregas y
+// vencimientos próximos en vez de fechas que ya pasaron.
+
+import { addDays, toISODate } from '@/lib/format';
+import type { Project, ProjectStack } from '@/lib/projects';
+
+const NO_STACK: ProjectStack = { frontend: [], backend: [], db: [], hosting: [] };
+
+export function mockProjects(today: Date = new Date()): Project[] {
+  const day = (offset: number) => toISODate(addDays(today, offset));
+  // Horas hacia atrás: fija el orden de "recientes" igual que en el export.
+  const hoursAgo = (h: number) => new Date(today.getTime() - h * 3_600_000).toISOString();
+
+  return [
+    {
+      id: 'agb',
+      code: 'AGB-2026',
+      name: 'Colegio Guillermo Brown',
+      client: 'Colegio Guillermo Brown',
+      type: 'institucional',
+      status: 'produccion',
+      isDemo: false,
+      description:
+        'Landing institucional (Conócenos, Propuesta, Niveles, Eventos y Contacto). Desde Sanity Studio el colegio edita el comunicado que aparece como modal y los eventos de la home.',
+      deliveryDate: null,
+      stack: { frontend: ['Astro', 'Tailwind', 'React'], backend: [], db: [], hosting: ['Vercel'] },
+      cms: 'Sanity',
+      domainName: null,
+      domainExpires: null,
+      domainPending: true,
+      hostingExpires: null,
+      budgetPen: null,
+      thumbnailUrl: '/mock/thumbs/agb.webp',
+      updatedAt: hoursAgo(30),
+      payments: [],
+    },
+    {
+      id: 'agw',
+      code: 'AGW-2026',
+      name: 'Landing de servicios',
+      client: 'AgenciaWeb',
+      type: 'landing',
+      status: 'en_desarrollo',
+      isDemo: false,
+      description:
+        'Landing de servicios con contenido administrable desde Strapi. Front en Vercel y Strapi en Railway.',
+      deliveryDate: null,
+      stack: {
+        frontend: ['Astro', 'React', 'Tailwind'],
+        backend: [],
+        db: [],
+        hosting: ['Vercel', 'Railway'],
+      },
+      cms: 'Strapi 5',
+      domainName: null,
+      domainExpires: null,
+      domainPending: true,
+      hostingExpires: null,
+      budgetPen: null,
+      thumbnailUrl: '/mock/thumbs/agw.webp',
+      updatedAt: hoursAgo(31),
+      payments: [],
+    },
+    {
+      id: 'dfl',
+      code: 'DFL-2026',
+      name: 'Dashboard freelance',
+      client: 'Proyecto propio',
+      type: 'dashboard',
+      status: 'en_desarrollo',
+      isDemo: false,
+      description:
+        'Plataforma propia para administrar mis proyectos web por cliente: stack, accesos, pagos, vencimientos y bitácora en una sola ficha.',
+      deliveryDate: null,
+      stack: NO_STACK,
+      cms: null,
+      domainName: null,
+      domainExpires: null,
+      domainPending: false,
+      hostingExpires: null,
+      budgetPen: null,
+      // La captura del export de este proyecto mostraba el navegador del autor (pestañas y
+      // URLs privadas): no se publica. Sin miniatura se muestra el recuadro neutro.
+      thumbnailUrl: null,
+      updatedAt: hoursAgo(32),
+      payments: [],
+    },
+    {
+      id: 'snd',
+      code: 'SND-2026',
+      name: '(F) Sonrident · Control de citas',
+      client: 'Clínica Dental Sonrident',
+      type: 'webapp',
+      status: 'en_desarrollo',
+      isDemo: true,
+      description:
+        'Sistema de reservas para la clínica dental Sonrident: agenda por odontólogo, historial del paciente, recordatorios y cobro de la cita en línea.',
+      deliveryDate: day(46),
+      stack: {
+        frontend: ['Angular', 'Tailwind'],
+        backend: ['Spring Boot', 'Spring Security + JWT', 'Spring Data JPA'],
+        db: ['PostgreSQL'],
+        hosting: ['Railway', 'Vercel'],
+      },
+      cms: null,
+      domainName: 'sonrident-citas.vercel.app',
+      domainExpires: day(23),
+      domainPending: false,
+      hostingExpires: day(41),
+      budgetPen: 9500,
+      thumbnailUrl: '/mock/thumbs/snd.webp',
+      updatedAt: hoursAgo(20),
+      payments: [{ id: 'snd-p1', amountPen: 3800, paidOn: day(-30), concept: 'Adelanto' }],
+    },
+    {
+      id: 'plv',
+      code: 'PLV-2026',
+      name: '(F) Polera Studio · E-commerce',
+      client: 'Polera Studio',
+      type: 'ecommerce',
+      status: 'revision',
+      isDemo: true,
+      description:
+        'Tienda de polos con zoom de producto, selector de tallas y colores, carrito persistente y checkout con pasarela de pagos.',
+      deliveryDate: day(7),
+      stack: {
+        frontend: ['Next.js', 'Tailwind', 'Motion', 'Lenis'],
+        backend: ['Medusa v2', 'Culqi (módulo propio)'],
+        db: ['PostgreSQL', 'Redis'],
+        hosting: ['Vercel', 'Railway', 'Cloudinary'],
+      },
+      cms: 'Medusa Admin',
+      domainName: 'polerastudio.pe',
+      domainExpires: day(128),
+      domainPending: false,
+      hostingExpires: day(14),
+      budgetPen: 7800,
+      thumbnailUrl: '/mock/thumbs/plv.webp',
+      updatedAt: hoursAgo(33),
+      payments: [{ id: 'plv-p1', amountPen: 3900, paidOn: day(-20), concept: 'Adelanto 50%' }],
+    },
+    {
+      id: 'alq',
+      code: 'ALQ-2026',
+      name: '(F) Alquila Ya · Marketplace',
+      client: 'Proyecto de portafolio',
+      type: 'webapp',
+      status: 'en_desarrollo',
+      isDemo: true,
+      description:
+        'Marketplace donde los propietarios publican sus alquileres y los interesados filtran por mapa y precio, chatean y reservan visitas.',
+      deliveryDate: day(57),
+      stack: {
+        frontend: ['Next.js 15', 'Tailwind', 'Mapbox'],
+        backend: ['NestJS', 'Prisma'],
+        db: ['PostgreSQL', 'Supabase Storage'],
+        hosting: ['Vercel', 'Render'],
+      },
+      cms: null,
+      domainName: 'alquila-ya.vercel.app',
+      domainExpires: null,
+      domainPending: false,
+      hostingExpires: null,
+      budgetPen: 6000,
+      thumbnailUrl: '/mock/thumbs/alq.webp',
+      updatedAt: hoursAgo(60),
+      payments: [{ id: 'alq-p1', amountPen: 1500, paidOn: day(-15), concept: 'Adelanto' }],
+    },
+  ];
+}

@@ -1,10 +1,12 @@
 import {
+  addDays,
   daysUntil,
   formatDate,
   formatDateShort,
   formatPEN,
   formatRelativeDays,
   parseDate,
+  toISODate,
 } from '@/lib/format';
 
 const NBSP = '\u00a0';
@@ -77,5 +79,19 @@ describe('formatRelativeDays', () => {
     [-3, 'hace 3 días'],
   ])('%i → %s', (days, expected) => {
     expect(formatRelativeDays(days)).toBe(expected);
+  });
+});
+
+describe('toISODate y addDays', () => {
+  it('formatea en hora local, ida y vuelta con parseDate', () => {
+    const date = new Date(2026, 0, 5, 23, 59);
+    expect(toISODate(date)).toBe('2026-01-05');
+    expect(toISODate(parseDate('2026-12-31')!)).toBe('2026-12-31');
+  });
+
+  it('cruza meses y años', () => {
+    expect(toISODate(addDays(new Date(2026, 9, 30), 3))).toBe('2026-11-02');
+    expect(toISODate(addDays(new Date(2026, 11, 31), 1))).toBe('2027-01-01');
+    expect(toISODate(addDays(new Date(2026, 9, 5), -5))).toBe('2026-09-30');
   });
 });
