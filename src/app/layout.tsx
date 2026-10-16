@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { Nunito, Source_Serif_4 } from 'next/font/google';
 import type { ReactNode } from 'react';
+// UIcons self-hosted (sin CDN en la CSP): solo los tres sets que usa la UI.
+import '@flaticon/flaticon-uicons/css/regular/rounded.css';
+import '@flaticon/flaticon-uicons/css/solid/rounded.css';
+import '@flaticon/flaticon-uicons/css/brands/all.css';
 import '@/styles/globals.css';
 
 // Las familias se exponen como variables; tokens.css las compone en --font-*.

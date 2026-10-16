@@ -86,3 +86,6 @@ Ver `04-plan.md`. Resumen: scaffold y tokens → componentes base → layout →
 - 2026-10-15 · T02 · En App Router, una carpeta `_algo` es **privada** y no genera ruta. Para una URL `/_tokens`, la carpeta se llama `%5Ftokens`.
 - 2026-10-15 · T02 · Los tokens que referencian a otros (`--status-dev: var(--color-accent)`) van bajo `[data-theme]`, no en `:root`: una custom property se resuelve donde se declara y se hereda ya resuelta, así que en `:root` ignoraría el tema de un contenedor anidado.
 - 2026-10-15 · T02 · La regla `no-hex` (`no-restricted-syntax`) aplica solo a `src/**`; los tests que usan hex como fixture quedan fuera. El CSS se cubre con `pnpm check:tokens` (grep).
+- 2026-10-16 · T03 · UIcons 2.6 no existe en npm (salta de 2.4.0 a 3.0.0): se usa `@flaticon/flaticon-uicons@3.3.1`, importando solo `regular/rounded`, `solid/rounded` y `brands/all` en `layout.tsx`. Sus selectores solo aplican a `<i>` y `<span>`.
+- 2026-10-16 · T03 · Las fechas `YYYY-MM-DD` se parsean en hora local con `parseDate` (`format.ts`). `new Date('2026-10-05')` es UTC y en Lima muestra el día anterior.
+- 2026-10-16 · T03 · `Intl` en es-PE: el monto lleva un espacio duro U+00A0 entre `S/` y la cifra, y septiembre se abrevia "set." (no "sep" como en el export). En los tests, compara usando la constante `NBSP` de `format.test.ts`, no un espacio normal.

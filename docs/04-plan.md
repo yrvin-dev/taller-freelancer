@@ -15,7 +15,7 @@
 - **Archivos:** `src/styles/tokens.css`, `src/styles/globals.css`, `tailwind.config.ts`, `src/app/layout.tsx`, `docs/02-design-system.md` (marcar los 🔶 resueltos).
 - **Hecho cuando:** una página de prueba `/_tokens` (solo en dev) muestra rampas, tipos, radios y sombras igual que el export en los dos temas. La regla ESLint `no-hex` falla con un hex de prueba.
 
-### [ ] T03 · Íconos y dominio
+### [x] T03 · Íconos y dominio
 - **Objetivo:** fuente única de íconos (UIcons) y de enums, labels y colores de estado.
 - **Archivos:** `src/lib/icons.ts`, `src/lib/domain.ts`, `src/lib/format.ts`, `tests/unit/format.test.ts`.
 - **Hecho cuando:** `formatPEN(1800)` devuelve `S/ 1,800.00`, las fechas salen en es-PE y los tests pasan.

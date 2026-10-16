@@ -147,7 +147,7 @@ Las cards no llevan borde (`border: 0`), solo `--shadow-sm`. Hover → `--shadow
 
 ## 7. Iconos
 
-- **Set:** Flaticon **UIcons** 2.6. Regular rounded (`fi-rr-*`) para la UI, solid rounded (`fi-sr-*`) para estados activos y para la marca (`fi-sr-fire-flame-curved`), brands (`fi-brands-google`, `-github`).
+- **Set:** Flaticon **UIcons** (el export usa 2.6 por CDN; el proyecto usa `@flaticon/flaticon-uicons@3.3.1` self-hosted, porque la 2.6 no está en npm, y trae los 45 glifos del export). Regular rounded (`fi-rr-*`) para la UI, solid rounded (`fi-sr-*`) para estados activos y para la marca (`fi-sr-fire-flame-curved`), brands (`fi-brands-google`, `-github`).
 - Tamaños: 13–16px dentro de botones, 19–24px en los íconos de las cards de resumen y 22px en la marca.
 - **Switch de tema:** SVG propio (pista de 52×30 con luna y sol, trazo `#111` de 2px). Va como componente `ThemeSwitch`; no se reemplaza por un ícono del set.
 - ⚠️ Broadsheet recomienda Phosphor duotone; el export usa UIcons. **Gana el export.** Mantener un solo set: un archivo `src/lib/icons.ts` como fuente única de nombres.
