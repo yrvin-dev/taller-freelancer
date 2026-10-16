@@ -4,7 +4,7 @@ import { HomeDashboard, homeCards } from '@/components/projects/HomeDashboard';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { mockProjects } from '@/lib/mock/projects';
 
-const NBSP = ' ';
+// getByText normaliza los espacios del DOM (el espacio duro de Intl pasa a ' ').
 const TODAY = new Date(2026, 9, 5);
 
 function renderDashboard(projects = mockProjects(TODAY), hour = 9) {

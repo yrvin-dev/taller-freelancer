@@ -160,7 +160,8 @@ Las cards no llevan borde (`border: 0`), solo `--shadow-sm`. Hover → `--shadow
 
 El export solo muestra un tag coral arriba del formulario ("Completa el nombre del proyecto y el cliente."). Para validar por campo se agrega:
 
-- **Ayuda:** debajo del control, 12px, `--color-label` (texto al 70%), con un margen de `--space-1`.
+- **Ayuda:** debajo del control, 12px, `--color-label`, con un margen de `--space-1`.
+- ✅ T05c · `--color-label` = `neutral-700` y `--color-placeholder` = `neutral-600`. El export usaba texto al 70% y al 65%, que en light da 3.6–4.4:1 (no AA). `tests/unit/contrast.test.ts` mide estos pares contra `tokens.css` en todos los fondos.
 - **Error:** debajo del control (después de la ayuda), 12px, `--color-danger-text`, con el ícono `warning` delante. El borde del control pasa a `--color-danger`.
 - Los dos van en `aria-describedby` del control, y el error además pone `aria-invalid`.
 - **Seg:** la opción elegida lleva texto `--color-on-accent`, no `--color-bg` como en el export (2.2:1 sobre el acento en arena).

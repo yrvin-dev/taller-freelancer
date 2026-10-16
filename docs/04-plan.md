@@ -37,6 +37,11 @@
 - **Archivos:** `src/components/ui/{Dialog,Toast}.tsx` y sus tests.
 - **Hecho cuando:** el `Dialog` atrapa el foco y cierra con Esc, y el `Toast` se anuncia en una región `role="status"`.
 
+### [x] T05c · Contraste de label y placeholder
+- **Objetivo:** corregir T05a: el texto al 70% y al 65% del export no llega a 4.5:1 en light. Pasan a `neutral-700` y `neutral-600`.
+- **Archivos:** `src/styles/tokens.css`, `tests/unit/contrast.test.ts`.
+- **Hecho cuando:** un test mide label y placeholder contra `tokens.css` en los dos temas y los tres fondos.
+
 ### [x] T06 · ThemeSwitch
 - **Objetivo:** el switch con luna y sol en SVG (tamaños `sm` y `md`), con persistencia en una cookie para que no haya parpadeo al cargar.
 - **Archivos:** `src/components/ui/ThemeSwitch.tsx`, `src/app/layout.tsx`.

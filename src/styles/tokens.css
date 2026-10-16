@@ -109,8 +109,10 @@
   --shadow-sidebar: 5px 0 30px rgba(0, 0, 0, 0.08), var(--shadow-sm);
 
   /* Formularios (export: .field > label y .input::placeholder) */
-  --color-label: color-mix(in srgb, var(--color-text) 70%, transparent);
-  --color-placeholder: color-mix(in srgb, var(--color-text) 65%, transparent); /* 4.8:1 */
+  /* Sólidos de la rampa, no texto con transparencia: al 70%/65% (export) no llegan a
+     4.5:1 en light (3.6–4.4:1). Verificado en tests/unit/contrast.test.ts. */
+  --color-label: var(--color-neutral-700); /* ≥ 4.75:1 en todos los fondos */
+  --color-placeholder: var(--color-neutral-600); /* ≥ 4.96:1 sobre la superficie del input */
   --color-backdrop: color-mix(in srgb, var(--color-neutral-900) 50%, transparent);
 
   /* Degradados permitidos (02 §2.6) */
