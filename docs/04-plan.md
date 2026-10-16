@@ -37,7 +37,7 @@
 - **Archivos:** `src/components/ui/{Dialog,Toast}.tsx` y sus tests.
 - **Hecho cuando:** el `Dialog` atrapa el foco y cierra con Esc, y el `Toast` se anuncia en una región `role="status"`.
 
-### [ ] T06 · ThemeSwitch
+### [x] T06 · ThemeSwitch
 - **Objetivo:** el switch con luna y sol en SVG (tamaños `sm` y `md`), con persistencia en una cookie para que no haya parpadeo al cargar.
 - **Archivos:** `src/components/ui/ThemeSwitch.tsx`, `src/app/layout.tsx`.
 - **Hecho cuando:** al recargar en dark no hay flash del tema claro.

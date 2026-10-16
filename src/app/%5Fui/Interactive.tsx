@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/Input';
 import { Seg } from '@/components/ui/Seg';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
+import { ThemeSwitch } from '@/components/ui/ThemeSwitch';
 import { ToastProvider, useToast } from '@/components/ui/Toast';
 import { PROJECT_STATUSES, STATUS_META } from '@/lib/domain';
 
@@ -60,6 +61,8 @@ export function Interactive({ id }: { id: string }) {
       <ToastProvider>
         <Overlays />
       </ToastProvider>
+
+      <SwitchDemo />
     </div>
   );
 }
@@ -100,6 +103,19 @@ function Overlays() {
         Se borrará la ficha con sus accesos, pagos y bitácora. Si solo quieres sacarlo de la vista,
         cámbialo a Archivado.
       </Dialog>
+    </div>
+  );
+}
+
+// Solo muestra los dos estados y tamaños; el tema real de la página lo cambia la home.
+function SwitchDemo() {
+  const [dark, setDark] = useState(false);
+  const theme = dark ? 'dark' : 'light';
+  const toggle = () => setDark((d) => !d);
+  return (
+    <div className="flex items-center gap-2">
+      <ThemeSwitch theme={theme} onToggle={toggle} size="sm" />
+      <ThemeSwitch theme={theme} onToggle={toggle} />
     </div>
   );
 }

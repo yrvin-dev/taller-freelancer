@@ -96,3 +96,5 @@ Ver `04-plan.md`. Resumen: scaffold y tokens → componentes base → layout →
 - 2026-10-16 · T05a · No correr `pnpm build` con `pnpm dev` levantado: los dos usan `.next` y se pisan.
 - 2026-10-16 · T05b · jsdom no implementa `<dialog>.showModal()`: `vitest.setup.ts` tiene un polyfill mínimo (atributo `open` y evento `close`). El foco atrapado y el fondo inerte solo se pueden probar en e2e (Playwright).
 - 2026-10-16 · T05b · `::backdrop` hereda las custom properties del `<dialog>` solo en navegadores recientes (Chrome 122+, Safari 17.4+, Firefox 120+). En uno anterior, `backdrop:bg-backdrop` queda transparente: el diálogo sigue funcionando, solo pierde el oscurecido.
+- 2026-10-16 · T06 · El tema vive en la cookie `tf-theme`, que lee el layout raíz con `cookies()`, así que todas las rutas se renderizan en el servidor en cada pedido (`ƒ` en el build, no `○`). Es a propósito: es lo que evita el parpadeo sin un script inline (que chocaría con la CSP).
+- 2026-10-16 · T06 · `ThemeSwitch` recibe `onToggle`: un Server Component no le puede pasar una función. Se usa desde un Client Component con `useTheme()` (ver `HomeThemeSwitch`).

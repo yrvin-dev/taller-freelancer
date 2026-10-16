@@ -60,6 +60,15 @@
   --color-on-ink: #ffffff; /* texto sobre ink-deep y el degradado del avatar */
   --color-process-yellow: #ffd461;
 
+  /* ThemeSwitch: SVG propio del export, se dibuja igual en los dos temas (02 §7) */
+  --switch-stroke: #111111;
+  --switch-glyph: #ffffff;
+  --switch-dark-track: #4b5a8c;
+  --switch-dark-knob: #6f7fb3;
+  --switch-light-track: #ffd9a8;
+  --switch-light-moon: #c98a3c;
+  --switch-light-knob: #f0a24a;
+
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
