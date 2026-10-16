@@ -48,6 +48,18 @@ describe('Toast', () => {
     expect(region).toBeEmptyDOMElement();
   });
 
+  it('aboveNav sube el toast en mobile para no tapar la BottomNav', () => {
+    render(
+      <ToastProvider aboveNav>
+        <Trigger message="Nota agregada" />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Nota agregada' }));
+    const toast = screen.getByRole('status').firstElementChild;
+    expect(toast?.className).toContain('bottom-[calc(84px+env(safe-area-inset-bottom))]');
+    expect(toast).toHaveClass('shell:bottom-6');
+  });
+
   it('useToast fuera del provider falla con un mensaje claro', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => render(<Trigger message="x" />)).toThrow(/ToastProvider/);

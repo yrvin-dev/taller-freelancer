@@ -9,17 +9,27 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { cx } from '@/lib/cx';
 import type { IconName } from '@/lib/icons';
 import { Icon } from './Icon';
 
-export type ToastProps = { message: string; icon?: IconName };
+export type ToastProps = {
+  message: string;
+  icon?: IconName;
+  /** En mobile sube a 84px para no tapar la BottomNav (solo dentro del shell de la app). */
+  aboveNav?: boolean;
+};
 
 // Portado del toast inline del export: invertido (fondo texto, texto fondo), abajo al
-// centro (84px en mobile, sobre la BottomNav), padding 10px 18px, gap 8px, ícono de
-// 18px y sombra lg.
-export function Toast({ message, icon = 'success' }: ToastProps) {
+// centro, padding 10px 18px, gap 8px, ícono de 18px y sombra lg.
+export function Toast({ message, icon = 'success', aboveNav = false }: ToastProps) {
   return (
-    <div className="fixed bottom-[calc(84px+env(safe-area-inset-bottom))] left-1/2 z-30 flex max-w-[calc(100vw-32px)] -translate-x-1/2 items-center gap-[calc(var(--space-2)*0.8)] rounded-lg bg-text px-[calc(var(--space-3)*1.2)] py-2 text-md text-bg shadow-lg shell:bottom-6">
+    <div
+      className={cx(
+        'fixed left-1/2 z-30 flex max-w-[calc(100vw-32px)] -translate-x-1/2 items-center gap-[calc(var(--space-2)*0.8)] rounded-lg bg-text px-[calc(var(--space-3)*1.2)] py-2 text-md text-bg shadow-lg',
+        aboveNav ? 'bottom-[calc(84px+env(safe-area-inset-bottom))] shell:bottom-6' : 'bottom-6',
+      )}
+    >
       <Icon name={icon} className="text-[18px]" />
       {message}
     </div>
@@ -29,7 +39,7 @@ export function Toast({ message, icon = 'success' }: ToastProps) {
 /** Duración del export (`flash`): 2200 ms. */
 export const TOAST_DURATION_MS = 2200;
 
-type ToastState = ToastProps & { id: number };
+type ToastState = { id: number; message: string; icon?: IconName };
 type ToastApi = { show(message: string, icon?: IconName): void };
 
 const ToastContext = createContext<ToastApi | null>(null);
@@ -39,7 +49,13 @@ const ToastContext = createContext<ToastApi | null>(null);
  * el temporizador. La región `role="status"` está siempre montada para que los
  * lectores de pantalla anuncien cada mensaje.
  */
-export function ToastProvider({ children }: { children: ReactNode }) {
+export function ToastProvider({
+  children,
+  aboveNav = false,
+}: {
+  children: ReactNode;
+  aboveNav?: boolean;
+}) {
   const [toast, setToast] = useState<ToastState | null>(null);
 
   const show = useCallback((message: string, icon?: IconName) => {
@@ -58,7 +74,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={api}>
       {children}
       <div role="status" aria-live="polite" aria-atomic="true">
-        {toast && <Toast key={toast.id} message={toast.message} icon={toast.icon} />}
+        {toast && (
+          <Toast key={toast.id} message={toast.message} icon={toast.icon} aboveNav={aboveNav} />
+        )}
       </div>
     </ToastContext.Provider>
   );

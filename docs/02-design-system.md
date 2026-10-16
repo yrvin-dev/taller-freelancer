@@ -78,7 +78,7 @@ Cada variante redefine `--color-accent-100…800` en light y en dark (valores en
 
 ### 2.6 Degradados permitidos (solo estos tres)
 
-1. **Hero del login:** `linear-gradient(150deg, #2C4059 0% 45%, var(--color-accent) 140%)`.
+1. **Hero del login:** `linear-gradient(150deg, #2C4059 0% 45%, var(--color-accent) 140%)`. ✅ T08: token `--gradient-hero` (`bg-hero`). Texto en `--color-on-ink` y `--color-on-ink-muted` (blanco al 82%); la nota al pie del export iba al 60% (≈ 4.0:1 donde cae en el degradado) y se subió al 82%.
 2. **Card destacada ("Entregas próximas"):** `linear-gradient(135deg, var(--color-process-yellow) 0%, var(--color-accent) 70%)`, con texto `--color-on-accent`. **Avatar:** `linear-gradient(135deg, #2C4059, var(--color-accent))`.
 3. **Barra de progreso de pagos:** `linear-gradient(90deg, var(--color-process-yellow), var(--color-accent))`.
 

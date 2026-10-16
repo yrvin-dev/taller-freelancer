@@ -25,6 +25,8 @@ const config: Config = {
       'ink-deep': 'var(--color-ink-deep)',
       'on-accent': 'var(--color-on-accent)',
       'on-ink': 'var(--color-on-ink)',
+      'on-ink-muted': 'var(--color-on-ink-muted)',
+      'on-ink-chip': 'var(--color-on-ink-chip)',
       'process-yellow': 'var(--color-process-yellow)',
       danger: {
         DEFAULT: 'var(--color-danger)',
@@ -119,6 +121,7 @@ const config: Config = {
       none: 'none',
       featured: 'var(--gradient-featured)',
       avatar: 'var(--gradient-avatar)',
+      hero: 'var(--gradient-hero)',
     },
     extend: {
       transitionTimingFunction: { out: 'var(--ease-out)', shell: 'var(--ease-shell)' },

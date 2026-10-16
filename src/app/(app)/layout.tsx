@@ -13,7 +13,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   const expanded = parseSidebarExpanded((await cookies()).get(SIDEBAR_COOKIE)?.value);
 
   return (
-    <ToastProvider>
+    <ToastProvider aboveNav>
       <div className="flex min-h-screen">
         <Sidebar user={MOCK_USER} activeCount={MOCK_ACTIVE_PROJECTS} initialExpanded={expanded} />
         {/* Export: 60px abajo en desktop; en mobile, 96px para no quedar bajo la BottomNav. */}

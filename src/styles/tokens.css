@@ -59,6 +59,8 @@
   --color-ink-deep: #2c4059;
   --color-on-accent: #16202e;
   --color-on-ink: #ffffff; /* texto sobre ink-deep y el degradado del avatar */
+  --color-on-ink-muted: rgba(255, 255, 255, 0.82); /* bajada y nota del hero del login */
+  --color-on-ink-chip: rgba(255, 255, 255, 0.12); /* fondo del ícono de la marca en el hero */
   --color-process-yellow: #ffd461;
 
   /* ThemeSwitch: SVG propio del export, se dibuja igual en los dos temas (02 §7) */
@@ -111,6 +113,12 @@
     var(--color-accent) 70%
   );
   --gradient-avatar: linear-gradient(135deg, var(--color-ink-deep), var(--color-accent));
+  --gradient-hero: linear-gradient(
+    150deg,
+    var(--color-ink-deep) 0%,
+    var(--color-ink-deep) 45%,
+    var(--color-accent) 140%
+  );
 }
 
 /* ── Light ───────────────────────────────────────────────────────────── */

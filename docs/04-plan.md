@@ -56,7 +56,7 @@
 
 ## Fase 3 · Páginas (con datos mock tipados)
 
-### [ ] T08 · Login
+### [x] T08 · Login
 - **Objetivo:** la pantalla del export (hero en degradado y botón de Google), todavía sin auth real.
 - **Archivos:** `src/app/(auth)/login/page.tsx`.
 - **Hecho cuando:** coincide visualmente con el export en desktop y en mobile.
