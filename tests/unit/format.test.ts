@@ -5,8 +5,12 @@ import {
   formatDateShort,
   formatPEN,
   formatRelativeDays,
+  greeting,
+  hourIn,
   parseDate,
+  todayIn,
   toISODate,
+  toISODateIn,
 } from '@/lib/format';
 
 const NBSP = '\u00a0';
@@ -93,5 +97,42 @@ describe('toISODate y addDays', () => {
     expect(toISODate(addDays(new Date(2026, 9, 30), 3))).toBe('2026-11-02');
     expect(toISODate(addDays(new Date(2026, 11, 31), 1))).toBe('2027-01-01');
     expect(toISODate(addDays(new Date(2026, 9, 5), -5))).toBe('2026-09-30');
+  });
+});
+
+describe('formatPEN whole', () => {
+  it('redondea a soles enteros', () => {
+    expect(formatPEN(14100, { whole: true })).toBe(`S/${NBSP}14,100`);
+    expect(formatPEN(3799.5, { whole: true })).toBe(`S/${NBSP}3,800`);
+  });
+});
+
+describe('zona horaria de Lima', () => {
+  // 17 oct 2026 02:30 UTC = 16 oct 21:30 en Lima (UTC−5).
+  const now = new Date(Date.UTC(2026, 9, 17, 2, 30));
+
+  it('todayIn devuelve el día de Lima aunque en UTC ya sea mañana', () => {
+    expect(toISODate(todayIn('America/Lima', now))).toBe('2026-10-16');
+  });
+
+  it('hourIn devuelve la hora de Lima', () => {
+    expect(hourIn('America/Lima', now)).toBe(21);
+  });
+
+  it.each([
+    [0, 'Buenos días'],
+    [11, 'Buenos días'],
+    [12, 'Buenas tardes'],
+    [18, 'Buenas tardes'],
+    [19, 'Buenas noches'],
+    [23, 'Buenas noches'],
+  ])('%i h → %s', (hour, expected) => {
+    expect(greeting(hour)).toBe(expected);
+  });
+});
+
+describe('toISODateIn', () => {
+  it('usa el calendario de Lima', () => {
+    expect(toISODateIn(new Date(Date.UTC(2026, 9, 17, 2, 30)), 'America/Lima')).toBe('2026-10-16');
   });
 });

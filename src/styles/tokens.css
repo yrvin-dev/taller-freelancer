@@ -61,6 +61,13 @@
   --color-on-ink: #ffffff; /* texto sobre ink-deep y el degradado del avatar */
   --color-on-ink-muted: rgba(255, 255, 255, 0.82); /* bajada y nota del hero del login */
   --color-on-ink-chip: rgba(255, 255, 255, 0.12); /* fondo del ícono de la marca en el hero */
+
+  /* SummaryCard (export) */
+  --color-on-accent-muted: rgba(22, 32, 46, 0.82); /* ≥ 4.53:1 sobre la card destacada */
+  --color-on-accent-chip: rgba(255, 255, 255, 0.4); /* fondo del ícono en la card destacada */
+  --color-chip-yellow: color-mix(in srgb, var(--color-process-yellow) 40%, transparent);
+  /* Hover de ítems que heredan color: currentColor se resuelve donde se usa */
+  --state-current-hover: color-mix(in srgb, currentColor 10%, transparent);
   --color-process-yellow: #ffd461;
 
   /* ThemeSwitch: SVG propio del export, se dibuja igual en los dos temas (02 §7) */

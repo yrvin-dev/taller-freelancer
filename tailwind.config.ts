@@ -27,6 +27,9 @@ const config: Config = {
       'on-ink': 'var(--color-on-ink)',
       'on-ink-muted': 'var(--color-on-ink-muted)',
       'on-ink-chip': 'var(--color-on-ink-chip)',
+      'on-accent-muted': 'var(--color-on-accent-muted)',
+      'on-accent-chip': 'var(--color-on-accent-chip)',
+      'chip-yellow': 'var(--color-chip-yellow)',
       'process-yellow': 'var(--color-process-yellow)',
       danger: {
         DEFAULT: 'var(--color-danger)',
@@ -47,6 +50,7 @@ const config: Config = {
         subtle: 'var(--state-subtle)',
         'accent-active': 'var(--state-accent-active)',
         'danger-hover': 'var(--state-danger-hover)',
+        'current-hover': 'var(--state-current-hover)',
       },
       accent: { DEFAULT: 'var(--color-accent)', ...ramp('accent') },
       'accent-2': { DEFAULT: 'var(--color-accent-2)', ...ramp('accent-2') },

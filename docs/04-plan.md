@@ -66,9 +66,9 @@
 - **Archivos:** `src/lib/{projects,summary}.ts`, `src/lib/mock/projects.ts`, `src/lib/format.ts`, `public/mock/thumbs/*.webp`, `tests/unit/summary.test.ts`.
 - **Hecho cuando:** los badges ("en 3 días", "Comprar") y los totales se calculan desde los datos, con tests en fechas fijas.
 
-### [ ] T09b · Home · UI
+### [x] T09b · Home · UI
 - **Objetivo:** saludo, las 3 `SummaryCard` (solo "Entregas próximas" destacada; las otras en surface plano, 02 §9), proyectos recientes y estado vacío.
-- **Archivos:** `src/components/projects/{SummaryCard,RecentProjects}.tsx`, `src/app/(app)/page.tsx`.
+- **Archivos:** `src/components/projects/{HomeDashboard,SummaryCard,RecentProjects,HomeEmptyState}.tsx`, `src/app/(app)/page.tsx`.
 - **Hecho cuando:** coincide con el export en light y dark, a 375px y 1440px.
 
 ### [ ] T10 · Lista de proyectos

@@ -102,7 +102,7 @@ type PageHeaderProps = { title: string; description?: ReactNode; actions?: React
 // mobile (< 820px): AppHeader (marca) + BottomNav fija de 4 ítems; sin props
 
 // projects
-type SummaryCardProps = { kind: 'entregas'|'vencimientos'|'pagos'; featured?: boolean; items: { id: string; primary: string; badge: string; tone: 'accent'|'accent-2'|'neutral' }[]; total?: number };
+type SummaryCardProps = { title: string; icon: IconName; iconTone: 'featured'|'danger'|'yellow'; window: string; count: number; sub: string; featured?: boolean; items: { id: string; href: string; primary: string; secondary?: string; badge: string; tone: TagVariant }[] }; // armadas por homeCards(projects, today)
 type ProjectCardProps = { project: ProjectListItem };   // miniatura 16:10, nombre, cliente, StatusDot, tags de stack
 type ProjectRowProps = { project: ProjectListItem };    // fila de tabla
 type ProjectFiltersProps = { value: ProjectFilters; stacks: string[]; cmsOptions: string[]; counts: Record<ProjectStatus|'todos', number> }; // escribe en la URL

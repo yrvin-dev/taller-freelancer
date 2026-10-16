@@ -1,19 +1,17 @@
-import Link from 'next/link';
-import { PageHeader } from '@/components/layout/PageHeader';
-import { buttonClass } from '@/components/ui/Button';
-import { Icon } from '@/components/ui/Icon';
+import { HomeDashboard } from '@/components/projects/HomeDashboard';
+import { hourIn, todayIn } from '@/lib/format';
+import { mockProjects } from '@/lib/mock/projects';
+import { MOCK_USER } from '@/lib/mock/user';
 
-// Contenido real (saludo, SummaryCards, recientes) en la tanda de la home.
+// Datos de prueba hasta la tanda de datos: entonces `getSummary(uid)` (03 §3).
 export default function Home() {
+  const today = todayIn();
   return (
-    <PageHeader
-      title="Inicio"
-      actions={
-        <Link href="/proyectos/nuevo" className={buttonClass()}>
-          <Icon name="plus" />
-          Nuevo proyecto
-        </Link>
-      }
+    <HomeDashboard
+      projects={mockProjects(today)}
+      today={today}
+      hour={hourIn()}
+      userName={MOCK_USER.name}
     />
   );
 }

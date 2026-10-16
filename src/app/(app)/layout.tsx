@@ -4,6 +4,7 @@ import { AppHeader } from '@/components/layout/AppHeader';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { ToastProvider } from '@/components/ui/Toast';
+import { todayIn } from '@/lib/format';
 import { parseSidebarExpanded, SIDEBAR_COOKIE } from '@/lib/layout-prefs';
 import { mockProjects } from '@/lib/mock/projects';
 import { MOCK_USER } from '@/lib/mock/user';
@@ -12,7 +13,7 @@ import { MOCK_USER } from '@/lib/mock/user';
 // hasta entonces se usa MOCK_USER.
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const expanded = parseSidebarExpanded((await cookies()).get(SIDEBAR_COOKIE)?.value);
-  const activeCount = mockProjects().filter((p) => p.status !== 'archivado').length;
+  const activeCount = mockProjects(todayIn()).filter((p) => p.status !== 'archivado').length;
 
   return (
     <ToastProvider aboveNav>

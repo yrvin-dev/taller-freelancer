@@ -4,6 +4,11 @@ const LOCALE = 'es-PE';
 const MS_PER_DAY = 86_400_000;
 
 const penFormatter = new Intl.NumberFormat(LOCALE, { style: 'currency', currency: 'PEN' });
+const penWholeFormatter = new Intl.NumberFormat(LOCALE, {
+  style: 'currency',
+  currency: 'PEN',
+  maximumFractionDigits: 0,
+});
 const dateFormatter = new Intl.DateTimeFormat(LOCALE, {
   day: 'numeric',
   month: 'short',
@@ -11,9 +16,12 @@ const dateFormatter = new Intl.DateTimeFormat(LOCALE, {
 });
 const dateShortFormatter = new Intl.DateTimeFormat(LOCALE, { day: 'numeric', month: 'short' });
 
-/** `1800` → `S/ 1,800.00`. Intl separa el símbolo con un espacio duro (U+00A0). */
-export function formatPEN(amount: number): string {
-  return penFormatter.format(amount);
+/**
+ * `1800` → `S/ 1,800.00`. Con `whole`, sin decimales (`S/ 1,800`), como en los
+ * resúmenes del export. Intl separa el símbolo con un espacio duro (U+00A0).
+ */
+export function formatPEN(amount: number, { whole = false }: { whole?: boolean } = {}): string {
+  return (whole ? penWholeFormatter : penFormatter).format(amount);
 }
 
 /**
@@ -76,4 +84,38 @@ export function toISODate(date: Date): string {
 /** Suma días de calendario a una fecha local (respeta cambios de mes y año). */
 export function addDays(date: Date, days: number): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
+}
+
+/** Zona horaria de la app (los usuarios están en Perú; Vercel corre en UTC). */
+export const APP_TIME_ZONE = 'America/Lima';
+
+/**
+ * "Hoy" en Lima como fecha local a medianoche. En el servidor (UTC), `new Date()`
+ * ya es el día siguiente entre las 19:00 y las 24:00 de Lima.
+ */
+export function todayIn(timeZone: string = APP_TIME_ZONE, now: Date = new Date()): Date {
+  return parseDate(toISODateIn(now, timeZone)) ?? now;
+}
+
+/** Instante → `'YYYY-MM-DD'` del calendario de Lima (ej. `updatedAt` → "3 oct"). */
+export function toISODateIn(date: Date, timeZone: string = APP_TIME_ZONE): string {
+  // en-CA formatea como YYYY-MM-DD.
+  return new Intl.DateTimeFormat('en-CA', { timeZone }).format(date);
+}
+
+/** Hora (0–23) en Lima, para el saludo. */
+export function hourIn(timeZone: string = APP_TIME_ZONE, now: Date = new Date()): number {
+  const hour = new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    hour: '2-digit',
+    hourCycle: 'h23',
+  }).format(now);
+  return Number(hour);
+}
+
+/** Saludo del export según la hora: días (< 12), tardes (< 19) o noches. */
+export function greeting(hour: number): string {
+  if (hour < 12) return 'Buenos días';
+  if (hour < 19) return 'Buenas tardes';
+  return 'Buenas noches';
 }
