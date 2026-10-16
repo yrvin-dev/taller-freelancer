@@ -10,7 +10,7 @@
 - **Archivos:** `package.json`, `tsconfig.json`, `next.config.ts`, `tailwind.config.ts`, `postcss.config.js`, `eslint.config.mjs`, `.prettierrc`, `.gitignore`, `.env.example`, `vitest.config.ts`, `src/app/layout.tsx`, `src/app/page.tsx`.
 - **Hecho cuando:** `pnpm dev` levanta, `pnpm build` pasa y `.env*` está ignorado (excepto `.env.example`).
 
-### [ ] T02 · Tokens
+### [x] T02 · Tokens
 - **Objetivo:** pasar a CSS los tokens de `02-design-system.md` (light, dark, `data-bg` y `data-accent`), resolver los 🔶 que bloquean y mapear Tailwind a `var(--*)`. Cargar Source Serif 4 y Nunito con `next/font`.
 - **Archivos:** `src/styles/tokens.css`, `src/styles/globals.css`, `tailwind.config.ts`, `src/app/layout.tsx`, `docs/02-design-system.md` (marcar los 🔶 resueltos).
 - **Hecho cuando:** una página de prueba `/_tokens` (solo en dev) muestra rampas, tipos, radios y sombras igual que el export en los dos temas. La regla ESLint `no-hex` falla con un hex de prueba.

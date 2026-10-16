@@ -83,3 +83,6 @@ Ver `04-plan.md`. Resumen: scaffold y tokens → componentes base → layout →
 - 2026-10-15 · T01 · En `/mnt/c` (disco de Windows desde WSL) Vitest + jsdom no arranca (worker > 60s); en ext4 tarda 2s. **El repo vive en `~/proyectos/`, nunca en `/mnt/c`.**
 - 2026-10-15 · T01 · ESLint 9 usa flat config (`eslint.config.mjs` + `FlatCompat` para `next/*`). `pnpm lint` corre `eslint .`, no `next lint` (deprecado en Next 15.5).
 - 2026-10-15 · T01 · pnpm bloquea los scripts de postinstall por defecto: `unrs-resolver` está permitido en `pnpm-workspace.yaml` (`allowBuilds`).
+- 2026-10-15 · T02 · En App Router, una carpeta `_algo` es **privada** y no genera ruta. Para una URL `/_tokens`, la carpeta se llama `%5Ftokens`.
+- 2026-10-15 · T02 · Los tokens que referencian a otros (`--status-dev: var(--color-accent)`) van bajo `[data-theme]`, no en `:root`: una custom property se resuelve donde se declara y se hereda ya resuelta, así que en `:root` ignoraría el tema de un contenedor anidado.
+- 2026-10-15 · T02 · La regla `no-hex` (`no-restricted-syntax`) aplica solo a `src/**`; los tests que usan hex como fixture quedan fuera. El CSS se cubre con `pnpm check:tokens` (grep).

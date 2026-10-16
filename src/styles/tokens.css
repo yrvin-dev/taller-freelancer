@@ -1,0 +1,317 @@
+/*
+ * Tokens de Taller Freelancer: el único archivo del repo con valores hex o rgb.
+ * Fuente: export `Taller Freelancer.dc.html` sobre la base Broadsheet (gana el export).
+ * Spec: docs/02-design-system.md.
+ *
+ * - Tokens independientes del tema → :root.
+ * - Tokens por tema → [data-theme="light" | "dark"] en <html> (o en cualquier contenedor).
+ * - Tokens que referencian a otros (var(--…)) → [data-theme], para que se recalculen
+ *   en cada contenedor con tema propio y no hereden el valor ya resuelto en :root.
+ * - Variantes de preferencia → data-bg (fondo) y data-accent (acento).
+ *
+ * Valores marcados "OKLCH" no están en el export: se generaron en OKLCH usando la
+ * rampa naranja como plantilla (misma L y misma proporción de croma por paso).
+ */
+
+/* ── Independientes del tema ─────────────────────────────────────────── */
+:root {
+  /* Tipografía (las familias las inyecta next/font como variables en <html>) */
+  --font-heading: var(--font-source-serif), system-ui, serif;
+  --font-heading-weight: 600;
+  --font-body: var(--font-source-serif), system-ui, serif;
+  --font-ui: var(--font-nunito), system-ui, sans-serif;
+
+  --text-2xs: 11px; /* tag, card-meta, th */
+  --text-xs: 12px; /* label de campo */
+  --text-sm: 13px; /* h6, overline */
+  --text-md: 14px; /* input, botón */
+  --text-base: 15px; /* body */
+  --text-lg: 16px; /* h5 */
+  --text-xl: 20px; /* h4 */
+  --text-2xl: 25px; /* h3 */
+  --text-3xl: 32px; /* h2 */
+  --text-4xl: 42px; /* h1 */
+
+  --leading-tight: 1.12;
+  --leading-control: 1.2;
+  --leading-body: 1.55;
+
+  --tracking-heading: -0.015em;
+  --tracking-caps: 0.08em;
+
+  /* Espaciado: no existen 5, 7 ni 10 */
+  --space-1: 5px;
+  --space-2: 10px;
+  --space-3: 15px;
+  --space-4: 20px;
+  --space-6: 30px;
+  --space-8: 40px;
+  --page-pad: clamp(var(--space-4), 4vw, var(--space-8));
+
+  /* Radios (override del export sobre Broadsheet) */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* Colores fijos en los dos temas */
+  --color-ink-deep: #2c4059;
+  --color-on-accent: #16202e;
+  --color-process-yellow: #ffd461;
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ── Derivados (se recalculan en cada contenedor con tema) ───────────── */
+[data-theme] {
+  --status-dev: var(--color-accent);
+  --status-review: var(--color-process-yellow);
+  --status-prod: var(--color-success-500);
+  --status-maint: var(--color-info-500);
+  --status-archived: var(--color-neutral-500);
+}
+
+/* ── Light ───────────────────────────────────────────────────────────── */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --color-bg: #efe4d2;
+  --color-surface: #ffffff;
+  --color-text: #2c4059;
+  --color-divider: color-mix(in srgb, #2c4059 14%, transparent);
+  --color-accent: #ef7b3e;
+  --color-accent-2: #ea5455;
+
+  --color-neutral-100: #eef1f5;
+  --color-neutral-200: #dde3ea;
+  --color-neutral-300: #c2ccd8;
+  --color-neutral-400: #9aa8b9;
+  --color-neutral-500: #77879b;
+  --color-neutral-600: #5c6d82;
+  --color-neutral-700: #4a5a6f;
+  --color-neutral-800: #36475e;
+  --color-neutral-900: #2c4059;
+
+  --color-accent-100: #fff0e6;
+  --color-accent-200: #ffd9c2;
+  --color-accent-300: #f9b48c;
+  --color-accent-400: #f4955f;
+  --color-accent-500: #ef7b3e;
+  --color-accent-600: #d4622a;
+  --color-accent-700: #a84a1d;
+  --color-accent-800: #7a3515;
+  --color-accent-900: #4d220e;
+
+  --color-accent-2-100: #fdeaea;
+  --color-accent-2-200: #f9cccc;
+  --color-accent-2-300: #f3a2a2;
+  --color-accent-2-400: #ee7778;
+  --color-accent-2-500: #ea5455;
+  --color-accent-2-600: #c93d3e;
+  --color-accent-2-700: #9e2e2f;
+  --color-accent-2-800: #702122;
+  --color-accent-2-900: #451415;
+
+  /* OKLCH, base #22a55b (punto "Producción" del export) */
+  --color-success-100: #eaf7ed;
+  --color-success-200: #caecd2;
+  --color-success-300: #97d8a9;
+  --color-success-400: #6ac888;
+  --color-success-500: #22a55b;
+  --color-success-600: #19924f;
+  --color-success-700: #107f43;
+  --color-success-800: #0e5c30;
+  --color-success-900: #0d3a1e;
+
+  /* OKLCH, base #4a90c9 (azul de la paleta del export) */
+  --color-info-100: #ecf4fd;
+  --color-info-200: #cfe5f9;
+  --color-info-300: #a2cbef;
+  --color-info-400: #7db7e8;
+  --color-info-500: #4a90c9;
+  --color-info-600: #407fb3;
+  --color-info-700: #366f9d;
+  --color-info-800: #275072;
+  --color-info-900: #193248;
+
+  --shadow-sm: 0 12px 28px -6px rgba(44, 64, 89, 0.28), 0 3px 8px rgba(44, 64, 89, 0.1);
+  --shadow-md: 0 18px 38px -8px rgba(44, 64, 89, 0.34), 0 4px 10px rgba(44, 64, 89, 0.12);
+  --shadow-lg: 0 26px 56px -10px rgba(44, 64, 89, 0.4), 0 6px 14px rgba(44, 64, 89, 0.14);
+}
+
+/* ── Dark (rampas invertidas: 100 es el más oscuro) ──────────────────── */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg: #1d1a17;
+  --color-surface: #2b2621;
+  --color-text: #f4efe7;
+  --color-divider: color-mix(in srgb, #f4efe7 16%, transparent);
+  --color-accent: #ef7b3e;
+  --color-accent-2: #ea5455;
+
+  --color-neutral-100: #22313f;
+  --color-neutral-200: #34485f;
+  --color-neutral-300: #4a5f77;
+  --color-neutral-400: #66798f;
+  --color-neutral-500: #8595a8;
+  --color-neutral-600: #a6b3c2;
+  --color-neutral-700: #c7d0da;
+  --color-neutral-800: #e2e7ec;
+  --color-neutral-900: #f6f8fa;
+
+  --color-accent-100: #4a2c1c;
+  --color-accent-200: #6b3a20;
+  --color-accent-300: #94502a;
+  --color-accent-400: #c46634;
+  --color-accent-500: #ef7b3e;
+  --color-accent-600: #f4955f;
+  --color-accent-700: #f9b48c;
+  --color-accent-800: #ffd9c2;
+  --color-accent-900: #fff0e6;
+
+  --color-accent-2-100: #4a2229;
+  --color-accent-2-200: #6a2a30;
+  --color-accent-2-300: #9e3a3c;
+  --color-accent-2-400: #d44a4b;
+  --color-accent-2-500: #ea5455;
+  --color-accent-2-600: #f07f80;
+  --color-accent-2-700: #f6aaab;
+  --color-accent-2-800: #fbd3d3;
+  --color-accent-2-900: #fdeaea;
+
+  /* OKLCH: 100–400 propios; 600–900 = light 400–100 (mismo patrón que accent) */
+  --color-success-100: #1f3c28;
+  --color-success-200: #245434;
+  --color-success-300: #2f7548;
+  --color-success-400: #389a5c;
+  --color-success-500: #22a55b;
+  --color-success-600: #6ac888;
+  --color-success-700: #97d8a9;
+  --color-success-800: #caecd2;
+  --color-success-900: #eaf7ed;
+
+  --color-info-100: #253746;
+  --color-info-200: #2f4c65;
+  --color-info-300: #40698c;
+  --color-info-400: #5089b9;
+  --color-info-500: #4a90c9;
+  --color-info-600: #7db7e8;
+  --color-info-700: #a2cbef;
+  --color-info-800: #cfe5f9;
+  --color-info-900: #ecf4fd;
+
+  --shadow-sm: 0 12px 30px -6px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-md: 0 18px 40px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-lg: 0 26px 56px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+/* ── Variantes de fondo (data-bg). "arena" es el default de arriba ───── */
+[data-theme='light'][data-bg='pizarra'] {
+  --color-bg: #cdd5df;
+}
+[data-theme='dark'][data-bg='pizarra'] {
+  --color-bg: #18222f;
+  --color-surface: #2c4059;
+}
+[data-theme='light'][data-bg='salvia'] {
+  --color-bg: #cfdcd6;
+}
+[data-theme='dark'][data-bg='salvia'] {
+  --color-bg: #121c1b;
+  --color-surface: #1e2c2a;
+}
+
+/* ── Variantes de acento (data-accent). "naranja" es el default ──────── */
+/* 100–800 del export; 900 en light y 300/400/900 en dark: OKLCH. */
+[data-theme][data-accent='terracota'] {
+  --color-accent: #d9643a;
+  --color-accent-100: #fbe9e1;
+  --color-accent-200: #f4cdbd;
+  --color-accent-300: #e9a283;
+  --color-accent-400: #e0815b;
+  --color-accent-500: #d9643a;
+  --color-accent-600: #bd5129;
+  --color-accent-700: #96401f;
+  --color-accent-800: #6c2e16;
+  --color-accent-900: #4d2212;
+}
+[data-theme='dark'][data-accent='terracota'] {
+  --color-accent-100: #4a271a;
+  --color-accent-200: #6b3521;
+  --color-accent-300: #954e35;
+  --color-accent-400: #c56442;
+  --color-accent-600: #e0815b;
+  --color-accent-700: #e9a283;
+  --color-accent-800: #f4cdbd;
+  --color-accent-900: #fbe9e1;
+}
+
+[data-theme][data-accent='mandarina'] {
+  --color-accent: #ff8f2e;
+  --color-accent-100: #fff1e2;
+  --color-accent-200: #ffdab5;
+  --color-accent-300: #ffbd7e;
+  --color-accent-400: #ffa452;
+  --color-accent-500: #ff8f2e;
+  --color-accent-600: #ec7a14;
+  --color-accent-700: #b25a0c;
+  --color-accent-800: #7d3f08;
+  --color-accent-900: #4c2400;
+}
+[data-theme='dark'][data-accent='mandarina'] {
+  --color-accent-100: #4a2d12;
+  --color-accent-200: #6b3f17;
+  --color-accent-300: #93511a;
+  --color-accent-400: #c26915;
+  --color-accent-600: #ffa452;
+  --color-accent-700: #ffbd7e;
+  --color-accent-800: #ffdab5;
+  --color-accent-900: #fff1e2;
+}
+
+[data-theme][data-accent='azul'] {
+  --color-accent: #3d9be9;
+  --color-accent-100: #e6f2fd;
+  --color-accent-200: #c4e0fa;
+  --color-accent-300: #93c6f4;
+  --color-accent-400: #64b0ef;
+  --color-accent-500: #3d9be9;
+  --color-accent-600: #2283d6;
+  --color-accent-700: #1a66a8;
+  --color-accent-800: #134a7a;
+  --color-accent-900: #10324f;
+}
+[data-theme='dark'][data-accent='azul'] {
+  --color-accent-100: #12304d;
+  --color-accent-200: #17426b;
+  --color-accent-300: #336998;
+  --color-accent-400: #3e89c9;
+  --color-accent-600: #64b0ef;
+  --color-accent-700: #93c6f4;
+  --color-accent-800: #c4e0fa;
+  --color-accent-900: #e6f2fd;
+}
+
+[data-theme][data-accent='turquesa'] {
+  --color-accent: #2bb3a8;
+  --color-accent-100: #e2f6f4;
+  --color-accent-200: #bce9e5;
+  --color-accent-300: #86d6cf;
+  --color-accent-400: #55c4bb;
+  --color-accent-500: #2bb3a8;
+  --color-accent-600: #1f968c;
+  --color-accent-700: #18756d;
+  --color-accent-800: #11534e;
+  --color-accent-900: #073834;
+}
+[data-theme='dark'][data-accent='turquesa'] {
+  --color-accent-100: #0f3a37;
+  --color-accent-200: #14504b;
+  --color-accent-300: #28726b;
+  --color-accent-400: #2c968d;
+  --color-accent-600: #55c4bb;
+  --color-accent-700: #86d6cf;
+  --color-accent-800: #bce9e5;
+  --color-accent-900: #e2f6f4;
+}
