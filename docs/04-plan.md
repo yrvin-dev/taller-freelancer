@@ -93,9 +93,14 @@
 
 > Fase 2: la pestaña "Editores CMS" del export (tabla de editores y guía de edición) no entra en el MVP: no está en el 01 ni en el 03.
 
-### [ ] T12 · Formulario nuevo / editar
-- **Objetivo:** `ProjectForm` con React Hook Form y Zod, y la subida de la miniatura.
-- **Archivos:** `src/lib/schemas.ts`, `src/components/projects/ProjectForm.tsx`, `proyectos/nuevo/page.tsx`, `proyectos/[id]/editar/page.tsx`, tests del esquema.
+### [x] T12a · Formulario · esquema y Server Action
+- **Objetivo:** `projectSchema` (Zod) compartido por el formulario y la Server Action `saveProject`, con mensajes por campo en español; `toFormValues(project)` para editar.
+- **Archivos:** `src/lib/{schemas,project-form,action-result}.ts`, `src/app/(app)/proyectos/actions.ts`, `tests/unit/schemas.test.ts`.
+- **Hecho cuando:** el esquema rechaza datos inválidos con un mensaje por campo (incluidos enlaces `javascript:`) y la acción devuelve `fieldErrors`.
+
+### [ ] T12b · Formulario · UI y páginas
+- **Objetivo:** `ProjectForm` con React Hook Form + `zodResolver` sobre `Field`, la miniatura (vista previa y validación; la subida a Storage llega con la base) y las páginas `/proyectos/nuevo` y `/proyectos/[id]/editar`.
+- **Archivos:** `src/components/projects/{ProjectForm,ThumbnailField}.tsx`, `proyectos/nuevo/page.tsx`, `proyectos/[id]/editar/page.tsx`.
 - **Hecho cuando:** los errores se muestran por campo y el esquema es el mismo en el cliente y en el servidor.
 
 ### [ ] T13 · Calendario, Cuenta, 403 y 401

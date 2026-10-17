@@ -108,6 +108,7 @@ type ProjectRowProps = { project: Project };    // fila de tabla (ui/Table); "Ab
 // /proyectos: la vista va en la URL (?vista=tabla) con ViewSwitch; parseProjectView()
 type ProjectFiltersProps = { value: ProjectFilters; stacks: string[]; cmsOptions: string[]; counts: Record<ProjectStatus|'todos', number> }; // escribe en la URL
 type ProjectFormProps = { initial?: ProjectInput; action(input: ProjectInput): Promise<ActionResult<{ id: string }>> };
+// projectSchema (src/lib/schemas.ts) valida el form (zodResolver) y saveProject(input, projectId) en el servidor; ProjectFormValues = z.input (texto), ProjectInput = z.output (normalizado). Error → { ok: false, error, fieldErrors: { campo: mensaje } }. cms es texto libre (el select ofrece CMS_OPTIONS).
 type CredentialRowProps = { projectId: string; credential: { id: string; label: string; username: string | null; url: string | null } }; // sin secreto; "Mostrar"/"Copiar" llaman a revealCredential({ projectId, credentialId }) → ActionResult<{ secret }> (src/lib/action-result.ts)
 type PaymentListProps = { total: number; payments: Payment[]; onAdd(p: PaymentInput): Promise<ActionResult> };
 type NoteLogProps = { notes: Note[]; onAdd(n: NoteInput): Promise<ActionResult>; onDelete(id: string): Promise<ActionResult> }; // borrar con confirmación en la misma línea
