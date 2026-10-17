@@ -76,7 +76,7 @@ taller-freelancer/
 | `/proyectos/[id]` | privada | Ficha: cabecera con miniatura, stack, enlaces, accesos, pagos, vencimientos, bitácora | `getProject(uid, id)`; si no es tuyo → 403 |
 | `/proyectos/[id]/editar` | privada | `ProjectForm` prellenado | ídem |
 | `/calendario` | privada | Entregas y vencimientos por mes | `listDeadlines(uid, month)` |
-| `/cuenta` | privada | Perfil de Google, preferencias (nombre, carpeta base, tema, acento, fondo), exportar JSON, borrar cuenta | `getProfile(uid)` |
+| `/cuenta` | privada | Perfil de Google, preferencias (nombre, carpeta base y tema; acento y fondo en fase 2), exportar JSON (`GET /cuenta/exportar`, sin credenciales), borrar cuenta | `getProfile(uid)`, `savePreferences` (al salir del campo) |
 | `/403` | privada | `ErrorScreen` "No tienes acceso a este proyecto" | — |
 | 401 | diálogo | `SessionExpiredDialog` encima de la app, con "Entrar de nuevo con Google" | — |
 

@@ -15,6 +15,8 @@ const dateFormatter = new Intl.DateTimeFormat(LOCALE, {
   year: 'numeric',
 });
 const dateShortFormatter = new Intl.DateTimeFormat(LOCALE, { day: 'numeric', month: 'short' });
+const monthFormatter = new Intl.DateTimeFormat(LOCALE, { month: 'long' });
+const weekdayFormatter = new Intl.DateTimeFormat(LOCALE, { weekday: 'short' });
 
 /**
  * `1800` → `S/ 1,800.00`. Con `whole`, sin decimales (`S/ 1,800`), como en los
@@ -118,4 +120,23 @@ export function greeting(hour: number): string {
   if (hour < 12) return 'Buenos días';
   if (hour < 19) return 'Buenas tardes';
   return 'Buenas noches';
+}
+
+/**
+ * `'2026-10-05'` → `octubre 2026` (sin el "de" de Intl, como el export). Con
+ * `capitalize`, `Octubre 2026` (encabezados del calendario).
+ */
+export function formatMonthYear(iso: string, { capitalize = false } = {}): string {
+  const date = parseDate(iso);
+  if (!date) return '—';
+  // Según el ICU, Intl devuelve "octubre" u "Octubre": se normaliza.
+  const month = monthFormatter.format(date).toLocaleLowerCase(LOCALE);
+  const label = `${month} ${date.getFullYear()}`;
+  return capitalize ? label.charAt(0).toUpperCase() + label.slice(1) : label;
+}
+
+/** `'2026-10-05'` → `lun` (sin el punto de Intl, como el export). */
+export function formatWeekdayShort(iso: string): string {
+  const date = parseDate(iso);
+  return date ? weekdayFormatter.format(date).replace(/\.$/, '') : '—';
 }

@@ -21,6 +21,8 @@ const eslintConfig = [
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
+      // `const { secreto, ...resto } = obj` es la forma idiomática de omitir campos.
+      '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],
     },
   },
   {

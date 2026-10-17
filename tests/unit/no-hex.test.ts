@@ -1,5 +1,5 @@
 import { ESLint } from 'eslint';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 const eslint = new ESLint();
 const lint = async (code: string) => {
@@ -8,6 +8,10 @@ const lint = async (code: string) => {
 };
 
 describe('regla no-hex', () => {
+  // La primera pasada carga la config completa de ESLint (parser de TS, plugins de
+  // Next): con toda la suite en paralelo supera los 5 s por defecto. Se calienta aquí.
+  beforeAll(() => lint(''), 30_000);
+
   it.each([
     "export const c = '#EF7B3E';",
     "export const c = '#fff';",

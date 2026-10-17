@@ -155,3 +155,11 @@ export function fieldErrorsOf(error: z.ZodError): Record<string, string> {
   }
   return errors;
 }
+
+/** Preferencias de Cuenta (tabla `profiles`): se guardan al salir de cada campo. */
+export const preferencesSchema = z.object({
+  displayName: required('Escribe cómo quieres que te saludemos.', 60),
+  basePath: optionalText(260),
+});
+
+export type PreferencesValues = z.input<typeof preferencesSchema>;

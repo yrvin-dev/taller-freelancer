@@ -1,7 +1,13 @@
 // Lógica del panel de inicio (las 3 SummaryCard), portada del export. Funciones puras:
 // reciben `today` para que los badges ("en 3 días", "Comprar") se calculen y se testeen.
 
-import { daysUntil, formatDate, formatRelativeDays } from './format';
+import {
+  daysUntil,
+  formatDate,
+  formatMonthYear,
+  formatRelativeDays,
+  formatWeekdayShort,
+} from './format';
 import { paidPen, type Project } from './projects';
 
 /** Ventana de "Por vencer" (export: "Próximos 30 días"). */
@@ -128,4 +134,74 @@ export function expiryCards(
     : card('Dominio', project.domainExpires);
 
   return [domain, card('Hosting', project.hostingExpires)];
+}
+
+export type AgendaKind = 'entrega' | 'dominio' | 'hosting';
+
+export type AgendaEvent = {
+  id: string;
+  projectId: string;
+  date: string;
+  kind: AgendaKind;
+  title: string;
+  detail: string;
+  tone: 'accent' | 'accent-2' | 'neutral';
+  /** `05` y `lun`, como el día grande del export. */
+  day: string;
+  weekday: string;
+};
+
+export type AgendaMonth = { key: string; label: string; events: AgendaEvent[] };
+
+const KIND_ORDER: Record<AgendaKind, number> = { entrega: 0, dominio: 1, hosting: 2 };
+
+/**
+ * Agenda del calendario (export: `agenda`): entregas y vencimientos de dominio y
+ * hosting desde hoy, sin archivados, ordenados y agrupados por mes. Los vencimientos
+ * usan la regla de la home: coral a 7 días o menos (02 §8.5).
+ */
+export function agendaEvents(projects: Project[], today: Date): AgendaMonth[] {
+  const events: AgendaEvent[] = [];
+
+  for (const project of projects) {
+    if (project.status === 'archivado') continue;
+    const candidates: [AgendaKind, string | null, string][] = [
+      ['entrega', project.deliveryDate, `Entrega · ${project.client}`],
+      ['dominio', project.domainExpires, ['Dominio', project.domainName].filter(Boolean).join(' ')],
+      [
+        'hosting',
+        project.hostingExpires,
+        ['Hosting', project.stack.hosting.join(' + ')].filter(Boolean).join(' '),
+      ],
+    ];
+    for (const [kind, date, detail] of candidates) {
+      const days = date ? daysUntil(date, today) : null;
+      if (date === null || days === null || days < 0) continue;
+      events.push({
+        id: `${project.id}-${kind}`,
+        projectId: project.id,
+        date,
+        kind,
+        title: project.name,
+        detail,
+        tone: kind === 'entrega' ? 'accent' : days <= URGENT_DAYS ? 'accent-2' : 'neutral',
+        day: date.slice(8, 10),
+        weekday: formatWeekdayShort(date),
+      });
+    }
+  }
+
+  events.sort((a, b) => a.date.localeCompare(b.date) || KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
+
+  const months: AgendaMonth[] = [];
+  for (const event of events) {
+    const key = event.date.slice(0, 7);
+    let month = months.find((m) => m.key === key);
+    if (!month) {
+      month = { key, label: formatMonthYear(event.date, { capitalize: true }), events: [] };
+      months.push(month);
+    }
+    month.events.push(event);
+  }
+  return months;
 }

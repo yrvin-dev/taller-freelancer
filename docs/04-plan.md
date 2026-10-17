@@ -103,10 +103,17 @@
 - **Archivos:** `src/components/projects/{ProjectForm,ThumbnailField}.tsx`, `proyectos/nuevo/page.tsx`, `proyectos/[id]/editar/page.tsx`.
 - **Hecho cuando:** los errores se muestran por campo y el esquema es el mismo en el cliente y en el servidor.
 
-### [ ] T13 · Calendario, Cuenta, 403 y 401
-- **Objetivo:** las pantallas restantes del export.
-- **Archivos:** `calendario/page.tsx`, `cuenta/page.tsx`, `403/page.tsx`, `SessionExpiredDialog.tsx`, `not-found.tsx`, `error.tsx`.
+### [x] T13a · Calendario y Cuenta
+- **Objetivo:** `/calendario` (agenda por mes con `agendaEvents`) y `/cuenta` (perfil, preferencias guardadas al salir del campo, tema, exportar JSON sin secretos y borrar cuenta con confirmación).
+- **Archivos:** `src/app/(app)/{calendario,cuenta}/*`, `src/components/account/*`, `src/lib/{summary,format,schemas}.ts`.
+- **Hecho cuando:** coincide con el export, el tema cambia desde Cuenta y "Exportar datos" descarga un JSON sin credenciales.
+
+### [ ] T13b · Pantallas de error y sesión
+- **Objetivo:** `ErrorScreen` (403, 404 y error con "Reintentar") y `SessionExpiredDialog` (401, no se cierra con Esc).
+- **Archivos:** `src/components/ErrorScreen.tsx`, `src/components/SessionExpiredDialog.tsx`, `src/app/(app)/403/page.tsx`, `not-found.tsx`, `error.tsx`.
 - **Hecho cuando:** todas las pantallas del export tienen su ruta.
+
+> Fase 2: selectores de acento y fondo en Cuenta (los tokens ya existen; el export solo tiene tema).
 
 ## Fase 4 · Datos y auth
 

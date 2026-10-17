@@ -197,6 +197,12 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 - **"Dominio por comprar"**: checkbox nativo de 18px con `accent-color: var(--color-accent)` y su texto como label, en una fila de 44px (objetivo táctil). No hay checkbox en el export.
 - Miniatura: además de "PNG o JPG…", acepta WebP y valida hasta 2 MB con error en `danger-text`; al elegir una nueva aparece "Quitar imagen nueva".
 
+### 8.5 Calendario y Cuenta: diferencias con el export ✅ T13a
+
+- Calendario: los tags de Dominio y Hosting siguen la regla de la home (`accent-2` a 7 días o menos, `neutral` si falta más); el export los pintaba todos en coral. Entrega → `accent`. Usa `PageHeader`, así en mobile también tiene el switch de tema.
+- Calendario vacío: "No hay entregas ni vencimientos próximos." en `neutral-700`.
+- Cuenta: las preferencias se guardan al salir del campo, como el export (sin botón), y lo confirma un toast. "Exportar datos" descarga un JSON **sin credenciales** (ni etiquetas ni secretos).
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.
