@@ -189,6 +189,14 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 - Bitácora: Pedido → `outline` (el export usaba `accent-2`), Cambio → `accent`, Nota → `neutral`.
 - Vencimientos: "Por comprar", "Vencido" o a 30 días o menos → `accent-2`; el resto → `neutral`. El kicker de la tarjeta va en `accent-700` (el `accent` de `.card-kicker` en 10px no llega a 4.5:1).
 
+### 8.4 Formulario de proyecto: diferencias con el export ✅ T12b
+
+- Errores por campo (§8.1) además del resumen: el tag coral dice "Revisa los campos marcados." (`role="alert"`) y el foco va al primer campo con error.
+- Secciones como `fieldset` + `legend` (20px, peso de título), con la grilla del export (`minmax(220px, 1fr)`).
+- Sin "Editores CMS" (fase 2). Pagos: "Monto total (S/)" y, solo al crear, "Adelanto (S/)" (primer pago). "Primera entrada de la bitácora" solo al crear.
+- **"Dominio por comprar"**: checkbox nativo de 18px con `accent-color: var(--color-accent)` y su texto como label, en una fila de 44px (objetivo táctil). No hay checkbox en el export.
+- Miniatura: además de "PNG o JPG…", acepta WebP y valida hasta 2 MB con error en `danger-text`; al elegir una nueva aparece "Quitar imagen nueva".
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.

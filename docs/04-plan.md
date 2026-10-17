@@ -98,7 +98,7 @@
 - **Archivos:** `src/lib/{schemas,project-form,action-result}.ts`, `src/app/(app)/proyectos/actions.ts`, `tests/unit/schemas.test.ts`.
 - **Hecho cuando:** el esquema rechaza datos inválidos con un mensaje por campo (incluidos enlaces `javascript:`) y la acción devuelve `fieldErrors`.
 
-### [ ] T12b · Formulario · UI y páginas
+### [x] T12b · Formulario · UI y páginas
 - **Objetivo:** `ProjectForm` con React Hook Form + `zodResolver` sobre `Field`, la miniatura (vista previa y validación; la subida a Storage llega con la base) y las páginas `/proyectos/nuevo` y `/proyectos/[id]/editar`.
 - **Archivos:** `src/components/projects/{ProjectForm,ThumbnailField}.tsx`, `proyectos/nuevo/page.tsx`, `proyectos/[id]/editar/page.tsx`.
 - **Hecho cuando:** los errores se muestran por campo y el esquema es el mismo en el cliente y en el servidor.
