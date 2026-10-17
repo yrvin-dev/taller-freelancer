@@ -1,7 +1,7 @@
 // Lógica del panel de inicio (las 3 SummaryCard), portada del export. Funciones puras:
 // reciben `today` para que los badges ("en 3 días", "Comprar") se calculen y se testeen.
 
-import { daysUntil } from './format';
+import { daysUntil, formatDate, formatRelativeDays } from './format';
 import { paidPen, type Project } from './projects';
 
 /** Ventana de "Por vencer" (export: "Próximos 30 días"). */
@@ -98,4 +98,34 @@ export function homeSummaryLine(projects: Project[]): string {
 /** Los N proyectos actualizados más recientemente. */
 export function recentProjects(projects: Project[], limit = 4): Project[] {
   return [...projects].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, limit);
+}
+
+export type ExpiryCard = {
+  label: 'Dominio' | 'Hosting';
+  date: string;
+  status: string;
+  tone: 'accent-2' | 'neutral';
+};
+
+/** Las dos tarjetas de "Vencimientos" de la ficha (export: `expiries`). */
+export function expiryCards(
+  project: Pick<Project, 'domainPending' | 'domainExpires' | 'hostingExpires'>,
+  today: Date,
+): [ExpiryCard, ExpiryCard] {
+  const card = (label: ExpiryCard['label'], date: string | null): ExpiryCard => {
+    const days = date ? daysUntil(date, today) : null;
+    return {
+      label,
+      date: date ? formatDate(date) : 'Sin fecha',
+      status:
+        days === null ? 'No aplica' : days < 0 ? 'Vencido' : `Vence ${formatRelativeDays(days)}`,
+      tone: days !== null && days <= EXPIRY_WINDOW_DAYS ? 'accent-2' : 'neutral',
+    };
+  };
+
+  const domain: ExpiryCard = project.domainPending
+    ? { label: 'Dominio', date: 'Pendiente de compra', status: 'Por comprar', tone: 'accent-2' }
+    : card('Dominio', project.domainExpires);
+
+  return [domain, card('Hosting', project.hostingExpires)];
 }

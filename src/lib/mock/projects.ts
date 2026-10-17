@@ -47,6 +47,27 @@ export function mockProjects(today: Date = new Date()): Project[] {
       thumbnailUrl: '/mock/thumbs/agb.webp',
       updatedAt: hoursAgo(30),
       payments: [],
+      credentials: [],
+      notes: [
+        {
+          id: 'agb-n1',
+          kind: 'cambio',
+          notedOn: day(0),
+          body: 'Pasa a Producción: sitio en vivo en landing-colegio-agb.vercel.app. Pendiente: compra del dominio.',
+        },
+        {
+          id: 'agb-n2',
+          kind: 'nota',
+          notedOn: day(-2),
+          body: 'Desplegado en Vercel (landing-colegio-agb.vercel.app).',
+        },
+        {
+          id: 'agb-n3',
+          kind: 'cambio',
+          notedOn: day(-3),
+          body: 'Guía de edición de Sanity documentada: Comunicado y Eventos editables, acceso del colegio con rol Editor.',
+        },
+      ],
     },
     {
       id: 'agw',
@@ -80,6 +101,15 @@ export function mockProjects(today: Date = new Date()): Project[] {
       thumbnailUrl: '/mock/thumbs/agw.webp',
       updatedAt: hoursAgo(31),
       payments: [],
+      credentials: [],
+      notes: [
+        {
+          id: 'agw-n1',
+          kind: 'nota',
+          notedOn: day(-2),
+          body: 'Front desplegado en Vercel y Strapi 5 en Railway. Pendiente: compra del dominio.',
+        },
+      ],
     },
     {
       id: 'dfl',
@@ -110,6 +140,15 @@ export function mockProjects(today: Date = new Date()): Project[] {
       thumbnailUrl: null,
       updatedAt: hoursAgo(32),
       payments: [],
+      credentials: [],
+      notes: [
+        {
+          id: 'dfl-n1',
+          kind: 'nota',
+          notedOn: day(-2),
+          body: 'Prototipo de diseño listo: Inicio, Proyectos, Ficha con pestañas, Formulario, Calendario y modo oscuro. Siguiente: definir stack.',
+        },
+      ],
     },
     {
       id: 'snd',
@@ -148,6 +187,29 @@ export function mockProjects(today: Date = new Date()): Project[] {
       thumbnailUrl: '/mock/thumbs/snd.webp',
       updatedAt: hoursAgo(20),
       payments: [{ id: 'snd-p1', amountPen: 3800, paidOn: day(-30), concept: 'Adelanto' }],
+      credentials: [
+        { id: 'snd-c1', label: 'Railway', username: 'devfreelance', url: 'railway.app/dashboard' },
+      ],
+      notes: [
+        {
+          id: 'snd-n1',
+          kind: 'cambio',
+          notedOn: day(-1),
+          body: 'Pasarela Culqi integrada en sandbox: cobro de la cita y webhook que confirma la reserva.',
+        },
+        {
+          id: 'snd-n2',
+          kind: 'cambio',
+          notedOn: day(-6),
+          body: 'Autenticación con JWT y autorización por roles (@PreAuthorize) lista.',
+        },
+        {
+          id: 'snd-n3',
+          kind: 'pedido',
+          notedOn: day(-15),
+          body: 'Recordatorio por WhatsApp 24 h antes de cada cita.',
+        },
+      ],
     },
     {
       id: 'plv',
@@ -187,6 +249,40 @@ export function mockProjects(today: Date = new Date()): Project[] {
       thumbnailUrl: '/mock/thumbs/plv.webp',
       updatedAt: hoursAgo(33),
       payments: [{ id: 'plv-p1', amountPen: 3900, paidOn: day(-20), concept: 'Adelanto 50%' }],
+      credentials: [
+        {
+          id: 'plv-c1',
+          label: 'Medusa Admin',
+          username: 'admin@polerastudio.pe',
+          url: 'admin.polerastudio.pe',
+        },
+        {
+          id: 'plv-c2',
+          label: 'Cloudinary',
+          username: 'polerastudio',
+          url: 'cloudinary.com/console',
+        },
+      ],
+      notes: [
+        {
+          id: 'plv-n1',
+          kind: 'nota',
+          notedOn: day(-2),
+          body: 'Demo enviada al cliente. Imágenes servidas por Cloudinary en AVIF/WebP con blur placeholder.',
+        },
+        {
+          id: 'plv-n2',
+          kind: 'cambio',
+          notedOn: day(-5),
+          body: 'Módulo de pago Culqi para Medusa v2 (tarjetas y Yape) en modo prueba, con webhooks y correos de confirmación.',
+        },
+        {
+          id: 'plv-n3',
+          kind: 'pedido',
+          notedOn: day(-11),
+          body: 'Galería de producto con zoom y vista 360 del polo.',
+        },
+      ],
     },
     {
       id: 'alq',
@@ -225,6 +321,21 @@ export function mockProjects(today: Date = new Date()): Project[] {
       thumbnailUrl: '/mock/thumbs/alq.webp',
       updatedAt: hoursAgo(60),
       payments: [{ id: 'alq-p1', amountPen: 1500, paidOn: day(-15), concept: 'Adelanto' }],
+      credentials: [],
+      notes: [
+        {
+          id: 'alq-n1',
+          kind: 'cambio',
+          notedOn: day(-3),
+          body: 'Búsqueda por mapa con clusters y filtros por distrito, precio y tipo.',
+        },
+        {
+          id: 'alq-n2',
+          kind: 'nota',
+          notedOn: day(-9),
+          body: 'Pago del plan destacado con Culqi en modo prueba.',
+        },
+      ],
     },
   ];
 }

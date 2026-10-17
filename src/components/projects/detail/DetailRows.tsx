@@ -4,18 +4,25 @@ import { cx } from '@/lib/cx';
 // Filas "etiqueta · valor" de las pestañas Cliente, Stack y Accesos del export:
 // etiqueta de 170px en 13px y el valor al lado; en mobile se apilan.
 
-export function DetailRows({ children }: { children: ReactNode }) {
-  return <dl className="m-0 flex max-w-[720px] flex-col">{children}</dl>;
+export function DetailRows({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
+  return (
+    <dl className={cx('m-0 flex flex-col', wide ? 'max-w-[900px]' : 'max-w-[720px]')}>
+      {children}
+    </dl>
+  );
 }
 
 export function DetailRow({
   label,
   children,
   align = 'baseline',
+  fill = false,
 }: {
   label: ReactNode;
   children: ReactNode;
   align?: 'baseline' | 'center';
+  /** El valor ocupa el resto de la fila (Accesos: valor + acciones a la derecha). */
+  fill?: boolean;
 }) {
   return (
     <div
@@ -27,7 +34,11 @@ export function DetailRow({
       <dt className="flex flex-[0_0_170px] items-center gap-[calc(var(--space-1)*1.2)] text-sm text-neutral-700">
         {label}
       </dt>
-      <dd className="m-0 min-w-0">{children}</dd>
+      <dd
+        className={cx('m-0 min-w-0', fill && 'flex flex-[1_1_240px] flex-wrap items-center gap-2')}
+      >
+        {children}
+      </dd>
     </div>
   );
 }

@@ -1,10 +1,10 @@
 'use client';
 
-import type { SelectHTMLAttributes } from 'react';
+import type { ComponentProps } from 'react';
 import { cx } from '@/lib/cx';
 import { controlClass, singleLineClass, useControlProps } from './Input';
 
-export type SelectProps = SelectHTMLAttributes<HTMLSelectElement>;
+export type SelectProps = ComponentProps<'select'>;
 
 /** `<select>` nativo con el estilo de `.input`, como en el export. */
 export function Select({ className, children, ...rest }: SelectProps) {

@@ -172,6 +172,23 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 - Pestaña Stack: el CMS va en tag `outline`, no en `accent-2`: el coral queda para vencido y destructivo (§9.6).
 - Resumen: sin "Editor del CMS" (la pestaña Editores CMS es fase 2). Los accesos rápidos solo aparecen si hay enlace (el export ponía `#`).
 
+### 8.3 Credenciales, lista de pagos y bitácora (no están en el export) ✅ T11b
+
+**Credenciales** (pestaña Accesos, debajo de los enlaces, con el encabezado "Credenciales"). Reusan la fila de Accesos del export:
+- Etiqueta de 170px con el ícono `lock` (17px, acento) y el nombre ("Sanity Studio"); debajo, en 13px `neutral-700`, el usuario.
+- Valor: el secreto tapado como `••••••••` en `--font-ui`; al pulsar **Mostrar** se ve en texto monoespaciado durante 30 s y se vuelve a tapar (o antes, con **Ocultar**).
+- Acciones `ghost`: Mostrar / Ocultar, **Copiar** (copia sin mostrarlo, toast "Contraseña copiada") y **Abrir** si tiene URL.
+- El secreto no viaja en el HTML: lo trae la Server Action `revealCredential` solo al pulsar.
+- Vacío: "Sin credenciales guardadas. Agrégalas desde Editar." en `neutral-700`.
+
+**Lista de pagos** (pestaña Pagos, debajo de la barra): encabezado "Pagos" y filas como las de la bitácora del export: fecha (120px, 13px, `neutral-700`), concepto y monto alineado a la derecha (`formatPEN`). Vacío: "Aún no hay pagos registrados."
+
+**Figuras de Pagos**: "Monto total · Pagado · Saldo" (el export decía "Adelanto"; con pagos parciales es la suma). El saldo va en `accent-2-700` si es mayor que 0. La barra usa el degradado n.º 3 (`--gradient-progress`).
+
+**Tonos** (§9.6, el coral queda para vencido y destructivo):
+- Bitácora: Pedido → `outline` (el export usaba `accent-2`), Cambio → `accent`, Nota → `neutral`.
+- Vencimientos: "Por comprar", "Vencido" o a 30 días o menos → `accent-2`; el resto → `neutral`. El kicker de la tarjeta va en `accent-700` (el `accent` de `.card-kicker` en 10px no llega a 4.5:1).
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.

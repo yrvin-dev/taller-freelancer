@@ -86,7 +86,7 @@
 - **Archivos:** `src/app/(app)/proyectos/[id]/page.tsx`, `src/components/projects/detail/*`, `src/components/ui/CopyButton.tsx`, `src/lib/{projects,links}.ts`, `src/lib/mock/projects.ts`.
 - **Hecho cuando:** coincide con el export, un id inexistente da 404 y las pestañas sobreviven a la recarga.
 
-### [ ] T11b · Detalle de proyecto · accesos, pagos y notas
+### [x] T11b · Detalle de proyecto · accesos, pagos y notas
 - **Objetivo:** pestañas Accesos (`LinkList`, `CredentialRow` con el secreto oculto y "Mostrar" vía `revealCredential`, y Vencimientos), Pagos (`PaymentList`) y Notas (`NoteLog` con borrado y confirmación en la línea), y el diálogo "Eliminar / Archivar".
 - **Archivos:** `src/components/projects/detail/*`, `src/app/(app)/proyectos/[id]/actions.ts`, `docs/02-design-system.md` (Credenciales y lista de pagos, que no están en el export).
 - **Hecho cuando:** coincide con el export, se ve bien sin pagos ni notas (estados vacíos) y el secreto no está en el HTML inicial.

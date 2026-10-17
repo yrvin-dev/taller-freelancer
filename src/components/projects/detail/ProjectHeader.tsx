@@ -4,10 +4,10 @@ import { buttonClass } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { StatusDot } from '@/components/ui/StatusDot';
 import { Tag } from '@/components/ui/Tag';
-import { cx } from '@/lib/cx';
 import { TYPE_LABEL } from '@/lib/domain';
 import { formatDate } from '@/lib/format';
 import type { Project } from '@/lib/projects';
+import { DeleteProjectButton } from './DeleteProjectButton';
 
 // Cabecera de "03 Ficha del proyecto": barra de acciones y, debajo, miniatura 16:10
 // junto al código, tipo, estado, nombre y "cliente · país · Entrega …".
@@ -27,9 +27,11 @@ export function ProjectHeader({ project }: { project: Project }) {
           <Icon name="back" />
           Proyectos
         </Link>
+        <span className="ml-auto" />
+        <DeleteProjectButton projectName={project.name} />
         <Link
           href={`/proyectos/${project.id}/editar`}
-          className={cx('ml-auto', buttonClass({ variant: 'secondary' }))}
+          className={buttonClass({ variant: 'secondary' })}
         >
           <Icon name="pencil" />
           Editar
@@ -57,7 +59,9 @@ export function ProjectHeader({ project }: { project: Project }) {
             <Tag>{TYPE_LABEL[project.type]}</Tag>
             <StatusDot status={project.status} />
           </div>
-          <h1 id="ficha-titulo" className="m-0 text-[46px]">{project.name}</h1>
+          <h1 id="ficha-titulo" className="m-0 text-[46px]">
+            {project.name}
+          </h1>
           {meta && <span className="text-neutral-700">{meta}</span>}
         </div>
       </div>

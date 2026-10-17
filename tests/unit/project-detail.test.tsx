@@ -59,7 +59,8 @@ describe('ficha: cabecera y pestañas', () => {
   it.each([
     ['cliente', 'cliente'],
     [undefined, 'resumen'],
-    ['pagos', 'resumen'], // todavía no existe (T11b)
+    ['pagos', 'pagos'],
+    ['editores', 'resumen'], // Editores CMS es fase 2
     ['<x>', 'resumen'],
   ] as const)('parseProjectTab(%s) → %s', (value, expected) => {
     expect(parseProjectTab(value)).toBe(expected);

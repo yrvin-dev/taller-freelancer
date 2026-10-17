@@ -139,6 +139,7 @@
     var(--color-accent) 70%
   );
   --gradient-avatar: linear-gradient(135deg, var(--color-ink-deep), var(--color-accent));
+  --gradient-progress: linear-gradient(90deg, var(--color-process-yellow), var(--color-accent));
   --gradient-hero: linear-gradient(
     150deg,
     var(--color-ink-deep) 0%,

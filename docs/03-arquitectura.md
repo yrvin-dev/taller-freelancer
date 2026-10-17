@@ -108,9 +108,10 @@ type ProjectRowProps = { project: Project };    // fila de tabla (ui/Table); "Ab
 // /proyectos: la vista va en la URL (?vista=tabla) con ViewSwitch; parseProjectView()
 type ProjectFiltersProps = { value: ProjectFilters; stacks: string[]; cmsOptions: string[]; counts: Record<ProjectStatus|'todos', number> }; // escribe en la URL
 type ProjectFormProps = { initial?: ProjectInput; action(input: ProjectInput): Promise<ActionResult<{ id: string }>> };
-type CredentialRowProps = { credential: { id: string; label: string; username: string; url?: string } }; // "Mostrar" llama a revealCredential(id)
+type CredentialRowProps = { projectId: string; credential: { id: string; label: string; username: string | null; url: string | null } }; // sin secreto; "Mostrar"/"Copiar" llaman a revealCredential({ projectId, credentialId }) → ActionResult<{ secret }> (src/lib/action-result.ts)
 type PaymentListProps = { total: number; payments: Payment[]; onAdd(p: PaymentInput): Promise<ActionResult> };
 type NoteLogProps = { notes: Note[]; onAdd(n: NoteInput): Promise<ActionResult>; onDelete(id: string): Promise<ActionResult> }; // borrar con confirmación en la misma línea
+// T11b: NoteLog({ initialNotes, today }) vive en estado local; onAdd/onDelete pasan a Server Actions con la base
 type LinkListProps = { links: Partial<Record<'repo'|'deploy'|'design'|'cms'|'panel', string>> };
 // /proyectos/[id]: la pestaña va en la URL (?tab=resumen|cliente|stack|…), parseProjectTab(); externalHref() solo acepta http(s)
 type EmptyStateProps = { title: string; body?: string; action?: ReactNode };

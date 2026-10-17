@@ -1,6 +1,6 @@
 'use client';
 
-import type { AriaAttributes, InputHTMLAttributes } from 'react';
+import type { AriaAttributes, ComponentProps } from 'react';
 import { cx } from '@/lib/cx';
 import { useFieldControl } from './Field';
 
@@ -26,7 +26,7 @@ export function useControlProps({ id, ...rest }: ControlA11y) {
   };
 }
 
-export type InputProps = InputHTMLAttributes<HTMLInputElement>;
+export type InputProps = ComponentProps<'input'>;
 
 export function Input({ className, ...rest }: InputProps) {
   const a11y = useControlProps(rest);

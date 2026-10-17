@@ -9,7 +9,10 @@ export type CopyButtonProps = {
   text: string;
   /** Aviso al copiar, como en el export ("Ruta copiada"). */
   message: string;
-  /** Nombre accesible; con `label` se muestra el texto (ej. "Copiar ruta local"). */
+  /**
+   * Nombre accesible. Con `label` visible debe contenerlo ("Copiar" → "Copiar
+   * Repositorio"), para distinguir botones repetidos sin romper WCAG 2.5.3.
+   */
   ariaLabel: string;
   label?: string;
   variant?: 'secondary' | 'ghost';
@@ -40,7 +43,7 @@ export function CopyButton({
     <button
       type="button"
       onClick={copy}
-      aria-label={label ? undefined : ariaLabel}
+      aria-label={ariaLabel}
       title={label ? undefined : ariaLabel}
       className={cx(buttonClass({ variant, iconOnly: !label }), className)}
     >

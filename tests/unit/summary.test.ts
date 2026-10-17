@@ -39,6 +39,8 @@ function project(overrides: Partial<Project>): Project {
     thumbnailUrl: null,
     updatedAt: '2026-10-01T00:00:00.000Z',
     payments: [],
+    credentials: [],
+    notes: [],
     ...overrides,
   };
 }

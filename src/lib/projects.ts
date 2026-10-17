@@ -1,10 +1,19 @@
-import type { LinkKind, ProjectStatus, ProjectType } from './domain';
+import type { LinkKind, NoteKind, ProjectStatus, ProjectType } from './domain';
 
 // Forma de un proyecto en la UI: la tabla `projects` del 03 en camelCase, con sus
 // pagos. Las fechas son `'YYYY-MM-DD'` (columnas `date`); `updatedAt` es ISO completo.
 // Cuando existan los tipos generados de Supabase, la capa src/lib/data/* mapea a esto.
 
 export type Payment = { id: string; amountPen: number; paidOn: string; concept?: string };
+
+/**
+ * Credencial tal como llega a la UI: **sin el secreto**. El secreto (cifrado en la
+ * base) solo lo devuelve `revealCredential` cuando el usuario pulsa "Mostrar".
+ */
+export type Credential = { id: string; label: string; username: string | null; url: string | null };
+
+/** Entrada de la bitácora. */
+export type Note = { id: string; kind: NoteKind; body: string; notedOn: string };
 
 export type ProjectStack = {
   frontend: string[];
@@ -45,6 +54,8 @@ export type Project = {
   thumbnailUrl: string | null;
   updatedAt: string;
   payments: Payment[];
+  credentials: Credential[];
+  notes: Note[];
 };
 
 /** Suma de pagos en soles, redondeada a céntimos (los montos son numeric(10,2)). */
@@ -72,6 +83,9 @@ export const PROJECT_TABS = [
   { key: 'resumen', label: 'Resumen' },
   { key: 'cliente', label: 'Cliente' },
   { key: 'stack', label: 'Stack' },
+  { key: 'accesos', label: 'Accesos' },
+  { key: 'pagos', label: 'Pagos' },
+  { key: 'notas', label: 'Notas' },
 ] as const;
 export type ProjectTab = (typeof PROJECT_TABS)[number]['key'];
 

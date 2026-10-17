@@ -131,6 +131,7 @@ const config: Config = {
       featured: 'var(--gradient-featured)',
       avatar: 'var(--gradient-avatar)',
       hero: 'var(--gradient-hero)',
+      progress: 'var(--gradient-progress)',
     },
     extend: {
       transitionTimingFunction: { out: 'var(--ease-out)', shell: 'var(--ease-shell)' },
