@@ -112,6 +112,7 @@ type CredentialRowProps = { credential: { id: string; label: string; username: s
 type PaymentListProps = { total: number; payments: Payment[]; onAdd(p: PaymentInput): Promise<ActionResult> };
 type NoteLogProps = { notes: Note[]; onAdd(n: NoteInput): Promise<ActionResult>; onDelete(id: string): Promise<ActionResult> }; // borrar con confirmación en la misma línea
 type LinkListProps = { links: Partial<Record<'repo'|'deploy'|'design'|'cms'|'panel', string>> };
+// /proyectos/[id]: la pestaña va en la URL (?tab=resumen|cliente|stack|…), parseProjectTab(); externalHref() solo acepta http(s)
 type EmptyStateProps = { title: string; body?: string; action?: ReactNode };
 ```
 
@@ -139,6 +140,7 @@ create table projects (
   code text not null,                     -- ej. AGB-2026
   name text not null,
   client text not null,
+  client_contact text, client_email text, client_whatsapp text, client_country text, -- pestaña Cliente (export)
   type project_type not null,
   status project_status not null default 'en_desarrollo',
   is_demo boolean not null default false, -- proyectos ficticios "(F)"

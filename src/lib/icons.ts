@@ -44,6 +44,7 @@ export const ICONS = {
   repo: { glyph: 'code-branch' },
   deploy: { glyph: 'rocket-lunch' },
   design: { glyph: 'pen-nib' },
+  stack: { glyph: 'layers' },
   cms: { glyph: 'layers' },
   database: { glyph: 'database' },
   hosting: { glyph: 'cloud' },

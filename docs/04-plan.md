@@ -81,10 +81,17 @@
 - **Archivos:** `src/components/projects/{ProjectCard,ProjectRow}.tsx`, `src/app/(app)/proyectos/page.tsx`.
 - **Hecho cuando:** las dos vistas muestran los mismos datos y el estado de producción lleva el punto verde.
 
-### [ ] T11 · Detalle de proyecto
-- **Objetivo:** la ficha completa: `LinkList`, `CredentialRow` (con el secreto oculto), `PaymentList`, vencimientos y `NoteLog` con borrado y confirmación.
-- **Archivos:** `src/components/projects/*`, `src/app/(app)/proyectos/[id]/page.tsx`.
-- **Hecho cuando:** la página coincide con el export y se ve bien sin pagos ni notas (estados vacíos).
+### [x] T11a · Detalle de proyecto · cabecera y pestañas
+- **Objetivo:** cabecera de la ficha (volver, editar, miniatura, código, tipo, estado y cliente), pestañas en la URL (`?tab=`) y las pestañas Resumen, Cliente y Stack. Mock ampliado con los datos del cliente, la ruta local y los enlaces.
+- **Archivos:** `src/app/(app)/proyectos/[id]/page.tsx`, `src/components/projects/detail/*`, `src/components/ui/CopyButton.tsx`, `src/lib/{projects,links}.ts`, `src/lib/mock/projects.ts`.
+- **Hecho cuando:** coincide con el export, un id inexistente da 404 y las pestañas sobreviven a la recarga.
+
+### [ ] T11b · Detalle de proyecto · accesos, pagos y notas
+- **Objetivo:** pestañas Accesos (`LinkList`, `CredentialRow` con el secreto oculto y "Mostrar" vía `revealCredential`, y Vencimientos), Pagos (`PaymentList`) y Notas (`NoteLog` con borrado y confirmación en la línea), y el diálogo "Eliminar / Archivar".
+- **Archivos:** `src/components/projects/detail/*`, `src/app/(app)/proyectos/[id]/actions.ts`, `docs/02-design-system.md` (Credenciales y lista de pagos, que no están en el export).
+- **Hecho cuando:** coincide con el export, se ve bien sin pagos ni notas (estados vacíos) y el secreto no está en el HTML inicial.
+
+> Fase 2: la pestaña "Editores CMS" del export (tabla de editores y guía de edición) no entra en el MVP: no está en el 01 ni en el 03.
 
 ### [ ] T12 · Formulario nuevo / editar
 - **Objetivo:** `ProjectForm` con React Hook Form y Zod, y la subida de la miniatura.

@@ -166,6 +166,12 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 - Los dos van en `aria-describedby` del control, y el error además pone `aria-invalid`.
 - **Seg:** la opción elegida lleva texto `--color-on-accent`, no `--color-bg` como en el export (2.2:1 sobre el acento en arena).
 
+### 8.2 Ficha del proyecto: diferencias con el export ✅ T11a
+
+- Pestañas: el hover usa `accent-700` (el export usa `accent`, que no llega a 4.5:1 sobre el fondo).
+- Pestaña Stack: el CMS va en tag `outline`, no en `accent-2`: el coral queda para vencido y destructivo (§9.6).
+- Resumen: sin "Editor del CMS" (la pestaña Editores CMS es fase 2). Los accesos rápidos solo aparecen si hay enlace (el export ponía `#`).
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.
