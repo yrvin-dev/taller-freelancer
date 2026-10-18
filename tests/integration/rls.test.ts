@@ -65,8 +65,39 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // Borrar el usuario borra en cascada su perfil, proyectos, pagos y notas.
-  for (const id of createdUsers) await admin.auth.admin.deleteUser(id);
+  // Borrar el usuario borra en cascada su perfil, proyectos, pagos y notas. Sin
+  // ignorar errores: así se escondió el bug de touch_project (T14b).
+  for (const id of createdUsers) {
+    const { error } = await admin.auth.admin.deleteUser(id);
+    if (error) throw error;
+  }
+});
+
+describe('borrar cuenta (T14b)', () => {
+  it('borrar desde la API un usuario con pagos y notas borra todo en cascada', async () => {
+    const c = await newUser('c');
+    const project = await newProject(c, 'C-001');
+    await c.client
+      .from('payments')
+      .insert({ project_id: project.id, amount_pen: 100, paid_on: '2026-10-01' });
+    await c.client
+      .from('notes')
+      .insert({ project_id: project.id, kind: 'nota', body: 'Nota de C' });
+
+    // Supabase Auth borra con su propio rol (supabase_auth_admin): antes fallaba con
+    // "permission denied for table projects" desde el trigger touch_project.
+    const { error } = await admin.auth.admin.deleteUser(c.id);
+    expect(error).toBeNull();
+    createdUsers.splice(createdUsers.indexOf(c.id), 1);
+
+    const left = await Promise.all([
+      admin.from('profiles').select('id').eq('id', c.id),
+      admin.from('projects').select('id').eq('owner_id', c.id),
+      admin.from('payments').select('id').eq('owner_id', c.id),
+      admin.from('notes').select('id').eq('owner_id', c.id),
+    ]);
+    expect(left.map((r) => r.data)).toEqual([[], [], [], []]);
+  });
 });
 
 describe('profiles', () => {

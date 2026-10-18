@@ -218,7 +218,7 @@ create policy "dueño" on projects for all
 - Las tablas hijas (`payments`, `notes`, `credentials`) tienen una **FK compuesta** `(project_id, owner_id) → projects(id, owner_id)`: la base impide colgar filas en un proyecto ajeno aunque falle una política.
 - `check` de largo y formato en la base, iguales a Zod (`code ~ '^[A-Z0-9-]{1,20}$'`, nombre ≤ 120, nota ≤ 2000…).
 - `profiles.bg_variant` por defecto `arena` (T02) y `accent`/`bg_variant` con `check` de los valores de `tokens.css`.
-- `touch_project`: un pago, nota o credencial nueva actualiza `projects.updated_at` ("Actualizado" de recientes).
+- `touch_project`: un pago, nota o credencial nueva actualiza `projects.updated_at` ("Actualizado" de recientes). Es `security definer` (T14b): al borrar un usuario, Supabase Auth corre como `supabase_auth_admin`, que no tiene permisos sobre `projects`.
 - `project_summary` (`security_invoker`): `paid_pen` y `balance_pen`. Los días a la entrega se calculan en la app con la hora de Lima.
 - Test: `pnpm test:integration` (dos usuarios reales en la Supabase local; con RLS apagado, falla).
 

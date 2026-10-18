@@ -122,6 +122,11 @@
 - **Archivos:** `supabase/config.toml`, `supabase/migrations/20261018000001_init.sql`, `20261018000002_rls.sql`, `supabase/seed.sql`, `src/lib/database.types.ts`, `tests/integration/*`.
 - **Hecho cuando:** un test de integración con dos usuarios confirma que A no puede leer ni escribir los datos de B.
 
+### [x] T14b · Corrección: touch_project al borrar un usuario
+- **Objetivo:** el trigger `touch_project` fallaba con "permission denied for table projects" cuando Supabase Auth borra un usuario (rol `supabase_auth_admin`): "Borrar cuenta" no funcionaba con pagos o notas. Pasa a `security definer`.
+- **Archivos:** `supabase/migrations/20261018000003_touch_project_definer.sql`, `tests/integration/rls.test.ts`.
+- **Hecho cuando:** borrar desde la API un usuario con pagos y notas borra todo en cascada (con el trigger viejo, el test falla).
+
 ### [x] T15a · Auth con Google · sesión y rutas
 - **Objetivo:** login con Google, callback, middleware, cierre de sesión y el trigger que crea el perfil.
 - **Archivos:** `src/lib/supabase/*`, `src/lib/{env,auth-routes}.ts`, `src/middleware.ts`, `src/app/auth/{callback,signout}/route.ts`, `login/{page,actions}.ts(x)`, `supabase/config.toml`.
