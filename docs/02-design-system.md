@@ -203,6 +203,11 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 - Calendario vacío: "No hay entregas ni vencimientos próximos." en `neutral-700`.
 - Cuenta: las preferencias se guardan al salir del campo, como el export (sin botón), y lo confirma un toast. "Exportar datos" descarga un JSON **sin credenciales** (ni etiquetas ni secretos).
 
+### 8.5b Login con Google ✅ T15a
+
+- Error de inicio de sesión: bloque de 13px en `accent-2-100` / `accent-2-800` (`role="alert"`) encima del botón, con un texto fijo según el código (`?error=auth|oauth`): nunca se muestra texto que venga de la URL.
+- Mientras redirige a Google, el botón dice "Conectando…" y queda deshabilitado.
+
 ### 8.6 Pantallas de error y sesión ✅ T13b
 
 `ErrorScreen` porta "07 Sin acceso (403)": círculo de 64px con el acento al 16% y el ícono en acento (decorativo), el kicker "ERROR 403" (13px, 700, `tracking-caps`, `neutral-700`), el título, el texto en `neutral-700` y las acciones. Se reusa (no están en el export) para:

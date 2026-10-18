@@ -1,18 +1,17 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import AuthLayout from '@/app/(auth)/layout';
 import LoginPage from '@/app/(auth)/login/page';
 
-function renderLogin() {
-  return render(
-    <AuthLayout>
-      <LoginPage />
-    </AuthLayout>,
-  );
+vi.mock('@/app/(auth)/login/actions', () => ({ signInWithGoogle: vi.fn() }));
+
+async function renderLogin(params: { next?: string; error?: string } = {}) {
+  const page = await LoginPage({ searchParams: Promise.resolve(params) });
+  return render(<AuthLayout>{page}</AuthLayout>);
 }
 
 describe('Login', () => {
-  it('muestra el hero y el acceso con los textos del export', () => {
-    renderLogin();
+  it('muestra el hero y el acceso con los textos del export', async () => {
+    await renderLogin();
     expect(
       screen.getByRole('heading', {
         level: 1,
@@ -23,17 +22,26 @@ describe('Login', () => {
     expect(screen.getByText('Cada cuenta ve solo sus proyectos.')).toHaveClass('text-on-ink-muted');
   });
 
-  it('el botón de Google avisa con un toast hasta conectar auth (sin selector simulado)', () => {
-    renderLogin();
+  it('"Continuar con Google" envía el formulario de la Server Action', async () => {
+    await renderLogin();
     const button = screen.getByRole('button', { name: 'Continuar con Google' });
+    expect(button).toHaveAttribute('type', 'submit');
+    expect(button.closest('form')).not.toBeNull();
     expect(button.querySelector('i')).toHaveClass('fi-brands-google');
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
 
-    fireEvent.click(button);
-    const status = screen.getByRole('status');
-    expect(status).toHaveTextContent('Disponible al conectar Google');
-    expect(status.querySelector('i')).toHaveClass('fi-rr-info');
-    // Fuera del shell no hay BottomNav: el toast no sube.
-    expect(status.firstElementChild).toHaveClass('bottom-6');
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  it('conserva el destino (?next) en el formulario', async () => {
+    const { container } = await renderLogin({ next: '/proyectos/agb' });
+    expect(container.querySelector('input[name="next"]')).toHaveValue('/proyectos/agb');
+  });
+
+  it.each([
+    ['auth', 'No pudimos completar el inicio de sesión. Inténtalo de nuevo.'],
+    ['oauth', 'No pudimos conectar con Google. Inténtalo de nuevo.'],
+    ['<script>', 'No pudimos completar el inicio de sesión. Inténtalo de nuevo.'],
+  ])('error=%s muestra un mensaje fijo (nunca el texto de la URL)', async (error, message) => {
+    await renderLogin({ error });
+    expect(screen.getByRole('alert')).toHaveTextContent(message);
   });
 });

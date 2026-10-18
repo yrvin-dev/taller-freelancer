@@ -122,10 +122,15 @@
 - **Archivos:** `supabase/config.toml`, `supabase/migrations/20261018000001_init.sql`, `20261018000002_rls.sql`, `supabase/seed.sql`, `src/lib/database.types.ts`, `tests/integration/*`.
 - **Hecho cuando:** un test de integración con dos usuarios confirma que A no puede leer ni escribir los datos de B.
 
-### [ ] T15 · Auth con Google
+### [x] T15a · Auth con Google · sesión y rutas
 - **Objetivo:** login con Google, callback, middleware, cierre de sesión y el trigger que crea el perfil.
-- **Archivos:** `src/lib/supabase/*`, `src/middleware.ts`, `src/app/auth/callback/route.ts`, `login/page.tsx`.
+- **Archivos:** `src/lib/supabase/*`, `src/lib/{env,auth-routes}.ts`, `src/middleware.ts`, `src/app/auth/{callback,signout}/route.ts`, `login/{page,actions}.ts(x)`, `supabase/config.toml`.
 - **Hecho cuando:** las rutas privadas redirigen a `/login` sin sesión y el perfil se crea la primera vez.
+
+### [ ] T15b · Auth con Google · usuario real en la app
+- **Objetivo:** la sidebar y Cuenta muestran el usuario de la sesión (nombre, correo, foto y fecha de alta desde `profiles`) en lugar del mock.
+- **Archivos:** `src/lib/data/profile.ts`, `src/app/(app)/layout.tsx`, `src/app/(app)/cuenta/page.tsx`.
+- **Hecho cuando:** al entrar con Google se ven tus datos y el mock de usuario desaparece.
 
 ### [ ] T16 · Capa de datos y Server Actions
 - **Objetivo:** reemplazar el mock por `src/lib/data/*` en las lecturas y por Server Actions en el CRUD de proyectos, pagos y notas.

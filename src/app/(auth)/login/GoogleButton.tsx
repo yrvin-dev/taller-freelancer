@@ -1,22 +1,24 @@
 'use client';
 
+import { useFormStatus } from 'react-dom';
 import { Icon } from '@/components/ui/Icon';
-import { useToast } from '@/components/ui/Toast';
 
 /**
- * "Continuar con Google" del export. Hasta la tanda de auth solo avisa con un toast;
- * entonces pasa a `supabase.auth.signInWithOAuth({ provider: 'google' })`.
+ * "Continuar con Google" del export. Es el botón de envío del formulario del login
+ * (Server Action `signInWithGoogle`): funciona sin JavaScript y muestra "Conectando…"
+ * mientras redirige.
  */
 export function GoogleButton() {
-  const toast = useToast();
+  const { pending } = useFormStatus();
   return (
     <button
-      type="button"
-      onClick={() => toast.show('Disponible al conectar Google', 'info')}
-      className="flex h-[54px] cursor-pointer items-center justify-center gap-[calc(var(--space-2)*1.2)] rounded-pill border-0 bg-surface font-ui text-lg font-bold text-text shadow-sm transition-[box-shadow,transform] duration-200 ease-out hover:-translate-y-px hover:shadow-md motion-reduce:transition-none"
+      type="submit"
+      disabled={pending}
+      aria-busy={pending || undefined}
+      className="flex h-[54px] w-full cursor-pointer items-center justify-center gap-[calc(var(--space-2)*1.2)] rounded-pill border-0 bg-surface font-ui text-lg font-bold text-text shadow-sm transition-[box-shadow,transform] duration-200 ease-out enabled:hover:-translate-y-px enabled:hover:shadow-md disabled:cursor-wait disabled:opacity-[.45] motion-reduce:transition-none"
     >
       <Icon name="google" className="text-[20px] text-accent-2" />
-      Continuar con Google
+      {pending ? 'Conectando…' : 'Continuar con Google'}
     </button>
   );
 }
