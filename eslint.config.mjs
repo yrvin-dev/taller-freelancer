@@ -44,6 +44,8 @@ const eslintConfig = [
       'coverage/**',
       'design/**',
       'next-env.d.ts',
+      // Generado por `pnpm db:types` (CLAUDE.md, regla 3: no se edita a mano).
+      'src/lib/database.types.ts',
     ],
   },
 ];

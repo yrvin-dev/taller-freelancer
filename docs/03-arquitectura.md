@@ -213,6 +213,15 @@ create policy "dueño" on projects for all
 -- misma política en payments, notes y credentials; en profiles: id = auth.uid()
 ```
 
+✅ T14 · Implementado en `supabase/migrations/` (fuente de verdad del esquema; este bloque es el resumen). Diferencias con lo de arriba:
+- Políticas **por operación** (select/insert/update/delete), solo `to authenticated`, con `(select auth.uid())`. `anon` sin ningún permiso en `public`.
+- Las tablas hijas (`payments`, `notes`, `credentials`) tienen una **FK compuesta** `(project_id, owner_id) → projects(id, owner_id)`: la base impide colgar filas en un proyecto ajeno aunque falle una política.
+- `check` de largo y formato en la base, iguales a Zod (`code ~ '^[A-Z0-9-]{1,20}$'`, nombre ≤ 120, nota ≤ 2000…).
+- `profiles.bg_variant` por defecto `arena` (T02) y `accent`/`bg_variant` con `check` de los valores de `tokens.css`.
+- `touch_project`: un pago, nota o credencial nueva actualiza `projects.updated_at` ("Actualizado" de recientes).
+- `project_summary` (`security_invoker`): `paid_pen` y `balance_pen`. Los días a la entrega se calculan en la app con la hora de Lima.
+- Test: `pnpm test:integration` (dos usuarios reales en la Supabase local; con RLS apagado, falla).
+
 **Otros elementos de la base:**
 - Trigger `handle_new_user`: crea el `profile` desde `raw_user_meta_data` de Google la primera vez que el usuario entra.
 - Trigger `updated_at` en `projects`.

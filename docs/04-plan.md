@@ -117,9 +117,9 @@
 
 ## Fase 4 · Datos y auth
 
-### [ ] T14 · Supabase: esquema y RLS
+### [x] T14 · Supabase: esquema y RLS
 - **Objetivo:** migraciones (tablas, enums, índices, triggers y la vista `project_summary`), RLS en todas las tablas y el seed con proyectos "(F)".
-- **Archivos:** `supabase/migrations/0001_init.sql`, `0002_rls.sql`, `supabase/seed.sql`, `src/lib/database.types.ts`.
+- **Archivos:** `supabase/config.toml`, `supabase/migrations/20261018000001_init.sql`, `20261018000002_rls.sql`, `supabase/seed.sql`, `src/lib/database.types.ts`, `tests/integration/*`.
 - **Hecho cuando:** un test de integración con dos usuarios confirma que A no puede leer ni escribir los datos de B.
 
 ### [ ] T15 · Auth con Google
