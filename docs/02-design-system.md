@@ -203,6 +203,14 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 - Calendario vacío: "No hay entregas ni vencimientos próximos." en `neutral-700`.
 - Cuenta: las preferencias se guardan al salir del campo, como el export (sin botón), y lo confirma un toast. "Exportar datos" descarga un JSON **sin credenciales** (ni etiquetas ni secretos).
 
+### 8.6 Pantallas de error y sesión ✅ T13b
+
+`ErrorScreen` porta "07 Sin acceso (403)": círculo de 64px con el acento al 16% y el ícono en acento (decorativo), el kicker "ERROR 403" (13px, 700, `tracking-caps`, `neutral-700`), el título, el texto en `neutral-700` y las acciones. Se reusa (no están en el export) para:
+- **404** (`not-found.tsx`): ícono `search`, "No encontramos esta página", "Puede que el enlace esté mal escrito o que el proyecto ya no exista." · "Ir a mis proyectos" / "Ir al inicio".
+- **Error** (`error.tsx`): ícono `warning`, kicker "ERROR", "Algo salió mal", "No pudimos cargar esta pantalla. Vuelve a intentarlo; si sigue fallando, recarga la página." · "Reintentar" / "Ir al inicio".
+
+`SessionExpiredDialog` porta "08 Sesión expirada (401)": `<dialog>` modal con el fondo al 70% y desenfoque de 8px. **No se cierra con Esc ni con un clic afuera**: con la sesión vencida hay que volver a entrar o salir.
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.

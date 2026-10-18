@@ -79,6 +79,8 @@ taller-freelancer/
 | `/cuenta` | privada | Perfil de Google, preferencias (nombre, carpeta base y tema; acento y fondo en fase 2), exportar JSON (`GET /cuenta/exportar`, sin credenciales), borrar cuenta | `getProfile(uid)`, `savePreferences` (al salir del campo) |
 | `/403` | privada | `ErrorScreen` "No tienes acceso a este proyecto" | — |
 | 401 | diálogo | `SessionExpiredDialog` encima de la app, con "Entrar de nuevo con Google" | — |
+| 404 | `not-found.tsx` | `ErrorScreen` 404: en `(app)/` con el shell (`notFound()` de una ficha) y en la raíz sin él (URL inexistente) | — |
+| error | `(app)/error.tsx` | `ErrorScreen` "Algo salió mal" con "Reintentar" (`reset`); solo registra el digest | — |
 
 ## 4. Componentes y contratos de props
 

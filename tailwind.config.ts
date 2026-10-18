@@ -46,6 +46,8 @@ const config: Config = {
       label: 'var(--color-label)',
       placeholder: 'var(--color-placeholder)',
       backdrop: 'var(--color-backdrop)',
+      'backdrop-soft': 'var(--color-backdrop-soft)',
+      'accent-soft': 'var(--color-accent-soft)',
       state: {
         hover: 'var(--state-hover)',
         pressed: 'var(--state-pressed)',

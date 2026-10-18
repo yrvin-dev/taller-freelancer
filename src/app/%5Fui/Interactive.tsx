@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
+import { SessionExpiredDialog } from '@/components/SessionExpiredDialog';
 import { Dialog } from '@/components/ui/Dialog';
 import { Field } from '@/components/ui/Field';
 import { Input } from '@/components/ui/Input';
@@ -63,6 +64,8 @@ export function Interactive({ id }: { id: string }) {
       </ToastProvider>
 
       <SwitchDemo />
+
+      <ExpiredDemo />
     </div>
   );
 }
@@ -116,6 +119,22 @@ function SwitchDemo() {
     <div className="flex items-center gap-2">
       <ThemeSwitch theme={theme} onToggle={toggle} size="sm" />
       <ThemeSwitch theme={theme} onToggle={toggle} />
+    </div>
+  );
+}
+
+function ExpiredDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <Button variant="secondary" icon="history" onClick={() => setOpen(true)}>
+        Simular sesión expirada (401)
+      </Button>
+      <SessionExpiredDialog
+        open={open}
+        onRelogin={() => setOpen(false)}
+        onExit={() => setOpen(false)}
+      />
     </div>
   );
 }

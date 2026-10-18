@@ -113,6 +113,8 @@
   --state-subtle: color-mix(in srgb, var(--color-text) 5%, transparent);
   --state-accent-active: color-mix(in srgb, var(--color-accent) 12%, transparent);
   --state-danger-hover: color-mix(in srgb, var(--color-accent-2) 14%, transparent);
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 16%, transparent); /* ErrorScreen */
+  --color-backdrop-soft: color-mix(in srgb, var(--color-bg) 70%, transparent); /* 401 */
 
   /* ProjectCard: la parte inferior de la tarjeta (export) */
   --color-card-foot: color-mix(in srgb, var(--color-neutral-200) 70%, var(--color-surface));
