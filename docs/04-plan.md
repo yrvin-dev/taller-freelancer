@@ -152,9 +152,9 @@
 - **Archivos:** `src/lib/{crypto,env-server}.ts`, `src/app/(app)/proyectos/[id]/actions.ts`, `src/components/projects/detail/{AddCredentialDialog,CredentialRow,AccessTab}.tsx`, `tests/unit/crypto.test.ts`, `tests/integration/credentials.test.ts`.
 - **Hecho cuando:** en la base solo hay ciphertext, al manipular el tag el descifrado falla y el secreto nunca aparece en el HTML inicial.
 
-### [ ] T17b · Credenciales cifradas · rotación de clave
+### [x] T17b · Credenciales cifradas · rotación de clave
 - **Objetivo:** `scripts/rotate-key.ts`: re-cifra todas las credenciales con una clave nueva (`CREDENTIALS_KEY_PREVIOUS` → `CREDENTIALS_KEY`) y sube `key_version`. Única tarea con `service_role` (admin documentada).
-- **Archivos:** `scripts/rotate-key.ts`, `tests/integration/rotate-key.test.ts`.
+- **Archivos:** `src/lib/credentials-rotation.ts`, `scripts/rotate-key.ts`, `tests/integration/rotate-key.test.ts`.
 - **Hecho cuando:** después de rotar, todo se descifra con la clave nueva y nada con la vieja.
 
 ### [ ] T18 · Cuenta: exportar y borrar

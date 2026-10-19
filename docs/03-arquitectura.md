@@ -252,6 +252,7 @@ create policy "dueño" on projects for all
 5. **403:** `getProject` devuelve `null` por RLS. Si el id existe pero no es tuyo (comprobado con una función `security definer` que solo devuelve un booleano), redirige a `/403`; si no existe, va a `notFound()`.
 
 **Credenciales de clientes:**
+- ✅ T17b · Rotación: `pnpm rotate-key [--dry-run]` (`scripts/rotate-key.ts` → `src/lib/credentials-rotation.ts`). Con `CREDENTIALS_KEY_PREVIOUS` (clave actual), `CREDENTIALS_KEY` (nueva) y `CREDENTIALS_KEY_VERSION` (+1) re-cifra las filas de la versión anterior, deja intactas las que no se descifran (las reporta por id) y es idempotente. Usa `service_role`: es la tarea de admin documentada de la regla 5. Mientras dura, la app lee ambas versiones.
 - ✅ T17a · Implementado en `src/lib/crypto.ts` + `src/lib/env-server.ts` (claves por versión, validadas con Zod). AAD = `taller-freelancer:credential:v1:{owner_id}:{project_id}`: copiar un cifrado a otra fila hace fallar el descifrado. En PostgREST el `bytea` viaja como `\x` + hex. `revealCredential` lee con RLS y solo registra el id si falla. Se agregan y borran desde Accesos (diálogo), nunca por el formulario del proyecto.
 - Se cifran en `src/lib/crypto.ts` (solo servidor) con AES-256-GCM.
   - IV aleatorio de 12 bytes por secreto.
