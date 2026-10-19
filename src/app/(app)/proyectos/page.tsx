@@ -7,8 +7,7 @@ import { ViewSwitch } from '@/components/projects/ViewSwitch';
 import { buttonClass } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Table, Th } from '@/components/ui/Table';
-import { todayIn } from '@/lib/format';
-import { mockProjects } from '@/lib/mock/projects';
+import { listProjects } from '@/lib/data/projects';
 import { parseProjectView } from '@/lib/projects';
 
 export const metadata: Metadata = { title: 'Proyectos · Taller Freelancer' };
@@ -19,7 +18,7 @@ type ProjectsPageProps = { searchParams: Promise<{ vista?: string | string[] }> 
 // reales, con `listProjects(uid, filters)` en la tanda de datos.
 export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const view = parseProjectView((await searchParams).vista);
-  const projects = mockProjects(todayIn());
+  const projects = await listProjects();
 
   return (
     <div className="flex flex-col gap-6">

@@ -6,6 +6,8 @@ import { NoteLog } from '@/components/projects/detail/NoteLog';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ToastProvider } from '@/components/ui/Toast';
 
+vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
+
 async function renderProject(id: string, tab?: string) {
   const page = await ProjectPage({
     params: Promise.resolve({ id }),

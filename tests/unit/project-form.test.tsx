@@ -4,6 +4,8 @@ import NewProjectPage from '@/app/(app)/proyectos/nuevo/page';
 import { ThumbnailField, thumbnailError } from '@/components/projects/ThumbnailField';
 import { ToastProvider } from '@/components/ui/Toast';
 
+vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
+
 const action = vi.hoisted(() => ({ override: null as null | (() => unknown) }));
 vi.mock('@/app/(app)/proyectos/actions', async (importOriginal) => {
   const real = await importOriginal<typeof import('@/app/(app)/proyectos/actions')>();

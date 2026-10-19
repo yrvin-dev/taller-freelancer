@@ -6,8 +6,10 @@ import AccountPage from '@/app/(app)/cuenta/page';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ToastProvider } from '@/components/ui/Toast';
 import { formatMonthYear, formatWeekdayShort } from '@/lib/format';
-import { mockProjects } from '@/lib/mock/projects';
+import { mockProjects } from '../fixtures/projects';
 import { agendaEvents } from '@/lib/summary';
+
+vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
 
 const TODAY = new Date(2026, 9, 5);
 
@@ -118,8 +120,8 @@ describe('agendaEvents', () => {
 });
 
 describe('/calendario', () => {
-  it('lista los eventos por mes y enlaza a la ficha', () => {
-    withProviders(<CalendarPage />);
+  it('lista los eventos por mes y enlaza a la ficha', async () => {
+    withProviders(await CalendarPage());
     expect(screen.getByRole('heading', { level: 1, name: 'Calendario' })).toBeInTheDocument();
     const firstMonth = screen.getAllByRole('region')[0]!;
     const firstEvent = within(firstMonth).getAllByRole('link')[0]!;

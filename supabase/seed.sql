@@ -105,10 +105,14 @@ begin
   -- Los pagos y notas "tocan" su proyecto (trigger touch_project). Se restaura el orden
   -- de "recientes" del export con el trigger de updated_at apagado solo aquí.
   alter table public.projects disable trigger projects_set_updated_at;
-  update public.projects p set updated_at = now() - v.ago
-  from (values ('SND-2026', interval '20 hours'), ('AGB-2026', interval '30 hours'),
-               ('AGW-2026', interval '31 hours'), ('DFL-2026', interval '32 hours'),
-               ('PLV-2026', interval '33 hours'), ('ALQ-2026', interval '60 hours')) as v(code, ago)
+  -- Miniaturas: rutas estáticas de public/mock/thumbs (DFL no tiene, T09a).
+  update public.projects p set updated_at = now() - v.ago, thumbnail_path = v.thumb
+  from (values ('SND-2026', interval '20 hours', '/mock/thumbs/snd.webp'),
+               ('AGB-2026', interval '30 hours', '/mock/thumbs/agb.webp'),
+               ('AGW-2026', interval '31 hours', '/mock/thumbs/agw.webp'),
+               ('DFL-2026', interval '32 hours', null),
+               ('PLV-2026', interval '33 hours', '/mock/thumbs/plv.webp'),
+               ('ALQ-2026', interval '60 hours', '/mock/thumbs/alq.webp')) as v(code, ago, thumb)
   where p.owner_id = demo and p.code = v.code;
   alter table public.projects enable trigger projects_set_updated_at;
 end;

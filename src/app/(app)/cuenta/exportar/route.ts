@@ -1,5 +1,5 @@
 import { todayIn, toISODate } from '@/lib/format';
-import { mockProjects } from '@/lib/mock/projects';
+import { listProjects } from '@/lib/data/projects';
 import { getCurrentProfile } from '@/lib/data/profile';
 
 // "Exportar datos" de Cuenta: descarga un JSON con los proyectos, clientes, pagos y
@@ -10,7 +10,7 @@ export async function GET() {
   if (!profile) return new Response('No autorizado', { status: 401 });
 
   const today = todayIn();
-  const proyectos = mockProjects(today).map(({ credentials, ...project }) => project);
+  const proyectos = (await listProjects()).map(({ credentials, ...project }) => project);
   const body = JSON.stringify(
     { exportadoEl: new Date().toISOString(), usuario: profile.email, proyectos },
     null,

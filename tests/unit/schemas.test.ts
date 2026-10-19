@@ -1,5 +1,5 @@
 import { saveProject } from '@/app/(app)/proyectos/actions';
-import { mockProjects } from '@/lib/mock/projects';
+import { mockProjects } from '../fixtures/projects';
 import { EMPTY_PROJECT_FORM, toFormValues } from '@/lib/project-form';
 import { isValidLink, projectSchema, type ProjectFormValues } from '@/lib/schemas';
 

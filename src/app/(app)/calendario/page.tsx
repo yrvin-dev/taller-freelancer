@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Tag } from '@/components/ui/Tag';
 import { todayIn } from '@/lib/format';
-import { mockProjects } from '@/lib/mock/projects';
+import { listProjects } from '@/lib/data/projects';
 import { agendaEvents, type AgendaKind } from '@/lib/summary';
 
 export const metadata: Metadata = { title: 'Calendario · Taller Freelancer' };
@@ -16,9 +16,9 @@ const KIND_LABEL: Record<AgendaKind, string> = {
 
 // Portada de "05 Calendario": agenda por mes desde hoy. Datos de prueba hasta la
 // tanda de datos (entonces `listDeadlines(uid, month)`).
-export default function CalendarPage() {
+export default async function CalendarPage() {
   const today = todayIn();
-  const months = agendaEvents(mockProjects(today), today);
+  const months = agendaEvents(await listProjects(), today);
 
   return (
     <div className="flex max-w-[820px] flex-col gap-6">

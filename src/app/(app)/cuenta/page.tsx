@@ -5,8 +5,8 @@ import { PreferencesForm } from '@/components/account/PreferencesForm';
 import { Avatar } from '@/components/ui/Avatar';
 import { buttonClass } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
-import { formatMonthYear, todayIn } from '@/lib/format';
-import { mockProjects } from '@/lib/mock/projects';
+import { formatMonthYear } from '@/lib/format';
+import { listProjects } from '@/lib/data/projects';
 import { getCurrentProfile } from '@/lib/data/profile';
 
 export const metadata: Metadata = { title: 'Cuenta · Taller Freelancer' };
@@ -15,7 +15,7 @@ export const metadata: Metadata = { title: 'Cuenta · Taller Freelancer' };
 export default async function AccountPage() {
   const profile = await getCurrentProfile();
   if (!profile) redirect('/login');
-  const projectCount = mockProjects(todayIn()).length;
+  const projectCount = (await listProjects()).length;
 
   return (
     <div className="flex max-w-[680px] flex-col gap-8">

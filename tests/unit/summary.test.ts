@@ -1,4 +1,4 @@
-import { mockProjects } from '@/lib/mock/projects';
+import { mockProjects } from '../fixtures/projects';
 import { paidPen, type Project } from '@/lib/projects';
 import {
   expiringSoon,

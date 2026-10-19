@@ -5,9 +5,8 @@ import { AppHeader } from '@/components/layout/AppHeader';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { ToastProvider } from '@/components/ui/Toast';
-import { todayIn } from '@/lib/format';
 import { parseSidebarExpanded, SIDEBAR_COOKIE } from '@/lib/layout-prefs';
-import { mockProjects } from '@/lib/mock/projects';
+import { listProjects } from '@/lib/data/projects';
 import { getCurrentProfile } from '@/lib/data/profile';
 
 // Shell de las páginas privadas con el usuario de la sesión. El middleware ya
@@ -17,7 +16,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   if (!profile) redirect('/login');
 
   const expanded = parseSidebarExpanded((await cookies()).get(SIDEBAR_COOKIE)?.value);
-  const activeCount = mockProjects(todayIn()).filter((p) => p.status !== 'archivado').length;
+  // listProjects va con cache(): la página del mismo pedido reusa esta lectura.
+  const activeCount = (await listProjects()).filter((p) => p.status !== 'archivado').length;
 
   return (
     <ToastProvider aboveNav>

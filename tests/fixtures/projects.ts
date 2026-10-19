@@ -1,5 +1,6 @@
-// Datos de prueba hasta la tanda de datos (Supabase): los 6 proyectos del export,
-// adaptados al modelo del 03 (enums, solo PEN, presupuesto + pagos).
+// Fixture de tests: los 6 proyectos del export adaptados al modelo del 03 (enums,
+// solo PEN, presupuesto + pagos). La app lee de Supabase (src/lib/data/*); el seed
+// local (supabase/seed.sql) carga los mismos proyectos en la base.
 //
 // Las fechas son relativas a `today` con los mismos desfases que el export tenía
 // respecto de su "hoy" fijo (2026-10-05): así la demo siempre tiene entregas y

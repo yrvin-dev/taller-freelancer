@@ -137,10 +137,15 @@
 - **Archivos:** `src/lib/{profile,data/profile}.ts`, `src/app/(app)/{layout,page}.tsx`, `src/app/(app)/cuenta/{page,actions}.ts(x)`, `cuenta/exportar/route.ts`.
 - **Hecho cuando:** al entrar con Google se ven tus datos y el mock de usuario desaparece.
 
-### [ ] T16 · Capa de datos y Server Actions
-- **Objetivo:** reemplazar el mock por `src/lib/data/*` en las lecturas y por Server Actions en el CRUD de proyectos, pagos y notas.
-- **Archivos:** `src/lib/data/*.ts`, `src/app/(app)/proyectos/actions.ts`; se borra `src/lib/mock.ts`.
-- **Hecho cuando:** el CRUD funciona de punta a punta, `revalidatePath` refresca la vista y desaparece cualquier import del mock.
+### [x] T16a · Capa de datos · lecturas
+- **Objetivo:** `listProjects` y `getProject` (`src/lib/data/projects.ts`) en home, lista, ficha, edición, calendario, Cuenta y exportación; 403 vs 404 con `project_exists`. El mock pasa a `tests/fixtures/`. `pnpm db:seed-me <correo>` copia los proyectos de ejemplo a una cuenta local.
+- **Archivos:** `src/lib/data/{projects,project-mapper}.ts`, `src/app/(app)/**/page.tsx`, `supabase/migrations/20261019000004_project_exists.sql`, `supabase/scripts/seed-me.sql`, `scripts/seed-me.mjs`, `tests/fixtures/*`.
+- **Hecho cuando:** las pantallas leen de la base con RLS y las credenciales llegan sin las columnas del secreto.
+
+### [ ] T16b · Capa de datos · escrituras
+- **Objetivo:** Server Actions del CRUD: `saveProject` (con primer pago y primera nota al crear), eliminar y archivar, agregar y borrar notas; `revalidatePath`.
+- **Archivos:** `src/app/(app)/proyectos/actions.ts`, `src/app/(app)/proyectos/[id]/actions.ts`, `src/lib/data/*`.
+- **Hecho cuando:** el CRUD funciona de punta a punta, `revalidatePath` refresca la vista y desaparece cualquier import del mock (salvo los secretos de prueba, que se van en T17).
 
 ### [ ] T17 · Credenciales cifradas
 - **Objetivo:** `crypto.ts`, la acción `revealCredential` y el script de rotación de clave.

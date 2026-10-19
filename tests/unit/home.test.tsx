@@ -2,7 +2,9 @@ import { render, screen, within } from '@testing-library/react';
 import Home from '@/app/(app)/page';
 import { HomeDashboard, homeCards } from '@/components/projects/HomeDashboard';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { mockProjects } from '@/lib/mock/projects';
+import { mockProjects } from '../fixtures/projects';
+
+vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
 
 // getByText normaliza los espacios del DOM (el espacio duro de Intl pasa a ' ').
 const TODAY = new Date(2026, 9, 5);

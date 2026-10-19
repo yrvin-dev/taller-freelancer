@@ -3,7 +3,9 @@ import ProjectsPage from '@/app/(app)/proyectos/page';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { ViewSwitch } from '@/components/projects/ViewSwitch';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { mockProjects } from '@/lib/mock/projects';
+import { mockProjects } from '../fixtures/projects';
+
+vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
 
 const nav = vi.hoisted(() => ({ replace: vi.fn(), search: '' }));
 vi.mock('next/navigation', () => ({

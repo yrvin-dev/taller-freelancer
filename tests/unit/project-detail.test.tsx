@@ -4,6 +4,8 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { ToastProvider } from '@/components/ui/Toast';
 import { parseProjectTab } from '@/lib/projects';
 
+vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
+
 async function renderProject(id: string, tab?: string) {
   const page = await ProjectPage({
     params: Promise.resolve({ id }),
@@ -48,6 +50,12 @@ describe('ficha: cabecera y pestañas', () => {
       'href',
       '/proyectos/snd?tab=cliente',
     );
+  });
+
+  it('un proyecto ajeno (RLS lo oculta pero existe) redirige a /403', async () => {
+    await expect(
+      ProjectPage({ params: Promise.resolve({ id: 'ajeno' }), searchParams: Promise.resolve({}) }),
+    ).rejects.toThrow('NEXT_REDIRECT');
   });
 
   it('un id inexistente da 404', async () => {

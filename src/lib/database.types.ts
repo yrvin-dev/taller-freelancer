@@ -334,7 +334,7 @@ export type Database = {
       };
     };
     Functions: {
-      [_ in never]: never;
+      project_exists: { Args: { p_id: string }; Returns: boolean };
     };
     Enums: {
       note_kind: 'pedido' | 'cambio' | 'nota';
