@@ -3,7 +3,7 @@
 // servidor: lo que pasa uno, pasa el otro.
 
 import { z } from 'zod';
-import { NO_CMS_LABEL, PROJECT_STATUSES, PROJECT_TYPES } from './domain';
+import { NO_CMS_LABEL, NOTE_KINDS, PROJECT_STATUSES, PROJECT_TYPES } from './domain';
 import { parseDate } from './format';
 import { externalHref } from './links';
 
@@ -163,3 +163,13 @@ export const preferencesSchema = z.object({
 });
 
 export type PreferencesValues = z.input<typeof preferencesSchema>;
+
+/** Ids que llegan del cliente a una Server Action: UUID o nada. */
+export const idSchema = z.uuid('Identificador inválido.');
+
+/** Entrada nueva de la bitácora (Notas de la ficha). */
+export const noteInputSchema = z.object({
+  projectId: idSchema,
+  kind: z.enum(NOTE_KINDS, 'Elige el tipo de entrada.'),
+  body: required('Escribe la entrada.', 2000),
+});

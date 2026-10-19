@@ -142,9 +142,9 @@
 - **Archivos:** `src/lib/data/{projects,project-mapper}.ts`, `src/app/(app)/**/page.tsx`, `supabase/migrations/20261019000004_project_exists.sql`, `supabase/scripts/seed-me.sql`, `scripts/seed-me.mjs`, `tests/fixtures/*`.
 - **Hecho cuando:** las pantallas leen de la base con RLS y las credenciales llegan sin las columnas del secreto.
 
-### [ ] T16b · Capa de datos · escrituras
+### [x] T16b · Capa de datos · escrituras
 - **Objetivo:** Server Actions del CRUD: `saveProject` (con primer pago y primera nota al crear), eliminar y archivar, agregar y borrar notas; `revalidatePath`.
-- **Archivos:** `src/app/(app)/proyectos/actions.ts`, `src/app/(app)/proyectos/[id]/actions.ts`, `src/lib/data/*`.
+- **Archivos:** `src/app/(app)/proyectos/actions.ts`, `src/app/(app)/proyectos/[id]/actions.ts`, `src/lib/data/project-mapper.ts`, `src/components/projects/{ProjectForm,detail/NoteLog,detail/DeleteProjectButton}.tsx`, `tests/integration/actions.test.ts`.
 - **Hecho cuando:** el CRUD funciona de punta a punta, `revalidatePath` refresca la vista y desaparece cualquier import del mock (salvo los secretos de prueba, que se van en T17).
 
 ### [ ] T17 · Credenciales cifradas

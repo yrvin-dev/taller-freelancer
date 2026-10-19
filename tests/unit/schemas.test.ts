@@ -129,7 +129,8 @@ describe('toFormValues', () => {
   });
 });
 
-describe('saveProject (Server Action)', () => {
+// La escritura en la base de saveProject se prueba en tests/integration/actions.test.ts.
+describe('saveProject (Server Action): validación', () => {
   it('valida con el mismo esquema y devuelve fieldErrors', async () => {
     const result = await saveProject({ ...valid, name: '', linkRepo: 'javascript:x' });
     expect(result).toEqual({
@@ -144,12 +145,5 @@ describe('saveProject (Server Action)', () => {
 
   it('rechaza lo que no es un objeto', async () => {
     await expect(saveProject('hola')).resolves.toMatchObject({ ok: false });
-  });
-
-  it('con datos válidos responde ok (sin base todavía: persisted false)', async () => {
-    await expect(saveProject(valid, 'agb')).resolves.toEqual({
-      ok: true,
-      data: { id: 'agb', persisted: false },
-    });
   });
 });

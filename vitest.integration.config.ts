@@ -5,6 +5,10 @@ import { defineConfig } from 'vitest/config';
 // Separados de `pnpm test` porque necesitan Docker.
 export default defineConfig({
   plugins: [tsconfigPaths()],
+  // Las Server Actions importan módulos `server-only`, que fuera de Next lanzan al cargarse.
+  resolve: {
+    alias: { 'server-only': new URL('./tests/stubs/server-only.ts', import.meta.url).pathname },
+  },
   test: {
     environment: 'node',
     globals: true,

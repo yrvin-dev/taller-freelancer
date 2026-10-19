@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm, type FieldPath } from 'react-hook-form';
 import { saveProject } from '@/app/(app)/proyectos/actions';
@@ -62,6 +63,7 @@ export function ProjectForm({
   cancelHref,
 }: ProjectFormProps) {
   const toast = useToast();
+  const router = useRouter();
   const [saving, startSaving] = useTransition();
   const {
     register,
@@ -196,7 +198,9 @@ export function ProjectForm({
         toast.show(result.error, 'warning');
         return;
       }
-      toast.show('Validado. Se guardará al conectar la base de datos.', 'info');
+      // El toast vive en el layout (app): sobrevive a la navegación a la ficha.
+      toast.show(mode === 'new' ? 'Proyecto creado' : 'Cambios guardados');
+      router.push(`/proyectos/${result.data.id}`);
     });
   });
 

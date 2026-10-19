@@ -28,7 +28,7 @@ export function ProjectHeader({ project }: { project: Project }) {
           Proyectos
         </Link>
         <span className="ml-auto" />
-        <DeleteProjectButton projectName={project.name} />
+        <DeleteProjectButton projectId={project.id} projectName={project.name} />
         <Link
           href={`/proyectos/${project.id}/editar`}
           className={buttonClass({ variant: 'secondary' })}

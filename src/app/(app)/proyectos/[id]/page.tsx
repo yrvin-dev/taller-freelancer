@@ -8,7 +8,7 @@ import { ProjectHeader } from '@/components/projects/detail/ProjectHeader';
 import { ProjectTabs } from '@/components/projects/detail/ProjectTabs';
 import { StackTab } from '@/components/projects/detail/StackTab';
 import { SummaryTab } from '@/components/projects/detail/SummaryTab';
-import { todayIn, toISODate } from '@/lib/format';
+import { todayIn } from '@/lib/format';
 import { getProject } from '@/lib/data/projects';
 import { loadProject } from './load-project';
 import { parseProjectTab, type Project, type ProjectTab } from '@/lib/projects';
@@ -30,9 +30,9 @@ const PANELS: Record<ProjectTab, (props: PanelProps) => ReactNode> = {
   stack: StackTab,
   accesos: AccessTab,
   pagos: PaymentsTab,
-  notas: ({ project, today }) => (
+  notas: ({ project }) => (
     // key: al cambiar de proyecto, la bitácora arranca de nuevo con sus notas.
-    <NoteLog key={project.id} initialNotes={project.notes} today={toISODate(today)} />
+    <NoteLog key={project.id} projectId={project.id} initialNotes={project.notes} />
   ),
 };
 

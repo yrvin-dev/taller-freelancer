@@ -1,6 +1,7 @@
 'use client';
 
-import { useId, useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, useTransition, type FormEvent } from 'react';
+import { addNote, deleteNote } from '@/app/(app)/proyectos/[id]/actions';
 import { Button } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Select';
 import { Tag } from '@/components/ui/Tag';
@@ -18,22 +19,22 @@ const KIND_TONE: Record<NoteKind, TagVariant> = {
 };
 
 export type NoteLogProps = {
+  projectId: string;
   initialNotes: Note[];
-  /** "Hoy" en Lima (`'YYYY-MM-DD'`), fecha de las entradas nuevas. */
-  today: string;
 };
 
 /**
  * Bitácora del export: agregar Pedido / Cambio / Nota y borrar con confirmación en la
- * misma línea. Por ahora vive en el estado de la página; con la base, `onAdd` y
- * `onDelete` pasan a Server Actions (03 §4).
+ * misma línea. Cada cambio pasa por una Server Action (`addNote`, `deleteNote`) y la
+ * lista local se actualiza con lo que devuelve la base.
  */
-export function NoteLog({ initialNotes, today }: NoteLogProps) {
+export function NoteLog({ projectId, initialNotes }: NoteLogProps) {
   const toast = useToast();
   const [notes, setNotes] = useState(initialNotes);
   const [kind, setKind] = useState<NoteKind>('pedido');
   const [draft, setDraft] = useState('');
   const [asking, setAsking] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const kindId = useId();
   const bodyId = useId();
@@ -42,16 +43,30 @@ export function NoteLog({ initialNotes, today }: NoteLogProps) {
     event.preventDefault();
     const body = draft.trim();
     if (!body) return;
-    setNotes((prev) => [{ id: crypto.randomUUID(), kind, body, notedOn: today }, ...prev]);
-    setDraft('');
-    toast.show('Nota agregada');
+    startTransition(async () => {
+      const result = await addNote({ projectId, kind, body });
+      if (!result.ok) {
+        toast.show(result.error, 'warning');
+        return;
+      }
+      setNotes((prev) => [result.data, ...prev]);
+      setDraft('');
+      toast.show('Nota agregada');
+    });
   }
 
   function remove(id: string) {
-    setNotes((prev) => prev.filter((note) => note.id !== id));
-    setAsking(null);
-    toast.show('Entrada borrada');
-    textareaRef.current?.focus(); // el botón que tenía el foco desaparece
+    startTransition(async () => {
+      const result = await deleteNote(id);
+      if (!result.ok) {
+        toast.show(result.error, 'warning');
+        return;
+      }
+      setNotes((prev) => prev.filter((note) => note.id !== id));
+      setAsking(null);
+      toast.show('Entrada borrada');
+      textareaRef.current?.focus(); // el botón que tenía el foco desaparece
+    });
   }
 
   return (
@@ -84,7 +99,13 @@ export function NoteLog({ initialNotes, today }: NoteLogProps) {
             className="flex-[1_1_300px]"
           />
         </div>
-        <Button type="submit" icon="plus" disabled={!draft.trim()} className="self-start">
+        <Button
+          type="submit"
+          icon="plus"
+          disabled={!draft.trim()}
+          loading={pending}
+          className="self-start"
+        >
           Agregar a la bitácora
         </Button>
       </form>
@@ -108,7 +129,12 @@ export function NoteLog({ initialNotes, today }: NoteLogProps) {
                     <Button size="sm" variant="ghost" autoFocus onClick={() => setAsking(null)}>
                       No
                     </Button>
-                    <Button size="sm" tone="danger" onClick={() => remove(note.id)}>
+                    <Button
+                      size="sm"
+                      tone="danger"
+                      loading={pending}
+                      onClick={() => remove(note.id)}
+                    >
                       Sí, borrar
                     </Button>
                   </span>

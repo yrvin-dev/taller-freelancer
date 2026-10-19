@@ -3,6 +3,7 @@
 
 import type { Database } from '@/lib/database.types';
 import type { Project } from '@/lib/projects';
+import type { ProjectInput } from '@/lib/schemas';
 
 type Tables = Database['public']['Tables'];
 
@@ -94,5 +95,55 @@ export function toProject(row: ProjectRow): Project {
         (a, b) => b.noted_on.localeCompare(a.noted_on) || b.created_at.localeCompare(a.created_at),
       )
       .map((n) => ({ id: n.id, kind: n.kind, body: n.body, notedOn: n.noted_on })),
+  };
+}
+
+/**
+ * Código automático cuando el formulario lo deja vacío (como el export):
+ * "Colegio Guillermo Brown" → `COL-2026`. Sin tildes ni símbolos.
+ */
+export function autoCode(name: string, year: number): string {
+  const letters = name
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^A-Za-z0-9]/g, '')
+    .slice(0, 3)
+    .toUpperCase();
+  return `${letters || 'PRY'}-${year}`;
+}
+
+/**
+ * Formulario validado (`ProjectInput`) → columnas de `projects`. No toca `owner_id`
+ * (lo pone la base con `auth.uid()`), ni `domain_name` ni `thumbnail_path`, que el
+ * formulario no edita.
+ */
+export function toProjectRow(input: ProjectInput, code: string): Tables['projects']['Update'] {
+  return {
+    code,
+    name: input.name,
+    client: input.client,
+    client_contact: input.clientContact,
+    client_email: input.clientEmail,
+    client_whatsapp: input.clientWhatsapp,
+    client_country: input.clientCountry,
+    type: input.type,
+    status: input.status,
+    description: input.description,
+    delivery_date: input.deliveryDate,
+    stack_frontend: input.frontend,
+    stack_backend: input.backend,
+    stack_db: input.db,
+    stack_hosting: input.hosting,
+    cms: input.cms,
+    local_path: input.localPath,
+    link_repo: input.linkRepo,
+    link_deploy: input.linkDeploy,
+    link_cms: input.linkCms,
+    link_design: input.linkDesign,
+    link_panel: input.linkPanel,
+    domain_expires: input.domainExpires,
+    domain_pending: input.domainPending,
+    hosting_expires: input.hostingExpires,
+    budget_pen: input.budgetPen,
   };
 }

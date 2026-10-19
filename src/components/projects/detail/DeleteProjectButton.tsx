@@ -1,21 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
+import { archiveProject, deleteProject } from '@/app/(app)/proyectos/[id]/actions';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 import { useToast } from '@/components/ui/Toast';
 
 /**
- * "Eliminar" del export, con la alternativa de archivar. Hasta la tanda de datos no
- * borra ni archiva: avisa con un toast (con la base: Server Actions + revalidatePath).
+ * "Eliminar" del export, con la alternativa de archivar (sacarlo de la vista sin borrar
+ * nada). Eliminar lleva a la lista; archivar deja la ficha, ya en "Archivado".
  */
-export function DeleteProjectButton({ projectName }: { projectName: string }) {
+export function DeleteProjectButton({
+  projectId,
+  projectName,
+}: {
+  projectId: string;
+  projectName: string;
+}) {
   const [open, setOpen] = useState(false);
+  const [pending, startTransition] = useTransition();
   const toast = useToast();
+  const router = useRouter();
 
-  function pending() {
-    setOpen(false);
-    toast.show('Disponible al conectar la base de datos', 'info');
+  function run(action: 'delete' | 'archive') {
+    startTransition(async () => {
+      const result =
+        action === 'delete' ? await deleteProject(projectId) : await archiveProject(projectId);
+      if (!result.ok) {
+        toast.show(result.error, 'warning');
+        return;
+      }
+      setOpen(false);
+      if (action === 'delete') {
+        toast.show('Proyecto eliminado');
+        router.push('/proyectos');
+      } else {
+        toast.show('Proyecto archivado');
+        router.refresh();
+      }
+    });
   }
 
   return (
@@ -29,13 +53,13 @@ export function DeleteProjectButton({ projectName }: { projectName: string }) {
         onClose={() => setOpen(false)}
         actions={
           <>
-            <Button variant="secondary" onClick={pending}>
+            <Button variant="secondary" disabled={pending} onClick={() => run('archive')}>
               Archivar
             </Button>
-            <Button variant="ghost" onClick={() => setOpen(false)}>
+            <Button variant="ghost" disabled={pending} onClick={() => setOpen(false)}>
               Cancelar
             </Button>
-            <Button tone="danger" icon="trash" onClick={pending}>
+            <Button tone="danger" icon="trash" loading={pending} onClick={() => run('delete')}>
               Eliminar
             </Button>
           </>

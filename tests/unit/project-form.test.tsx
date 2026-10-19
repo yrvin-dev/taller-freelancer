@@ -6,14 +6,23 @@ import { ToastProvider } from '@/components/ui/Toast';
 
 vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
 
-const action = vi.hoisted(() => ({ override: null as null | (() => unknown) }));
-vi.mock('@/app/(app)/proyectos/actions', async (importOriginal) => {
-  const real = await importOriginal<typeof import('@/app/(app)/proyectos/actions')>();
-  return {
-    saveProject: (input: unknown, id: string | null) =>
-      action.override ? Promise.resolve(action.override()) : real.saveProject(input, id),
-  };
-});
+// saveProject escribe en la base (probado en tests/integration/actions.test.ts): aquí
+// se simula y se registra con qué se llamó.
+const action = vi.hoisted(() => ({
+  override: null as null | (() => unknown),
+  calls: [] as [unknown, string | null][],
+  push: vi.fn(),
+}));
+vi.mock('@/app/(app)/proyectos/actions', () => ({
+  saveProject: async (input: unknown, id: string | null) => {
+    action.calls.push([input, id]);
+    return action.override ? action.override() : { ok: true, data: { id: 'id-guardado' } };
+  },
+}));
+vi.mock('next/navigation', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('next/navigation')>()),
+  useRouter: () => ({ push: action.push }),
+}));
 
 const withToast = (ui: React.ReactNode) => render(<ToastProvider>{ui}</ToastProvider>);
 
@@ -24,7 +33,11 @@ async function submit() {
 }
 
 describe('/proyectos/nuevo', () => {
-  beforeEach(() => (action.override = null));
+  beforeEach(() => {
+    action.override = null;
+    action.calls = [];
+    action.push.mockClear();
+  });
 
   it('tiene las secciones del export (sin Editores CMS) y los campos de crear', () => {
     withToast(<NewProjectPage />);
@@ -77,16 +90,23 @@ describe('/proyectos/nuevo', () => {
     );
   });
 
-  it('con datos válidos avisa que se guardará al conectar la base', async () => {
+  it('con datos válidos guarda, avisa y lleva a la ficha', async () => {
     withToast(<NewProjectPage />);
     fireEvent.change(screen.getByLabelText('Nombre del proyecto *'), { target: { value: 'AGB' } });
     fireEvent.change(screen.getByLabelText('Cliente *'), { target: { value: 'Colegio' } });
     await submit();
-    await waitFor(() =>
-      expect(screen.getByRole('status')).toHaveTextContent(
-        'Validado. Se guardará al conectar la base de datos.',
-      ),
-    );
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Proyecto creado'));
+    expect(action.push).toHaveBeenCalledWith('/proyectos/id-guardado');
+    // Al servidor van los valores crudos del formulario (los vuelve a validar).
+    const [input, id] = action.calls.at(-1)!;
+    expect(id).toBeNull();
+    expect(input).toMatchObject({ name: 'AGB', client: 'Colegio' });
+  });
+
+  it('con datos inválidos no llama al servidor', async () => {
+    withToast(<NewProjectPage />);
+    await submit();
+    expect(action.calls).toHaveLength(0);
   });
 });
 

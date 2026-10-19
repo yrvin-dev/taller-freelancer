@@ -5,6 +5,11 @@ import { ToastProvider } from '@/components/ui/Toast';
 import { parseProjectTab } from '@/lib/projects';
 
 vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
+// El encabezado incluye "Eliminar" (useRouter): fuera del App Router se simula.
+vi.mock('next/navigation', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('next/navigation')>()),
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }),
+}));
 
 async function renderProject(id: string, tab?: string) {
   const page = await ProjectPage({

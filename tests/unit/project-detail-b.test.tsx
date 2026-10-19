@@ -8,6 +8,26 @@ import { ToastProvider } from '@/components/ui/Toast';
 
 vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
 
+const writes = vi.hoisted(() => ({
+  addNote: vi.fn(),
+  deleteNote: vi.fn(),
+  deleteProject: vi.fn(),
+  archiveProject: vi.fn(),
+  push: vi.fn(),
+  refresh: vi.fn(),
+}));
+vi.mock('@/app/(app)/proyectos/[id]/actions', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/app/(app)/proyectos/[id]/actions')>()),
+  addNote: writes.addNote,
+  deleteNote: writes.deleteNote,
+  deleteProject: writes.deleteProject,
+  archiveProject: writes.archiveProject,
+}));
+vi.mock('next/navigation', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('next/navigation')>()),
+  useRouter: () => ({ push: writes.push, refresh: writes.refresh }),
+}));
+
 async function renderProject(id: string, tab?: string) {
   const page = await ProjectPage({
     params: Promise.resolve({ id }),
@@ -147,43 +167,71 @@ describe('pestaña Pagos', () => {
 });
 
 describe('NoteLog', () => {
+  beforeEach(() => vi.clearAllMocks());
+
   function renderLog(
     notes = [{ id: 'n1', kind: 'pedido' as const, body: 'Zoom 360', notedOn: '2026-10-01' }],
   ) {
     return render(
       <ToastProvider>
-        <NoteLog initialNotes={notes} today="2026-10-16" />
+        <NoteLog projectId="p1" initialNotes={notes} />
       </ToastProvider>,
     );
   }
 
-  it('agrega una entrada arriba con la fecha de hoy', () => {
+  it('agrega con addNote y pone arriba lo que devuelve la base', async () => {
+    writes.addNote.mockResolvedValue({
+      ok: true,
+      data: { id: 'n2', kind: 'cambio', body: 'Checkout con Yape', notedOn: '2026-10-16' },
+    });
     renderLog();
     const add = screen.getByRole('button', { name: 'Agregar a la bitácora' });
     expect(add).toBeDisabled();
     fireEvent.change(screen.getByLabelText('Tipo de entrada'), { target: { value: 'cambio' } });
     fireEvent.change(screen.getByLabelText('Entrada de la bitácora'), {
-      target: { value: 'Checkout con Yape' },
+      target: { value: '  Checkout con Yape ' },
     });
-    fireEvent.click(add);
+    await act(async () => fireEvent.click(add));
+
+    expect(writes.addNote).toHaveBeenCalledWith({
+      projectId: 'p1',
+      kind: 'cambio',
+      body: 'Checkout con Yape',
+    });
     const items = screen.getAllByRole('listitem');
     expect(items[0]).toHaveTextContent('16 oct 2026');
-    expect(items[0]).toHaveTextContent('Checkout con Yape');
     expect(within(items[0]!).getByText('Cambio')).toHaveClass('bg-accent-100');
     expect(screen.getByRole('status')).toHaveTextContent('Nota agregada');
+    expect(screen.getByLabelText('Entrada de la bitácora')).toHaveValue('');
   });
 
-  it('borra con confirmación en la misma línea; "No" cancela', () => {
+  it('si la base falla, avisa y conserva el borrador', async () => {
+    writes.addNote.mockResolvedValue({ ok: false, error: 'No pudimos guardar la entrada.' });
     renderLog();
-    const borrar = screen.getByRole('button', { name: 'Borrar entrada del 1 oct 2026 (Pedido)' });
-    fireEvent.click(borrar);
+    fireEvent.change(screen.getByLabelText('Entrada de la bitácora'), {
+      target: { value: 'Algo' },
+    });
+    await act(async () =>
+      fireEvent.click(screen.getByRole('button', { name: 'Agregar a la bitácora' })),
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('No pudimos guardar la entrada.');
+    expect(screen.getByLabelText('Entrada de la bitácora')).toHaveValue('Algo');
+    expect(screen.getAllByRole('listitem')).toHaveLength(1);
+  });
+
+  it('borra con confirmación en la misma línea; "No" cancela', async () => {
+    writes.deleteNote.mockResolvedValue({ ok: true, data: undefined });
+    renderLog();
+    fireEvent.click(screen.getByRole('button', { name: 'Borrar entrada del 1 oct 2026 (Pedido)' }));
     expect(screen.getByText('¿Borrar?')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'No' })).toHaveFocus();
     fireEvent.click(screen.getByRole('button', { name: 'No' }));
     expect(screen.getByText('Zoom 360')).toBeInTheDocument();
+    expect(writes.deleteNote).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole('button', { name: /^Borrar entrada/ }));
-    fireEvent.click(screen.getByRole('button', { name: 'Sí, borrar' }));
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Sí, borrar' })));
+    expect(writes.deleteNote).toHaveBeenCalledWith('n1');
     expect(screen.queryByText('Zoom 360')).not.toBeInTheDocument();
     expect(screen.getByText('Todavía no hay entradas en la bitácora.')).toBeInTheDocument();
     expect(screen.getByLabelText('Entrada de la bitácora')).toHaveFocus();
@@ -196,19 +244,54 @@ describe('NoteLog', () => {
 });
 
 describe('Eliminar', () => {
-  it('abre el diálogo con Archivar / Cancelar / Eliminar y avisa que falta la base', async () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  async function openDialog() {
     await renderProject('plv');
     fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
-    const dialog = screen.getByRole('dialog', {
-      name: '¿Eliminar (F) Polera Studio · E-commerce?',
-    });
-    expect(within(dialog).getByRole('button', { name: 'Archivar' })).toBeInTheDocument();
+    return screen.getByRole('dialog', { name: '¿Eliminar (F) Polera Studio · E-commerce?' });
+  }
 
+  it('Cancelar cierra sin tocar nada', async () => {
+    const dialog = await openDialog();
     fireEvent.click(within(dialog).getByRole('button', { name: 'Cancelar' }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(writes.deleteProject).not.toHaveBeenCalled();
+  });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
-    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Eliminar' }));
-    expect(screen.getByRole('status')).toHaveTextContent('Disponible al conectar la base de datos');
+  it('Eliminar borra y lleva a la lista', async () => {
+    writes.deleteProject.mockResolvedValue({ ok: true, data: undefined });
+    const dialog = await openDialog();
+    await act(async () =>
+      fireEvent.click(within(dialog).getByRole('button', { name: 'Eliminar' })),
+    );
+    expect(writes.deleteProject).toHaveBeenCalledWith('plv');
+    expect(writes.push).toHaveBeenCalledWith('/proyectos');
+    expect(screen.getByRole('status')).toHaveTextContent('Proyecto eliminado');
+  });
+
+  it('Archivar lo archiva y refresca la ficha', async () => {
+    writes.archiveProject.mockResolvedValue({ ok: true, data: undefined });
+    const dialog = await openDialog();
+    await act(async () =>
+      fireEvent.click(within(dialog).getByRole('button', { name: 'Archivar' })),
+    );
+    expect(writes.archiveProject).toHaveBeenCalledWith('plv');
+    expect(writes.refresh).toHaveBeenCalled();
+    expect(screen.getByRole('status')).toHaveTextContent('Proyecto archivado');
+  });
+
+  it('si falla, avisa y el diálogo sigue abierto', async () => {
+    writes.deleteProject.mockResolvedValue({
+      ok: false,
+      error: 'No pudimos eliminar el proyecto.',
+    });
+    const dialog = await openDialog();
+    await act(async () =>
+      fireEvent.click(within(dialog).getByRole('button', { name: 'Eliminar' })),
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('No pudimos eliminar el proyecto.');
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(writes.push).not.toHaveBeenCalled();
   });
 });
