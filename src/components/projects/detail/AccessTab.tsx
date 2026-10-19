@@ -7,6 +7,7 @@ import type { IconName } from '@/lib/icons';
 import { externalHref } from '@/lib/links';
 import type { Project } from '@/lib/projects';
 import { expiryCards } from '@/lib/summary';
+import { AddCredentialDialog } from './AddCredentialDialog';
 import { CredentialRow } from './CredentialRow';
 import { DetailRow, DetailRows } from './DetailRows';
 
@@ -76,10 +77,9 @@ export function AccessTab({ project, today }: { project: Project; today: Date })
             ))}
           </DetailRows>
         ) : (
-          <p className="m-0 text-neutral-700">
-            Sin credenciales guardadas. Agrégalas desde Editar.
-          </p>
+          <p className="m-0 text-neutral-700">Sin credenciales guardadas.</p>
         )}
+        <AddCredentialDialog projectId={project.id} />
       </section>
 
       <section className="flex flex-col gap-3" aria-labelledby="vencimientos">

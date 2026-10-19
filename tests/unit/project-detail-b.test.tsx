@@ -1,5 +1,4 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
-import { revealCredential } from '@/app/(app)/proyectos/[id]/actions';
 import ProjectPage from '@/app/(app)/proyectos/[id]/page';
 import { CredentialRow, REVEAL_MS } from '@/components/projects/detail/CredentialRow';
 import { NoteLog } from '@/components/projects/detail/NoteLog';
@@ -13,6 +12,9 @@ const writes = vi.hoisted(() => ({
   deleteNote: vi.fn(),
   deleteProject: vi.fn(),
   archiveProject: vi.fn(),
+  revealCredential: vi.fn(),
+  deleteCredential: vi.fn(),
+  addCredential: vi.fn(),
   push: vi.fn(),
   refresh: vi.fn(),
 }));
@@ -22,6 +24,9 @@ vi.mock('@/app/(app)/proyectos/[id]/actions', async (importOriginal) => ({
   deleteNote: writes.deleteNote,
   deleteProject: writes.deleteProject,
   archiveProject: writes.archiveProject,
+  revealCredential: writes.revealCredential,
+  deleteCredential: writes.deleteCredential,
+  addCredential: writes.addCredential,
 }));
 vi.mock('next/navigation', async (importOriginal) => ({
   ...(await importOriginal<typeof import('next/navigation')>()),
@@ -40,27 +45,7 @@ async function renderProject(id: string, tab?: string) {
   );
 }
 
-describe('revealCredential (Server Action)', () => {
-  it('devuelve el secreto de una credencial del proyecto', async () => {
-    await expect(revealCredential({ projectId: 'plv', credentialId: 'plv-c1' })).resolves.toEqual({
-      ok: true,
-      data: { secret: 'demo-medusa-admin-2026' },
-    });
-  });
-
-  it('rechaza entradas inválidas y credenciales de otro proyecto', async () => {
-    await expect(revealCredential({ projectId: '../x', credentialId: 'a' })).resolves.toMatchObject(
-      {
-        ok: false,
-      },
-    );
-    await expect(revealCredential('plv:plv-c1')).resolves.toMatchObject({ ok: false });
-    await expect(revealCredential({ projectId: 'snd', credentialId: 'plv-c1' })).resolves.toEqual({
-      ok: false,
-      error: 'No encontramos esa credencial.',
-    });
-  });
-});
+// revealCredential real (descifrado con RLS): tests/integration/credentials.test.ts.
 
 describe('pestaña Accesos', () => {
   it('cada enlace tiene Abrir y Copiar con nombre propio', async () => {
@@ -96,13 +81,19 @@ describe('pestaña Accesos', () => {
 
   it('sin credenciales muestra el estado vacío', async () => {
     await renderProject('agw', 'accesos');
-    expect(
-      screen.getByText('Sin credenciales guardadas. Agrégalas desde Editar.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Sin credenciales guardadas.')).toBeInTheDocument();
   });
 });
 
 describe('CredentialRow', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    writes.revealCredential.mockResolvedValue({
+      ok: true,
+      data: { secret: 'demo-medusa-admin-2026' },
+    });
+  });
+
   const credential = { id: 'plv-c1', label: 'Medusa Admin', username: 'admin', url: null };
 
   function renderRow() {
@@ -116,6 +107,30 @@ describe('CredentialRow', () => {
   }
 
   afterEach(() => vi.useRealTimers());
+
+  it('Borrar pide confirmación en la misma línea y llama a deleteCredential', async () => {
+    writes.deleteCredential.mockResolvedValue({ ok: true, data: undefined });
+    renderRow();
+    fireEvent.click(screen.getByRole('button', { name: 'Borrar credencial Medusa Admin' }));
+    expect(screen.getByRole('button', { name: 'No' })).toHaveFocus();
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Sí, borrar' })));
+    expect(writes.deleteCredential).toHaveBeenCalledWith('plv-c1');
+    expect(screen.getByRole('status')).toHaveTextContent('Credencial borrada');
+    expect(writes.refresh).toHaveBeenCalled();
+  });
+
+  it('si no se puede descifrar, avisa y sigue tapado', async () => {
+    writes.revealCredential.mockResolvedValue({
+      ok: false,
+      error: 'No pudimos descifrar esta credencial.',
+    });
+    renderRow();
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Mostrar contraseña de Medusa Admin' }));
+    });
+    expect(screen.getByRole('status')).toHaveTextContent('No pudimos descifrar esta credencial.');
+    expect(screen.getByText('Contraseña oculta')).toBeInTheDocument();
+  });
 
   it('Mostrar trae el secreto y se vuelve a tapar a los 30 s', async () => {
     vi.useFakeTimers();
@@ -293,5 +308,61 @@ describe('Eliminar', () => {
     expect(screen.getByRole('status')).toHaveTextContent('No pudimos eliminar el proyecto.');
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(writes.push).not.toHaveBeenCalled();
+  });
+});
+
+describe('AddCredentialDialog', () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  async function openDialog() {
+    const { AddCredentialDialog } =
+      await import('@/components/projects/detail/AddCredentialDialog');
+    render(
+      <ToastProvider>
+        <AddCredentialDialog projectId="11111111-1111-4111-8111-111111111111" />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Agregar credencial' }));
+    return screen.getByRole('dialog', { name: 'Agregar credencial' });
+  }
+
+  it('valida en el cliente: nombre y contraseña obligatorios', async () => {
+    const dialog = await openDialog();
+    await act(async () => fireEvent.click(within(dialog).getByRole('button', { name: 'Guardar' })));
+    expect(within(dialog).getByLabelText('Nombre *')).toHaveAccessibleDescription(
+      'Escribe un nombre (ej. Sanity Studio).',
+    );
+    expect(within(dialog).getByLabelText('Contraseña *')).toHaveAttribute('aria-invalid', 'true');
+    expect(writes.addCredential).not.toHaveBeenCalled();
+  });
+
+  it('envía la contraseña sin recortar y el campo es de tipo password', async () => {
+    writes.addCredential.mockResolvedValue({
+      ok: true,
+      data: { id: 'c1', label: 'Sanity', username: null, url: null },
+    });
+    const dialog = await openDialog();
+    const secret = within(dialog).getByLabelText('Contraseña *');
+    expect(secret).toHaveAttribute('type', 'password');
+    fireEvent.change(within(dialog).getByLabelText('Nombre *'), { target: { value: 'Sanity' } });
+    fireEvent.change(secret, { target: { value: ' con espacios ' } });
+    await act(async () => fireEvent.click(within(dialog).getByRole('button', { name: 'Guardar' })));
+
+    expect(writes.addCredential).toHaveBeenCalledWith(
+      expect.objectContaining({ label: 'Sanity', secret: ' con espacios ' }),
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('Credencial guardada');
+    expect(writes.refresh).toHaveBeenCalled();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('al cancelar, la contraseña escrita no queda en el formulario', async () => {
+    const dialog = await openDialog();
+    fireEvent.change(within(dialog).getByLabelText('Contraseña *'), {
+      target: { value: 'secreto' },
+    });
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Cancelar' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Agregar credencial' }));
+    expect(screen.getByLabelText('Contraseña *')).toHaveValue('');
   });
 });

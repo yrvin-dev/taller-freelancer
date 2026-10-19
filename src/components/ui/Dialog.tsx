@@ -8,6 +8,11 @@ export type DialogProps = {
   onClose(): void;
   children: ReactNode;
   actions?: ReactNode;
+  /**
+   * `text` (por defecto): el cuerpo del export, 14px al 85%. `form`: sin atenuar, para
+   * que los campos y sus labels conserven el contraste.
+   */
+  body?: 'text' | 'form';
 };
 
 /**
@@ -15,7 +20,7 @@ export type DialogProps = {
  * resto de la página, cierra con Esc y devuelve el foco al control que lo abrió.
  * Es controlado: Esc y el clic en el fondo llaman a `onClose`; el padre cambia `open`.
  */
-export function Dialog({ open, title, onClose, children, actions }: DialogProps) {
+export function Dialog({ open, title, onClose, children, actions, body = 'text' }: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
@@ -54,7 +59,7 @@ export function Dialog({ open, title, onClose, children, actions }: DialogProps)
         <h3 id={titleId} className="m-0 text-xl">
           {title}
         </h3>
-        <div className="text-md opacity-[.85]">{children}</div>
+        <div className={body === 'text' ? 'text-md opacity-[.85]' : undefined}>{children}</div>
         {actions && <div className="mt-2 flex flex-wrap justify-end gap-2">{actions}</div>}
       </div>
     </dialog>

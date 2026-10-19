@@ -173,3 +173,19 @@ export const noteInputSchema = z.object({
   kind: z.enum(NOTE_KINDS, 'Elige el tipo de entrada.'),
   body: required('Escribe la entrada.', 2000),
 });
+
+/**
+ * Credencial nueva (Accesos). La contraseña NO se recorta: un espacio al inicio o al
+ * final puede ser parte de ella. Se cifra en el servidor antes de guardarse.
+ */
+export const credentialInputSchema = z.object({
+  projectId: idSchema,
+  label: required('Escribe un nombre (ej. Sanity Studio).', 80),
+  // Opcionales de verdad: si no vienen (no solo vacíos), quedan en null.
+  username: optionalText(120).default(null),
+  url: optionalLink.default(null),
+  secret: z.string().min(1, 'Escribe la contraseña.').max(500, 'Máximo 500 caracteres.'),
+});
+
+export type CredentialFormValues = z.input<typeof credentialInputSchema>;
+export type CredentialInput = z.output<typeof credentialInputSchema>;

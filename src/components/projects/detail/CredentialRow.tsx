@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { revealCredential } from '@/app/(app)/proyectos/[id]/actions';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState, useTransition } from 'react';
+import { deleteCredential, revealCredential } from '@/app/(app)/proyectos/[id]/actions';
 import { Button, buttonClass } from '@/components/ui/Button';
 import { ExternalLink } from '@/components/ui/ExternalLink';
 import { Icon } from '@/components/ui/Icon';
@@ -109,7 +110,52 @@ export function CredentialRow({
             Abrir <span className="sr-only">{credential.label}</span>
           </ExternalLink>
         )}
+        <DeleteCredential credential={credential} />
       </span>
     </DetailRow>
+  );
+}
+
+/** "Borrar" con confirmación en la misma línea, como la bitácora (02 §8.3). */
+function DeleteCredential({ credential }: { credential: Credential }) {
+  const [asking, setAsking] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const toast = useToast();
+  const router = useRouter();
+
+  function remove() {
+    startTransition(async () => {
+      const result = await deleteCredential(credential.id);
+      if (!result.ok) {
+        toast.show(result.error, 'warning');
+        return;
+      }
+      toast.show('Credencial borrada');
+      router.refresh();
+    });
+  }
+
+  if (!asking) {
+    return (
+      <Button
+        iconOnly
+        icon="trash"
+        variant="ghost"
+        tone="danger"
+        aria-label={`Borrar credencial ${credential.label}`}
+        onClick={() => setAsking(true)}
+      />
+    );
+  }
+  return (
+    <span className="flex items-center gap-2">
+      <span className="text-sm text-neutral-700">¿Borrar?</span>
+      <Button size="sm" variant="ghost" autoFocus onClick={() => setAsking(false)}>
+        No
+      </Button>
+      <Button size="sm" tone="danger" loading={pending} onClick={remove}>
+        Sí, borrar
+      </Button>
+    </span>
   );
 }

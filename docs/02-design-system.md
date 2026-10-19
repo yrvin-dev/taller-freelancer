@@ -179,7 +179,8 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 - Valor: el secreto tapado como `••••••••` en `--font-ui`; al pulsar **Mostrar** se ve en texto monoespaciado durante 30 s y se vuelve a tapar (o antes, con **Ocultar**).
 - Acciones `ghost`: Mostrar / Ocultar, **Copiar** (copia sin mostrarlo, toast "Contraseña copiada") y **Abrir** si tiene URL.
 - El secreto no viaja en el HTML: lo trae la Server Action `revealCredential` solo al pulsar.
-- Vacío: "Sin credenciales guardadas. Agrégalas desde Editar." en `neutral-700`.
+- Vacío: "Sin credenciales guardadas." en `neutral-700`.
+- ✅ T17a · **Agregar credencial**: botón `secondary` con `plus` debajo de la lista; abre un `Dialog` (cuerpo `form`, sin atenuar) con Nombre \*, Usuario, Contraseña \* (`type="password"`, ayuda "Se guarda cifrada. Solo tú puedes verla.") y URL. La contraseña no se recorta. **Borrar**: ícono `trash` en `ghost` coral y confirmación en la misma línea ("¿Borrar? No / Sí, borrar"), como la bitácora.
 
 **Lista de pagos** (pestaña Pagos, debajo de la barra): encabezado "Pagos" y filas como las de la bitácora del export: fecha (120px, 13px, `neutral-700`), concepto y monto alineado a la derecha (`formatPEN`). Vacío: "Aún no hay pagos registrados."
 

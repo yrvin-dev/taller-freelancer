@@ -147,10 +147,15 @@
 - **Archivos:** `src/app/(app)/proyectos/actions.ts`, `src/app/(app)/proyectos/[id]/actions.ts`, `src/lib/data/project-mapper.ts`, `src/components/projects/{ProjectForm,detail/NoteLog,detail/DeleteProjectButton}.tsx`, `tests/integration/actions.test.ts`.
 - **Hecho cuando:** el CRUD funciona de punta a punta, `revalidatePath` refresca la vista y desaparece cualquier import del mock (salvo los secretos de prueba, que se van en T17).
 
-### [ ] T17 · Credenciales cifradas
-- **Objetivo:** `crypto.ts`, la acción `revealCredential` y el script de rotación de clave.
-- **Archivos:** `src/lib/crypto.ts`, `src/lib/data/credentials.ts`, `scripts/rotate-key.ts`, `tests/unit/crypto.test.ts`.
+### [x] T17a · Credenciales cifradas · cifrar, mostrar y borrar
+- **Objetivo:** `crypto.ts` (AES-256-GCM, IV de 12 bytes, AAD con dueño y proyecto), `addCredential`, `revealCredential` real y `deleteCredential`; "Agregar credencial" en Accesos. Se borra `mock/secrets`.
+- **Archivos:** `src/lib/{crypto,env-server}.ts`, `src/app/(app)/proyectos/[id]/actions.ts`, `src/components/projects/detail/{AddCredentialDialog,CredentialRow,AccessTab}.tsx`, `tests/unit/crypto.test.ts`, `tests/integration/credentials.test.ts`.
 - **Hecho cuando:** en la base solo hay ciphertext, al manipular el tag el descifrado falla y el secreto nunca aparece en el HTML inicial.
+
+### [ ] T17b · Credenciales cifradas · rotación de clave
+- **Objetivo:** `scripts/rotate-key.ts`: re-cifra todas las credenciales con una clave nueva (`CREDENTIALS_KEY_PREVIOUS` → `CREDENTIALS_KEY`) y sube `key_version`. Única tarea con `service_role` (admin documentada).
+- **Archivos:** `scripts/rotate-key.ts`, `tests/integration/rotate-key.test.ts`.
+- **Hecho cuando:** después de rotar, todo se descifra con la clave nueva y nada con la vieja.
 
 ### [ ] T18 · Cuenta: exportar y borrar
 - **Objetivo:** guardar las preferencias, exportar el JSON (sin secretos) y borrar la cuenta en cascada.
