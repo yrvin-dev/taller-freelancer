@@ -132,9 +132,9 @@
 - **Archivos:** `src/lib/supabase/*`, `src/lib/{env,auth-routes}.ts`, `src/middleware.ts`, `src/app/auth/{callback,signout}/route.ts`, `login/{page,actions}.ts(x)`, `supabase/config.toml`.
 - **Hecho cuando:** las rutas privadas redirigen a `/login` sin sesión y el perfil se crea la primera vez.
 
-### [ ] T15b · Auth con Google · usuario real en la app
+### [x] T15b · Auth con Google · usuario real en la app
 - **Objetivo:** la sidebar y Cuenta muestran el usuario de la sesión (nombre, correo, foto y fecha de alta desde `profiles`) en lugar del mock.
-- **Archivos:** `src/lib/data/profile.ts`, `src/app/(app)/layout.tsx`, `src/app/(app)/cuenta/page.tsx`.
+- **Archivos:** `src/lib/{profile,data/profile}.ts`, `src/app/(app)/{layout,page}.tsx`, `src/app/(app)/cuenta/{page,actions}.ts(x)`, `cuenta/exportar/route.ts`.
 - **Hecho cuando:** al entrar con Google se ven tus datos y el mock de usuario desaparece.
 
 ### [ ] T16 · Capa de datos y Server Actions

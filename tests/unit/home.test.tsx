@@ -85,13 +85,14 @@ describe('homeCards', () => {
   });
 });
 
+vi.mock('@/lib/data/profile', () => ({
+  getCurrentProfile: async () => ({ displayName: 'Yrvins Alberto' }),
+}));
+
 describe('Home (página)', () => {
-  it('renderiza con los datos de prueba y el usuario mock', () => {
-    render(
-      <ThemeProvider initialTheme="light">
-        <Home />
-      </ThemeProvider>,
-    );
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/, Yrvin$/);
+  it('saluda con el nombre del perfil de la sesión', async () => {
+    const page = await Home();
+    render(<ThemeProvider initialTheme="light">{page}</ThemeProvider>);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/, Yrvins$/);
   });
 });

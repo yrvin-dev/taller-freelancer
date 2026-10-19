@@ -10,7 +10,7 @@ import { Tag } from '@/components/ui/Tag';
 import { ThemeSwitchGraphic } from '@/components/ui/ThemeSwitch';
 import { cx } from '@/lib/cx';
 import { sidebarCookie } from '@/lib/layout-prefs';
-import type { ShellUser } from '@/lib/mock/user';
+import type { ShellUser } from '@/lib/profile';
 import { NAV_ITEMS, navKeyFor } from '@/lib/nav';
 
 export type SidebarProps = {

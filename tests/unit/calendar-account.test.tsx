@@ -11,6 +11,45 @@ import { agendaEvents } from '@/lib/summary';
 
 const TODAY = new Date(2026, 9, 5);
 
+// Perfil de la sesión y Supabase simulados (la integración real está en tests/integration).
+const session = vi.hoisted(() => ({
+  profile: {
+    id: 'u1',
+    name: 'Yrvins Arana',
+    email: 'yrvins@example.com',
+    displayName: 'Yrvins',
+    basePath: '',
+    memberSince: '2026-10-18',
+  } as null | Record<string, string>,
+  update: vi.fn(),
+  user: { id: 'u1' } as null | { id: string },
+  updateError: null as null | { message: string },
+}));
+vi.mock('@/lib/data/profile', () => ({ getCurrentProfile: async () => session.profile }));
+vi.mock('@/lib/supabase/server', () => ({
+  createSupabaseServerClient: async () => ({
+    auth: { getUser: async () => ({ data: { user: session.user } }) },
+    from: () => ({
+      update: (values: unknown) => ({
+        eq: async (column: string, value: string) => {
+          session.update(values, column, value);
+          return { error: session.updateError };
+        },
+      }),
+    }),
+  }),
+}));
+vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
+vi.mock('next/navigation', () => ({
+  redirect: (url: string) => {
+    throw new Error(`REDIRECT:${url}`);
+  },
+}));
+
+async function renderAccount() {
+  return withProviders(await AccountPage());
+}
+
 function withProviders(ui: React.ReactNode) {
   return render(
     <ThemeProvider initialTheme="light">
@@ -89,26 +128,27 @@ describe('/calendario', () => {
 });
 
 describe('/cuenta', () => {
-  it('muestra perfil, preferencias y tus datos', () => {
-    withProviders(<AccountPage />);
+  it('muestra perfil, preferencias y tus datos', async () => {
+    await renderAccount();
     expect(screen.getByRole('heading', { level: 1, name: 'Cuenta' })).toBeInTheDocument();
-    expect(screen.getByText('Miembro desde marzo 2026')).toBeInTheDocument();
+    expect(screen.getByText('Miembro desde octubre 2026')).toBeInTheDocument();
+    expect(screen.getByText('yrvins@example.com')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Exportar datos/ })).toHaveAttribute(
       'href',
       '/cuenta/exportar',
     );
-    expect(screen.getByLabelText('Nombre para el saludo')).toHaveValue('Yrvin');
+    expect(screen.getByLabelText('Nombre para el saludo')).toHaveValue('Yrvins');
   });
 
-  it('el Seg de tema cambia el tema de verdad', () => {
+  it('el Seg de tema cambia el tema de verdad', async () => {
     document.documentElement.dataset.theme = 'light';
-    withProviders(<AccountPage />);
+    await renderAccount();
     fireEvent.click(screen.getByRole('radio', { name: 'Oscuro' }));
     expect(document.documentElement.dataset.theme).toBe('dark');
   });
 
   it('guarda una preferencia al salir del campo y valida', async () => {
-    withProviders(<AccountPage />);
+    await renderAccount();
     const name = screen.getByLabelText('Nombre para el saludo');
 
     fireEvent.change(name, { target: { value: '   ' } });
@@ -118,15 +158,13 @@ describe('/cuenta', () => {
     fireEvent.change(name, { target: { value: 'Yrvin H.' } });
     await act(async () => fireEvent.blur(name));
     await waitFor(() =>
-      expect(screen.getByRole('status')).toHaveTextContent(
-        'Se guardará al conectar la base de datos',
-      ),
+      expect(screen.getByRole('status')).toHaveTextContent('Preferencias guardadas'),
     );
     expect(name).not.toHaveAttribute('aria-invalid');
   });
 
-  it('borrar cuenta pide confirmación', () => {
-    withProviders(<AccountPage />);
+  it('borrar cuenta pide confirmación', async () => {
+    await renderAccount();
     fireEvent.click(screen.getByRole('button', { name: 'Borrar cuenta' }));
     const dialog = screen.getByRole('dialog', { name: '¿Borrar tu cuenta?' });
     expect(dialog).toHaveTextContent('Se eliminarán 6 proyectos');
@@ -136,23 +174,48 @@ describe('/cuenta', () => {
 });
 
 describe('savePreferences (Server Action)', () => {
-  it('valida con preferencesSchema', async () => {
+  beforeEach(() => {
+    session.user = { id: 'u1' };
+    session.updateError = null;
+    session.update.mockClear();
+  });
+
+  it('valida con preferencesSchema antes de tocar la base', async () => {
     await expect(savePreferences({ displayName: '', basePath: '' })).resolves.toMatchObject({
       ok: false,
       fieldErrors: { displayName: 'Escribe cómo quieres que te saludemos.' },
     });
+    expect(session.update).not.toHaveBeenCalled();
+  });
+
+  it('guarda en profiles el perfil de la sesión', async () => {
     await expect(
-      savePreferences({ displayName: 'Yrvin', basePath: 'D:\\Proyectos' }),
-    ).resolves.toEqual({
-      ok: true,
-      data: { persisted: false },
+      savePreferences({ displayName: '  Yrvins ', basePath: 'D:\\Proyectos' }),
+    ).resolves.toEqual({ ok: true, data: { persisted: true } });
+    expect(session.update).toHaveBeenCalledWith(
+      { display_name: 'Yrvins', base_path: 'D:\\Proyectos' },
+      'id',
+      'u1',
+    );
+  });
+
+  it('sin sesión o con error de la base, no confirma el guardado', async () => {
+    session.user = null;
+    await expect(savePreferences({ displayName: 'X', basePath: '' })).resolves.toMatchObject({
+      ok: false,
+    });
+    session.user = { id: 'u1' };
+    session.updateError = { message: 'rls' };
+    await expect(savePreferences({ displayName: 'X', basePath: '' })).resolves.toEqual({
+      ok: false,
+      error: 'No pudimos guardar tus preferencias.',
     });
   });
 });
 
 describe('GET /cuenta/exportar', () => {
   it('descarga un JSON sin credenciales ni secretos', async () => {
-    const response = exportData();
+    const response = await exportData();
     expect(response.headers.get('Content-Type')).toBe('application/json; charset=utf-8');
     expect(response.headers.get('Content-Disposition')).toMatch(
       /^attachment; filename="taller-freelancer-\d{4}-\d{2}-\d{2}\.json"$/,
@@ -168,5 +231,13 @@ describe('GET /cuenta/exportar', () => {
     expect(text).not.toContain('demo-');
     expect(text).not.toContain('"credentials"');
     expect(data.proyectos[0]).toHaveProperty('payments');
+    expect((JSON.parse(text) as { usuario: string }).usuario).toBe('yrvins@example.com');
+  });
+
+  it('sin sesión responde 401', async () => {
+    const saved = session.profile;
+    session.profile = null;
+    expect((await exportData()).status).toBe(401);
+    session.profile = saved;
   });
 });

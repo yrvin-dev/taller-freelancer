@@ -117,6 +117,16 @@ describe('profiles', () => {
       .select();
     expect(updated).toEqual([]);
   });
+
+  it('cada quien puede editar sus preferencias (savePreferences)', async () => {
+    const { data } = await a.client
+      .from('profiles')
+      .update({ display_name: 'A editada', base_path: 'D:\\Proyectos' })
+      .eq('id', a.id)
+      .select('display_name, base_path')
+      .single();
+    expect(data).toEqual({ display_name: 'A editada', base_path: 'D:\\Proyectos' });
+  });
 });
 
 describe('projects', () => {

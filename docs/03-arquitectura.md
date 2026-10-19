@@ -229,6 +229,7 @@ create policy "dueño" on projects for all
 
 ## 6. Capa de datos y API
 
+- ✅ T15b · Primera función: `getCurrentProfile()` (`src/lib/data/profile.ts`, `server-only`, envuelta en `cache()` para no repetir la consulta en el mismo pedido). El layout `(app)` redirige a `/login` si devuelve `null` (segunda barrera tras el middleware). `savePreferences` actualiza `profiles` con RLS.
 - **Lecturas:** funciones en `src/lib/data/*.ts`, llamadas desde Server Components con el cliente de servidor de `@supabase/ssr`. Devuelven tipos de dominio, no filas crudas.
 - **Escrituras:** Server Actions (`actions.ts`).
   - Flujo: validar con Zod → llamar a `data/*` → `revalidatePath` → devolver `ActionResult`.
