@@ -218,6 +218,14 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 
 `SessionExpiredDialog` porta "08 Sesión expirada (401)": `<dialog>` modal con el fondo al 70% y desenfoque de 8px. **No se cierra con Esc ni con un clic afuera**: con la sesión vencida hay que volver a entrar o salir.
 
+### 8.7 Búsqueda y filtros de Proyectos ✅ T19
+
+Se porta la fila de filtros de "02 Proyectos" (Estado con contador por opción, Stack, CMS, cada uno `flex: 0 1 220px`, `gap: --space-3`; "Limpiar filtros" ghost con ícono `close`, solo si hay algún filtro) y el vacío "Ningún proyecto coincide" (padding `--space-8`, texto en `neutral-700`, "Limpiar filtros" secundario). Diferencias con el export:
+- **Campo "Buscar" al inicio de la fila** (no está en el export): `Field` + `Input type="search"`, placeholder "Nombre, cliente o código", `flex: 1 1 220px`. En mobile no hay sidebar, así que sin él no habría forma de buscar. Escribe en la URL tras **300 ms** sin teclear; la búsqueda de la sidebar llega al mismo campo (`?q=`).
+- Ignora mayúsculas y tildes ("pagina" encuentra "Página").
+- El título del vacío es `h2` con el tamaño de h3 (`text-2xl`): la página ya tiene su `h1`.
+- Sin ningún proyecto no se muestran filtros: se reusa "Tu espacio está listo" de la home.
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.

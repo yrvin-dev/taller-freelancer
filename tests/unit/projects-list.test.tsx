@@ -17,8 +17,8 @@ vi.mock('next/navigation', () => ({
 const TODAY = new Date(2026, 9, 5);
 const byId = (id: string) => mockProjects(TODAY).find((p) => p.id === id)!;
 
-async function renderPage(vista?: string) {
-  const page = await ProjectsPage({ searchParams: Promise.resolve({ vista }) });
+async function renderPage(params: Record<string, string> = {}) {
+  const page = await ProjectsPage({ searchParams: Promise.resolve(params) });
   return render(<ThemeProvider initialTheme="light">{page}</ThemeProvider>);
 }
 
@@ -74,7 +74,7 @@ describe('/proyectos', () => {
     const enTarjetas = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent);
     unmount();
 
-    await renderPage('tabla');
+    await renderPage({ vista: 'tabla' });
     const table = screen.getByRole('table', { name: 'Proyectos' });
     const enTabla = within(table)
       .getAllByRole('link', { name: /^Abrir / })
@@ -84,7 +84,7 @@ describe('/proyectos', () => {
   });
 
   it('en la tabla, cada "Abrir" se distingue por el nombre y Producción lleva el punto verde', async () => {
-    await renderPage('tabla');
+    await renderPage({ vista: 'tabla' });
     expect(screen.getByRole('link', { name: 'Abrir Colegio Guillermo Brown' })).toHaveAttribute(
       'href',
       '/proyectos/agb',
@@ -93,6 +93,37 @@ describe('/proyectos', () => {
     expect(within(row).getByText('Producción').querySelector('[aria-hidden="true"]')).toHaveStyle({
       background: 'var(--status-prod)',
     });
+  });
+});
+
+describe('/proyectos con filtros en la URL', () => {
+  it('aplica los filtros de la URL y cuenta "N de M"', async () => {
+    await renderPage({ stack: 'Vercel', cms: 'Sin CMS' });
+    expect(screen.getByText('2 de 6 proyectos')).toBeInTheDocument();
+    expect(screen.getAllByRole('article')).toHaveLength(2);
+    expect(screen.getByRole('combobox', { name: 'Stack' })).toHaveValue('Vercel');
+    expect(screen.getByRole('combobox', { name: 'CMS' })).toHaveValue('Sin CMS');
+    expect(screen.getByRole('button', { name: 'Limpiar filtros' })).toBeInTheDocument();
+  });
+
+  it('la búsqueda llega al campo y filtra la tabla', async () => {
+    await renderPage({ q: 'clinica', vista: 'tabla' });
+    expect(screen.getByRole('searchbox', { name: 'Buscar' })).toHaveValue('clinica');
+    const table = screen.getByRole('table', { name: 'Proyectos' });
+    expect(within(table).getAllByRole('link', { name: /^Abrir / })).toHaveLength(1);
+  });
+
+  it('sin resultados muestra el vacío con "Limpiar filtros" (conserva la vista)', async () => {
+    await renderPage({ q: 'no-existe', vista: 'tabla' });
+    expect(screen.getByText('0 de 6 proyectos')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Ningún proyecto coincide' }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Limpiar filtros' })).toHaveAttribute(
+      'href',
+      '/proyectos?vista=tabla',
+    );
   });
 });
 

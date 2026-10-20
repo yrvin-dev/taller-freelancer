@@ -235,7 +235,7 @@ create policy "dueño" on projects for all
 - **Lecturas:** funciones en `src/lib/data/*.ts`, llamadas desde Server Components con el cliente de servidor de `@supabase/ssr`. Devuelven tipos de dominio, no filas crudas.
 - **Escrituras:** Server Actions (`actions.ts`).
   - Flujo: validar con Zod → llamar a `data/*` → `revalidatePath` → devolver `ActionResult`.
-- **Búsqueda y filtros:** viven en `searchParams` (`?q=&estado=&stack=&cms=&vista=tabla`). Se aplican en el servidor (`ilike` o full text).
+- **Búsqueda y filtros:** viven en `searchParams` (`?q=&estado=&stack=&cms=&vista=tabla`). ✅ T19 · Se aplican en el servidor, **en memoria** sobre `listProjects()` (`src/lib/project-filters.ts`, funciones puras): con decenas de proyectos por usuario es una sola query, los contadores por estado salen gratis y la búsqueda ignora tildes sin extensiones de Postgres. Si un usuario llegara a miles, se pasa a SQL (`ilike` o full text con `unaccent`) sin cambiar la URL. Los valores inválidos de la URL se ignoran (quedan en "Todos").
 - **Contenido editable:** todo está en Postgres y es editable desde la UI. No hay CMS externo.
 - **Miniaturas:** se suben a Supabase Storage (bucket privado `thumbnails` con política por dueño). Se sirven con URL firmada y `next/image`, en 1600×1000 y 16:10.
 - **Exportar datos:** la Server Action `exportData()` devuelve un JSON con proyectos, pagos y notas. Las credenciales van **sin** el secreto.

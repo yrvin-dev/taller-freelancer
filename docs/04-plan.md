@@ -164,7 +164,7 @@
 
 ## Fase 5 · Interactividad
 
-### [ ] T19 · Búsqueda y filtros en la URL
+### [x] T19 · Búsqueda y filtros en la URL
 - **Objetivo:** búsqueda con debounce y desplegables de estado (con contador), stack y CMS. "Limpiar filtros" y la vista elegida se guardan en `searchParams`.
 - **Archivos:** `ProjectFilters.tsx`, `proyectos/page.tsx`, `src/lib/data/projects.ts`.
 - **Hecho cuando:** recargar o compartir la URL conserva los filtros y hay un estado vacío para "sin resultados".
