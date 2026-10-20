@@ -208,6 +208,7 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 
 - Error de inicio de sesión: bloque de 13px en `accent-2-100` / `accent-2-800` (`role="alert"`) encima del botón, con un texto fijo según el código (`?error=auth|oauth`): nunca se muestra texto que venga de la URL.
 - Mientras redirige a Google, el botón dice "Conectando…" y queda deshabilitado.
+- ✅ T18 · Tras borrar la cuenta: aviso neutro (`neutral-100` / `neutral-800`, `role="status"`) "Tu cuenta y todos tus datos se borraron." encima del botón (`?cuenta=borrada`).
 
 ### 8.6 Pantallas de error y sesión ✅ T13b
 

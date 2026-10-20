@@ -51,3 +51,13 @@ export function credentialsKeyring(): Keyring {
           : undefined,
   };
 }
+
+/**
+ * `service_role` de Supabase: se salta RLS. Solo para tareas de admin documentadas
+ * (CLAUDE.md regla 5): borrar la cuenta propia (`deleteAccount`) y rotar la clave.
+ */
+export function serviceRoleKey(): string {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!key) throw new Error('Falta SUPABASE_SERVICE_ROLE_KEY en el entorno del servidor.');
+  return key;
+}

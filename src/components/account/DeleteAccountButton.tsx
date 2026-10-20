@@ -1,14 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
+import { deleteAccount } from '@/app/(app)/cuenta/actions';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 import { useToast } from '@/components/ui/Toast';
 
-/** "Borrar cuenta" del export con su confirmación. Avisa hasta conectar la base. */
+/**
+ * "Borrar cuenta" del export con su confirmación. Si sale bien, `deleteAccount`
+ * cierra la sesión y redirige al login; aquí solo se maneja el error.
+ */
 export function DeleteAccountButton({ projectCount }: { projectCount: number }) {
   const [open, setOpen] = useState(false);
   const toast = useToast();
+  const [pending, startTransition] = useTransition();
 
   return (
     <>
@@ -21,15 +26,19 @@ export function DeleteAccountButton({ projectCount }: { projectCount: number }) 
         onClose={() => setOpen(false)}
         actions={
           <>
-            <Button variant="secondary" onClick={() => setOpen(false)}>
+            <Button variant="secondary" disabled={pending} onClick={() => setOpen(false)}>
               Cancelar
             </Button>
             <Button
               tone="danger"
-              onClick={() => {
-                setOpen(false);
-                toast.show('Disponible al conectar la base de datos', 'info');
-              }}
+              loading={pending}
+              onClick={() =>
+                startTransition(async () => {
+                  const result = await deleteAccount();
+                  // Solo vuelve si falló: si no, la acción ya redirigió al login.
+                  if (!result.ok) toast.show(result.error, 'warning');
+                })
+              }
             >
               Sí, borrar cuenta
             </Button>

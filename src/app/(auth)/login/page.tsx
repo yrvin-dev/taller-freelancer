@@ -5,7 +5,9 @@ import { GoogleButton } from './GoogleButton';
 
 export const metadata: Metadata = { title: 'Iniciar sesión · Taller Freelancer' };
 
-type LoginPageProps = { searchParams: Promise<{ next?: string; error?: string }> };
+type LoginPageProps = {
+  searchParams: Promise<{ next?: string; error?: string; cuenta?: string }>;
+};
 
 const ERRORS: Record<string, string> = {
   auth: 'No pudimos completar el inicio de sesión. Inténtalo de nuevo.',
@@ -15,7 +17,7 @@ const ERRORS: Record<string, string> = {
 // Portada del export ("00 Inicio de sesión"): hero en degradado a la izquierda y el
 // acceso con Google a la derecha; en mobile se apilan (flex-wrap con bases 420/380px).
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const { next, error } = await searchParams;
+  const { next, error, cuenta } = await searchParams;
   const errorMessage = error ? (ERRORS[error] ?? ERRORS.auth) : null;
 
   return (
@@ -56,6 +58,14 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               automáticamente.
             </p>
           </div>
+          {cuenta === 'borrada' && (
+            <p
+              role="status"
+              className="m-0 rounded-md bg-neutral-100 px-3 py-2 text-sm text-neutral-800"
+            >
+              Tu cuenta y todos tus datos se borraron.
+            </p>
+          )}
           {errorMessage && (
             <p
               role="alert"

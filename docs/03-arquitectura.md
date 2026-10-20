@@ -239,7 +239,7 @@ create policy "dueño" on projects for all
 - **Contenido editable:** todo está en Postgres y es editable desde la UI. No hay CMS externo.
 - **Miniaturas:** se suben a Supabase Storage (bucket privado `thumbnails` con política por dueño). Se sirven con URL firmada y `next/image`, en 1600×1000 y 16:10.
 - **Exportar datos:** la Server Action `exportData()` devuelve un JSON con proyectos, pagos y notas. Las credenciales van **sin** el secreto.
-- **Borrar cuenta:** una Server Action con `service_role` borra `auth.users`, y por cascada desaparece todo lo del usuario.
+- **Borrar cuenta:** una Server Action con `service_role` borra `auth.users`, y por cascada desaparece todo lo del usuario. ✅ T18 · `deleteAccount()` (sin argumentos: el id sale de la sesión) usa `createSupabaseAdminClient()` (`src/lib/supabase/admin.ts`, `server-only`), cierra la sesión y redirige a `/login?cuenta=borrada`. Probado: no queda ninguna fila del usuario en ninguna tabla.
 
 ## 7. Autenticación y credenciales sensibles
 

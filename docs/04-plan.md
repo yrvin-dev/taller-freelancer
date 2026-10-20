@@ -157,9 +157,9 @@
 - **Archivos:** `src/lib/credentials-rotation.ts`, `scripts/rotate-key.ts`, `tests/integration/rotate-key.test.ts`.
 - **Hecho cuando:** después de rotar, todo se descifra con la clave nueva y nada con la vieja.
 
-### [ ] T18 · Cuenta: exportar y borrar
+### [x] T18 · Cuenta: exportar y borrar
 - **Objetivo:** guardar las preferencias, exportar el JSON (sin secretos) y borrar la cuenta en cascada.
-- **Archivos:** `src/app/(app)/cuenta/actions.ts`, `src/lib/data/profile.ts`.
+- **Archivos:** `src/app/(app)/cuenta/actions.ts` (`deleteAccount`), `src/lib/supabase/admin.ts`, `src/lib/env-server.ts`, `src/components/account/DeleteAccountButton.tsx`, `tests/integration/delete-account.test.ts`. (Preferencias: T15b; exportar: T13a y T16a.)
 - **Hecho cuando:** tras borrar la cuenta no queda ninguna fila del usuario.
 
 ## Fase 5 · Interactividad

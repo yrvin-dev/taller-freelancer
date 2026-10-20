@@ -42,6 +42,11 @@ vi.mock('@/lib/supabase/server', () => ({
   }),
 }));
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
+const account = vi.hoisted(() => ({ deleteAccount: vi.fn() }));
+vi.mock('@/app/(app)/cuenta/actions', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/app/(app)/cuenta/actions')>()),
+  deleteAccount: account.deleteAccount,
+}));
 vi.mock('next/navigation', () => ({
   redirect: (url: string) => {
     throw new Error(`REDIRECT:${url}`);
@@ -163,6 +168,22 @@ describe('/cuenta', () => {
       expect(screen.getByRole('status')).toHaveTextContent('Preferencias guardadas'),
     );
     expect(name).not.toHaveAttribute('aria-invalid');
+  });
+
+  it('si borrar la cuenta falla, avisa y el diálogo sigue abierto', async () => {
+    account.deleteAccount.mockResolvedValue({
+      ok: false,
+      error: 'No pudimos borrar tu cuenta. Inténtalo de nuevo.',
+    });
+    await renderAccount();
+    fireEvent.click(screen.getByRole('button', { name: 'Borrar cuenta' }));
+    const dialog = screen.getByRole('dialog', { name: '¿Borrar tu cuenta?' });
+    await act(async () =>
+      fireEvent.click(within(dialog).getByRole('button', { name: 'Sí, borrar cuenta' })),
+    );
+    expect(account.deleteAccount).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('status')).toHaveTextContent('No pudimos borrar tu cuenta.');
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
   it('borrar cuenta pide confirmación', async () => {

@@ -4,7 +4,7 @@ import LoginPage from '@/app/(auth)/login/page';
 
 vi.mock('@/app/(auth)/login/actions', () => ({ signInWithGoogle: vi.fn() }));
 
-async function renderLogin(params: { next?: string; error?: string } = {}) {
+async function renderLogin(params: { next?: string; error?: string; cuenta?: string } = {}) {
   const page = await LoginPage({ searchParams: Promise.resolve(params) });
   return render(<AuthLayout>{page}</AuthLayout>);
 }
@@ -43,5 +43,15 @@ describe('Login', () => {
   ])('error=%s muestra un mensaje fijo (nunca el texto de la URL)', async (error, message) => {
     await renderLogin({ error });
     expect(screen.getByRole('alert')).toHaveTextContent(message);
+  });
+
+  it('tras borrar la cuenta muestra el aviso', async () => {
+    await renderLogin({ cuenta: 'borrada' });
+    // Hay dos role="status": este aviso y la región del toast (siempre montada).
+    expect(screen.getByText('Tu cuenta y todos tus datos se borraron.')).toHaveAttribute(
+      'role',
+      'status',
+    );
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });
