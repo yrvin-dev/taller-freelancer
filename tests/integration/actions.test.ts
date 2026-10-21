@@ -22,7 +22,7 @@ vi.mock('@/lib/supabase/server', () => ({
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
 
 const { saveProject } = await import('@/app/(app)/proyectos/actions');
-const { addNote, archiveProject, deleteNote, deleteProject } =
+const { addNote, addPayment, archiveProject, deleteNote, deletePayment, deleteProject } =
   await import('@/app/(app)/proyectos/[id]/actions');
 
 type User = { id: string; client: SupabaseClient<Database> };
@@ -248,6 +248,86 @@ describe('archivar y eliminar', () => {
   });
 });
 
+describe('pagos', () => {
+  let projectId: string;
+  let noBudgetId: string;
+  const pay = (amountPen: string, paidOn = '2026-01-15') =>
+    addPayment({ projectId, amountPen, paidOn, concept: 'Pago' });
+
+  beforeAll(async () => {
+    as(a);
+    const withBudget = await saveProject(
+      form({ name: 'Con pagos', client: 'X', code: 'PAG-1', budgetPen: '1000' }),
+    );
+    const withoutBudget = await saveProject(
+      form({ name: 'Sin monto', client: 'X', code: 'PAG-2' }),
+    );
+    projectId = withBudget.ok ? withBudget.data.id : '';
+    noBudgetId = withoutBudget.ok ? withoutBudget.data.id : '';
+  });
+
+  it('registra un pago propio y lo devuelve como dominio', async () => {
+    as(a);
+    const result = await pay('400.50');
+    expect(result).toMatchObject({ ok: true, data: { amountPen: 400.5, paidOn: '2026-01-15' } });
+    const { data } = await admin.from('payments').select('amount_pen').eq('project_id', projectId);
+    expect(data!.map((r) => Number(r.amount_pen))).toEqual([400.5]);
+  });
+
+  it('no deja superar el saldo (lo revisa contra la base)', async () => {
+    as(a);
+    const result = await pay('600');
+    expect(result.ok).toBe(false);
+    expect(result.ok ? '' : result.fieldErrors?.amountPen).toMatch(
+      /^El pago supera el saldo \(S\/\s599\.50\)\.$/,
+    );
+    // Justo el saldo sí entra.
+    await expect(pay('599.50')).resolves.toMatchObject({ ok: true });
+  });
+
+  it('sin monto total no se registran pagos', async () => {
+    as(a);
+    await expect(
+      addPayment({ projectId: noBudgetId, amountPen: '10', paidOn: '2026-01-15', concept: '' }),
+    ).resolves.toEqual({ ok: false, error: 'Registra primero el monto total desde Editar.' });
+  });
+
+  it('valida con Zod: monto, fecha futura y fecha inválida', async () => {
+    as(a);
+    const future = await pay('1', '2999-01-01');
+    expect(future.ok ? null : future.fieldErrors).toEqual({
+      paidOn: 'La fecha no puede ser futura.',
+    });
+    const bad = await pay('0', '2026-02-30');
+    expect(bad.ok ? null : bad.fieldErrors).toEqual({
+      amountPen: 'El monto debe ser mayor que 0.',
+      paidOn: 'Elige la fecha del pago.',
+    });
+  });
+
+  it('no puede registrar ni borrar pagos en un proyecto ajeno', async () => {
+    as(a);
+    const { data } = await admin.from('payments').select('id').eq('project_id', projectId).limit(1);
+    const paymentId = data![0]!.id;
+
+    as(b);
+    await expect(pay('1')).resolves.toEqual({ ok: false, error: 'No encontramos ese proyecto.' });
+    await expect(deletePayment(paymentId)).resolves.toMatchObject({ ok: false });
+    const { data: still } = await admin.from('payments').select('id').eq('id', paymentId);
+    expect(still).toHaveLength(1);
+  });
+
+  it('borra un pago propio', async () => {
+    as(a);
+    const { data } = await admin.from('payments').select('id').eq('project_id', projectId);
+    for (const { id } of data!) {
+      await expect(deletePayment(id)).resolves.toEqual({ ok: true, data: undefined });
+    }
+    const { data: left } = await admin.from('payments').select('id').eq('project_id', projectId);
+    expect(left).toEqual([]);
+  });
+});
+
 describe('sin sesión (401)', () => {
   it('toda acción devuelve code: unauthorized y no escribe nada', async () => {
     // Cliente anónimo: como un navegador cuya sesión ya venció.
@@ -259,6 +339,8 @@ describe('sin sesión (401)', () => {
       deleteNote(id),
       archiveProject(id),
       deleteProject(id),
+      addPayment({ projectId: id, amountPen: '10', paidOn: '2026-01-01', concept: '' }),
+      deletePayment(id),
     ]);
     for (const result of results) {
       expect(result).toEqual({

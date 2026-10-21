@@ -184,6 +184,10 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 
 **Lista de pagos** (pestaña Pagos, debajo de la barra): encabezado "Pagos" y filas como las de la bitácora del export: fecha (120px, 13px, `neutral-700`), concepto y monto alineado a la derecha (`formatPEN`). Vacío: "Aún no hay pagos registrados."
 
+**Registrar pago** ✅ T20b (no está en el export; mismo patrón que la bitácora): entre el encabezado "Pagos" y la lista, una fila de `Field` con "Monto (S/)" (`inputMode="decimal"`, 160px), "Fecha" (`type="date"`, arranca en hoy y con `max` en hoy, 180px) y "Concepto (opcional)" (hasta 120, el resto del ancho); debajo, el botón primario "Registrar pago" con ícono `plus`. Errores por campo (02 §8.1): monto vacío o en 0, fecha futura y "El pago supera el saldo (S/ …)". Cada fila suma un botón ghost con ícono `trash` ("Borrar pago del 15 set 2026 (Adelanto, S/ 3,900.00)") y la confirmación "¿Borrar?" · No · Sí, borrar en la misma línea. Sin monto total no hay formulario: queda "Registra el monto desde Editar."
+
+**Optimista** ✅ T20b (pagos y bitácora): lo nuevo aparece al instante al 60% de opacidad, con `aria-busy` y "(guardando…)" solo para lectores de pantalla, y sin botón de borrar hasta que se confirma. Lo borrado desaparece al instante. Si la acción falla, vuelve a como estaba, con el toast (o el diálogo 401), y lo escrito sigue en el formulario. Las cifras y la barra de Pagos se recalculan con el pago pendiente.
+
 **Figuras de Pagos**: "Monto total · Pagado · Saldo" (el export decía "Adelanto"; con pagos parciales es la suma). El saldo va en `accent-2-700` si es mayor que 0. La barra usa el degradado n.º 3 (`--gradient-progress`).
 
 **Tonos** (§9.6, el coral queda para vencido y destructivo):

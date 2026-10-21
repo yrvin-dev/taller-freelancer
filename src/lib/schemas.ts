@@ -4,7 +4,7 @@
 
 import { z } from 'zod';
 import { NO_CMS_LABEL, NOTE_KINDS, PROJECT_STATUSES, PROJECT_TYPES } from './domain';
-import { parseDate } from './format';
+import { parseDate, toISODateIn } from './format';
 import { externalHref } from './links';
 
 const MAX_PEN = 99_999_999.99; // numeric(10,2)
@@ -173,6 +173,36 @@ export const noteInputSchema = z.object({
   kind: z.enum(NOTE_KINDS, 'Elige el tipo de entrada.'),
   body: required('Escribe la entrada.', 2000),
 });
+
+/** Monto obligatorio y mayor que 0 (mismo formato que el formulario: "7800.50"). */
+const requiredPen = optionalPen.transform((v, ctx) => {
+  if (v === null) {
+    ctx.addIssue({ code: 'custom', message: 'Escribe el monto.' });
+    return z.NEVER;
+  }
+  if (v <= 0) {
+    ctx.addIssue({ code: 'custom', message: 'El monto debe ser mayor que 0.' });
+    return z.NEVER;
+  }
+  return v;
+});
+
+/**
+ * Pago parcial nuevo (pestaña Pagos). La fecha no puede ser futura: un pago registrado
+ * es dinero ya recibido ("hoy" en Lima, igual en el cliente y en el servidor). Que no
+ * supere el saldo lo revisa la Server Action con el proyecto leído de la base.
+ */
+export const paymentInputSchema = z.object({
+  projectId: idSchema,
+  amountPen: requiredPen,
+  paidOn: z
+    .string()
+    .trim()
+    .refine((v) => parseDate(v) !== null, 'Elige la fecha del pago.')
+    .refine((v) => v <= toISODateIn(new Date()), 'La fecha no puede ser futura.'),
+  concept: optionalText(120).default(null),
+});
+export type PaymentFormValues = z.input<typeof paymentInputSchema>;
 
 /**
  * Credencial nueva (Accesos). La contraseña NO se recorta: un espacio al inicio o al

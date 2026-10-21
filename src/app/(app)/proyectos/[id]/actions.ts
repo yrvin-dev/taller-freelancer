@@ -5,9 +5,15 @@ import { z } from 'zod';
 import { SESSION_EXPIRED, type ActionResult } from '@/lib/action-result';
 import { credentialAad, decrypt, encrypt, fromBytea, toBytea } from '@/lib/crypto';
 import { credentialsKeyring } from '@/lib/env-server';
-import { todayIn, toISODate } from '@/lib/format';
-import type { Credential, Note } from '@/lib/projects';
-import { credentialInputSchema, fieldErrorsOf, idSchema, noteInputSchema } from '@/lib/schemas';
+import { formatPEN, todayIn, toISODate } from '@/lib/format';
+import type { Credential, Note, Payment } from '@/lib/projects';
+import {
+  credentialInputSchema,
+  fieldErrorsOf,
+  idSchema,
+  noteInputSchema,
+  paymentInputSchema,
+} from '@/lib/schemas';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 const RevealInput = z.object({ projectId: idSchema, credentialId: idSchema });
@@ -99,6 +105,77 @@ export async function deleteNote(noteId: unknown): Promise<ActionResult> {
     .eq('id', id.data)
     .select('project_id');
   if (error || !data?.length) return { ok: false, error: 'No pudimos borrar la entrada.' };
+  revalidatePath(`/proyectos/${data[0]!.project_id}`);
+  revalidatePath('/');
+  return { ok: true, data: undefined };
+}
+
+// ── Pagos parciales (T20b). El saldo se revisa contra el proyecto leído con RLS. ──
+
+/** Registra un pago. No puede superar el saldo ni registrarse sin monto total. */
+export async function addPayment(input: unknown): Promise<ActionResult<Payment>> {
+  const parsed = paymentInputSchema.safeParse(input);
+  if (!parsed.success) {
+    return {
+      ok: false,
+      error: 'Revisa los campos marcados.',
+      fieldErrors: fieldErrorsOf(parsed.error),
+    };
+  }
+  const supabase = await sessionClient();
+  if (!supabase) return SESSION_EXPIRED;
+
+  const { projectId, amountPen, paidOn, concept } = parsed.data;
+  const { data: project } = await supabase
+    .from('projects')
+    .select('budget_pen, payments ( amount_pen )')
+    .eq('id', projectId)
+    .maybeSingle();
+  if (!project) return { ok: false, error: 'No encontramos ese proyecto.' };
+  if (project.budget_pen === null) {
+    return { ok: false, error: 'Registra primero el monto total desde Editar.' };
+  }
+  // En céntimos enteros, como `paidPen` (sin errores de coma flotante).
+  const cents = (v: number | string) => Math.round(Number(v) * 100);
+  const balance =
+    cents(project.budget_pen) - project.payments.reduce((t, p) => t + cents(p.amount_pen), 0);
+  if (cents(amountPen) > balance) {
+    const message = `El pago supera el saldo (${formatPEN(Math.max(0, balance) / 100)}).`;
+    return { ok: false, error: message, fieldErrors: { amountPen: message } };
+  }
+
+  const { data, error } = await supabase
+    .from('payments')
+    .insert({ project_id: projectId, amount_pen: amountPen, paid_on: paidOn, concept })
+    .select('id, amount_pen, paid_on, concept')
+    .single();
+  if (error || !data) return { ok: false, error: 'No pudimos registrar el pago.' };
+  revalidatePath(`/proyectos/${projectId}`);
+  revalidatePath('/');
+  return {
+    ok: true,
+    data: {
+      id: data.id,
+      amountPen: Number(data.amount_pen),
+      paidOn: data.paid_on,
+      ...(data.concept ? { concept: data.concept } : {}),
+    },
+  };
+}
+
+/** Borra un pago (ya confirmado en la misma línea). */
+export async function deletePayment(paymentId: unknown): Promise<ActionResult> {
+  const id = idSchema.safeParse(paymentId);
+  if (!id.success) return { ok: false, error: 'Pago inválido.' };
+  const supabase = await sessionClient();
+  if (!supabase) return SESSION_EXPIRED;
+
+  const { data, error } = await supabase
+    .from('payments')
+    .delete()
+    .eq('id', id.data)
+    .select('project_id');
+  if (error || !data?.length) return { ok: false, error: 'No pudimos borrar el pago.' };
   revalidatePath(`/proyectos/${data[0]!.project_id}`);
   revalidatePath('/');
   return { ok: true, data: undefined };

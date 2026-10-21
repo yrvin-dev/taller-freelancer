@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useRef, useState, useTransition, type FormEvent } from 'react';
+import { useId, useOptimistic, useRef, useState, useTransition, type FormEvent } from 'react';
 import { addNote, deleteNote } from '@/app/(app)/proyectos/[id]/actions';
 import { useActionFeedback } from '@/components/ActionFeedback';
 import { Button } from '@/components/ui/Button';
@@ -9,7 +9,8 @@ import { Tag } from '@/components/ui/Tag';
 import { Textarea } from '@/components/ui/Textarea';
 import { useToast } from '@/components/ui/Toast';
 import { NOTE_KIND_LABEL, NOTE_KINDS, type NoteKind, type TagVariant } from '@/lib/domain';
-import { formatDate } from '@/lib/format';
+import { cx } from '@/lib/cx';
+import { formatDate, toISODate, todayIn } from '@/lib/format';
 import type { Note } from '@/lib/projects';
 
 // Pedido en outline (no coral, que es vencido/destructivo: 02 §8.3).
@@ -19,6 +20,9 @@ const KIND_TONE: Record<NoteKind, TagVariant> = {
   nota: 'neutral',
 };
 
+type Row = Note & { pending?: boolean };
+type Change = { type: 'add'; note: Row } | { type: 'delete'; id: string };
+
 export type NoteLogProps = {
   projectId: string;
   initialNotes: Note[];
@@ -26,13 +30,18 @@ export type NoteLogProps = {
 
 /**
  * Bitácora del export: agregar Pedido / Cambio / Nota y borrar con confirmación en la
- * misma línea. Cada cambio pasa por una Server Action (`addNote`, `deleteNote`) y la
- * lista local se actualiza con lo que devuelve la base.
+ * misma línea. Cada cambio pasa por una Server Action (`addNote`, `deleteNote`).
+ * Optimista (T20b): la entrada aparece (o desaparece) al instante; si la acción falla,
+ * `useOptimistic` lo revierte solo y el texto escrito sigue en el campo.
  */
 export function NoteLog({ projectId, initialNotes }: NoteLogProps) {
   const toast = useToast();
   const { fail } = useActionFeedback();
-  const [notes, setNotes] = useState(initialNotes);
+  const [notes, setNotes] = useState<Row[]>(initialNotes);
+  const [rows, applyChange] = useOptimistic(notes, (current, change: Change) =>
+    change.type === 'add' ? [change.note, ...current] : current.filter((n) => n.id !== change.id),
+  );
+  const tempId = useRef(0);
   const [kind, setKind] = useState<NoteKind>('pedido');
   const [draft, setDraft] = useState('');
   const [asking, setAsking] = useState<string | null>(null);
@@ -46,26 +55,41 @@ export function NoteLog({ projectId, initialNotes }: NoteLogProps) {
     const body = draft.trim();
     if (!body) return;
     startTransition(async () => {
+      tempId.current += 1;
+      applyChange({
+        type: 'add',
+        note: {
+          id: `pendiente-${tempId.current}`,
+          kind,
+          body,
+          notedOn: toISODate(todayIn()),
+          pending: true,
+        },
+      });
       const result = await addNote({ projectId, kind, body });
       if (!result.ok) {
         fail(result);
         return;
       }
-      setNotes((prev) => [result.data, ...prev]);
-      setDraft('');
+      // Tras un await, en su propia transición: entra junto con el fin de la optimista.
+      startTransition(() => {
+        setNotes((prev) => [result.data, ...prev]);
+        setDraft('');
+      });
       toast.show('Nota agregada');
     });
   }
 
   function remove(id: string) {
+    setAsking(null);
     startTransition(async () => {
+      applyChange({ type: 'delete', id });
       const result = await deleteNote(id);
       if (!result.ok) {
         fail(result);
         return;
       }
-      setNotes((prev) => prev.filter((note) => note.id !== id));
-      setAsking(null);
+      startTransition(() => setNotes((prev) => prev.filter((note) => note.id !== id)));
       toast.show('Entrada borrada');
       textareaRef.current?.focus(); // el botón que tenía el foco desaparece
     });
@@ -112,31 +136,40 @@ export function NoteLog({ projectId, initialNotes }: NoteLogProps) {
         </Button>
       </form>
 
-      {notes.length === 0 ? (
+      {rows.length === 0 ? (
         <p className="m-0 text-neutral-700">Todavía no hay entradas en la bitácora.</p>
       ) : (
         <ul className="m-0 flex list-none flex-col p-0">
-          {notes.map((note) => {
+          {rows.map((note) => {
             const date = formatDate(note.notedOn);
             return (
-              <li key={note.id} className="flex flex-wrap gap-x-4 gap-y-1 py-3">
+              <li
+                key={note.id}
+                aria-busy={note.pending || undefined}
+                className={cx('flex flex-wrap gap-x-4 gap-y-1 py-3', note.pending && 'opacity-60')}
+              >
                 <span className="flex-[0_0_120px] text-sm text-neutral-700">{date}</span>
                 <span className="flex flex-[1_1_300px] flex-col items-start gap-1">
                   <Tag tone={KIND_TONE[note.kind]}>{NOTE_KIND_LABEL[note.kind]}</Tag>
-                  <span className="text-lg">{note.body}</span>
+                  <span className="text-lg">
+                    {note.body}
+                    {note.pending && (
+                      <>
+                        {' '}
+                        <span className="sr-only">(guardando…)</span>
+                      </>
+                    )}
+                  </span>
                 </span>
-                {asking === note.id ? (
+                {note.pending ? (
+                  <span className="w-[36px] flex-none" />
+                ) : asking === note.id ? (
                   <span className="flex flex-none items-center gap-2">
                     <span className="text-sm text-neutral-700">¿Borrar?</span>
                     <Button size="sm" variant="ghost" autoFocus onClick={() => setAsking(null)}>
                       No
                     </Button>
-                    <Button
-                      size="sm"
-                      tone="danger"
-                      loading={pending}
-                      onClick={() => remove(note.id)}
-                    >
+                    <Button size="sm" tone="danger" onClick={() => remove(note.id)}>
                       Sí, borrar
                     </Button>
                   </span>
