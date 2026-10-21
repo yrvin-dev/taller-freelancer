@@ -186,9 +186,9 @@
 - **Archivos:** `playwright.config.ts`, `tests/e2e/{auth.setup,demo-user,a11y.spec,keyboard.spec}.ts`, `src/middleware.ts`, `src/lib/auth-routes.ts` y los componentes con objetivos chicos.
 - **Hecho cuando:** `pnpm test:a11y` pasa sin violaciones en desktop y mobile.
 
-### [ ] T21b · Lighthouse 100
+### [x] T21b · Lighthouse 100
 - **Objetivo:** script `pnpm a11y:lighthouse` (Lighthouse, solo accesibilidad, con el Chromium de Playwright y la sesión demo) sobre las mismas rutas en los dos temas; arreglar lo que baje de 100.
-- **Archivos:** `scripts/lighthouse-a11y.ts` y los que la auditoría señale.
+- **Archivos:** `scripts/lighthouse-a11y.mts`, `tests/e2e/{demo-session,routes}.ts` (compartidos con axe), `ProjectCard`.
 - **Hecho cuando:** Lighthouse da 100 en accesibilidad en todas las rutas, en light y en dark.
 
 ### [ ] T22 · e2e

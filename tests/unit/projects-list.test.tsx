@@ -23,11 +23,15 @@ async function renderPage(params: Record<string, string> = {}) {
 }
 
 describe('ProjectCard', () => {
-  it('es un enlace a la ficha nombrado por el proyecto', () => {
+  it('el nombre es el enlace a la ficha y cubre la parte tintada (nombre = texto visible)', () => {
     render(<ProjectCard project={byId('agb')} />);
     const link = screen.getByRole('link', { name: 'Colegio Guillermo Brown' });
     expect(link).toHaveAttribute('href', '/proyectos/agb');
-    expect(within(link).getByText('Institucional · Sanity')).toBeInTheDocument();
+    expect(link).toHaveTextContent(/^Colegio Guillermo Brown$/); // WCAG 2.5.3
+    expect(link).toHaveClass('after:absolute', 'after:inset-0');
+    const foot = screen.getByText('Institucional · Sanity').closest('div');
+    expect(foot).toHaveClass('relative');
+    expect(foot).toContainElement(link);
   });
 
   it('muestra hasta 4 chips de stack con el color de su paleta', () => {

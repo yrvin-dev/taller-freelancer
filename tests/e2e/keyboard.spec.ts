@@ -15,11 +15,20 @@ function focused(page: Page) {
   return page.evaluate(() => {
     const el = document.activeElement as HTMLElement | null;
     if (!el || el === document.body) return null;
-    const style = getComputedStyle(el);
+    // El anillo puede estar en el elemento o en un contenedor (has-[:focus-visible]:outline,
+    // como la tarjeta de proyecto o la miniatura).
+    const hasRing = (node: Element) => {
+      const style = getComputedStyle(node);
+      return style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) >= 2;
+    };
+    let ring = false;
+    for (let node: Element | null = el; node && !ring; node = node.parentElement) {
+      ring = hasRing(node);
+    }
     return {
       tag: el.tagName.toLowerCase(),
       name: (el.getAttribute('aria-label') ?? el.textContent ?? '').trim().slice(0, 40),
-      ring: style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) >= 2,
+      ring,
     };
   });
 }

@@ -284,6 +284,7 @@ create policy "dueño" on projects for all
 
 - **Unitarias:** `crypto.ts` (ida y vuelta, y que falle si se manipula el tag), `schemas.ts` y `format.ts`.
 - **Integración:** políticas de RLS con dos usuarios de prueba (A no puede leer ni escribir lo de B).
+- ✅ T21b · **Lighthouse:** `pnpm a11y:lighthouse` (`scripts/lighthouse-a11y.mts`) mide el build (`pnpm build && pnpm start`, se niega a correr contra `pnpm dev`) en las mismas rutas que axe (`tests/e2e/routes.ts`), en light y dark, perfil mobile y desktop: 68 corridas, un Chromium limpio por corrida y un reintento solo si se cae la conexión. Falla si algo da menos de 100 o si falla alguna auditoría aunque no pese en el puntaje.
 - ✅ T21a · **Accesibilidad en navegador real (Playwright + axe):** `pnpm test:a11y` corre `tests/e2e/a11y.spec.ts` (axe WCAG 2.2 A/AA en todas las rutas, el login, la sidebar expandida y los diálogos de eliminar, credencial, borrar cuenta y 401, en light y dark, a 1440 y 375) y `tests/e2e/keyboard.spec.ts` (foco visible al tabular; un diálogo se abre con Enter, Esc lo cierra y el foco vuelve al botón; el 401 no se cierra; todo lo tocable mide ≥ 44px en mobile). `auth.setup.ts` entra como el usuario demo local con `@supabase/ssr` (sin Google); las cookies quedan en `tests/e2e/.auth/` (ignorado). Solo contra la Supabase local.
 - **e2e (Playwright):**
   - Login con la sesión mockeada → crear proyecto → filtrar → ver detalle → agregar pago y nota → borrar nota.

@@ -242,6 +242,10 @@ Se porta la fila de filtros de "02 Proyectos" (Estado con contador por opción, 
 
 En mobile (< 640px) todo lo que se toca mide al menos 44×44: botones e inputs (ya lo traían), las filas enlazadas de la home (proyectos recientes y los ítems de las tarjetas de resumen) y los enlaces sueltos de la ficha (sitio, CMS, diseño, correo, WhatsApp), con `touchLinkClass`. En desktop se ven igual que en el export. Los enlaces dentro de un párrafo quedan exentos (WCAG 2.5.8), y un input dentro de su label (checkbox, Seg, miniatura) cuenta por el label.
 
+### 8.10 Tarjeta de proyecto: enlace en el nombre ✅ T21b
+
+El enlace de `ProjectCard` es solo el nombre (h2) y su `::after` cubre la parte tintada: se toca igual que en el export, pero su nombre accesible coincide con el texto visible (WCAG 2.5.3, *Label in Name*; antes era toda la parte tintada con `aria-labelledby` al título). El anillo de foco va en la tarjeta entera (`has-[:focus-visible]`), porque el `overflow-hidden` de la tarjeta recortaría el del enlace.
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.
