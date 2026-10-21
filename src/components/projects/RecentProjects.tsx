@@ -46,7 +46,7 @@ export function RecentProjects({ projects }: { projects: Project[] }) {
               <Thumbnail project={project} />
               <Link
                 href={href}
-                className="flex min-w-0 flex-[1_1_200px] flex-col leading-[1.3] text-text no-underline hover:text-text"
+                className="flex min-w-0 flex-[1_1_200px] flex-col justify-center leading-[1.3] text-text no-underline hover:text-text max-sm:min-h-[44px]"
               >
                 <span className="font-heading text-[17px] font-semibold">{project.name}</span>
                 <span className="text-sm text-neutral-700">

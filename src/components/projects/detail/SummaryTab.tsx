@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 import { buttonClass } from '@/components/ui/Button';
 import { CopyButton } from '@/components/ui/CopyButton';
-import { ExternalLink } from '@/components/ui/ExternalLink';
+import { ExternalLink, touchLinkClass } from '@/components/ui/ExternalLink';
 import { Icon } from '@/components/ui/Icon';
 import { Tag } from '@/components/ui/Tag';
+import { cx } from '@/lib/cx';
 import { NO_CMS_LABEL } from '@/lib/domain';
 import type { IconName } from '@/lib/icons';
 import { externalHref } from '@/lib/links';
@@ -14,7 +15,7 @@ type Glance = { label: string; icon: IconName; value: ReactNode };
 function LinkOrDash({ value }: { value: string | undefined }) {
   const href = externalHref(value);
   return href ? (
-    <ExternalLink href={href} className="text-lg [overflow-wrap:anywhere]">
+    <ExternalLink href={href} className={cx('text-lg [overflow-wrap:anywhere]', touchLinkClass)}>
       {value}
     </ExternalLink>
   ) : (

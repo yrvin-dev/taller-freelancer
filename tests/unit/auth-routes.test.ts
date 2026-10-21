@@ -1,4 +1,4 @@
-import { isPublicPath, loginPath, safeNextPath } from '@/lib/auth-routes';
+import { isPublicPath, isServerActionRequest, loginPath, safeNextPath } from '@/lib/auth-routes';
 
 describe('isPublicPath', () => {
   it.each([
@@ -41,5 +41,15 @@ describe('loginPath', () => {
     );
     expect(loginPath('/')).toBe('/login');
     expect(loginPath('//malo.com')).toBe('/login');
+  });
+});
+
+describe('isServerActionRequest', () => {
+  const headers = (init: Record<string, string>) => new Headers(init);
+
+  it('solo un POST con Next-Action es una Server Action', () => {
+    expect(isServerActionRequest('POST', headers({ 'Next-Action': 'abc123' }))).toBe(true);
+    expect(isServerActionRequest('GET', headers({ 'Next-Action': 'abc123' }))).toBe(false);
+    expect(isServerActionRequest('POST', headers({}))).toBe(false);
   });
 });

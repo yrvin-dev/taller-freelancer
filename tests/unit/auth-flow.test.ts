@@ -72,6 +72,15 @@ describe('middleware', () => {
     }
   });
 
+  it('sin sesión, una Server Action pasa (responde 401 ella misma); un POST cualquiera no', async () => {
+    const action = req('/proyectos/agb', { method: 'POST', headers: { 'Next-Action': 'abc' } });
+    expect(location(await middleware(action))).toBeNull();
+    const form = req('/proyectos/agb', { method: 'POST' });
+    expect(location(await middleware(form))).toBe(
+      'http://localhost:3000/login?next=%2Fproyectos%2Fagb',
+    );
+  });
+
   it('con sesión, /login redirige al inicio y lo privado pasa', async () => {
     mocks.user = { id: 'u1' };
     expect(location(await middleware(req('/login')))).toBe('http://localhost:3000/');

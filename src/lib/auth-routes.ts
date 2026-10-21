@@ -12,6 +12,15 @@ export function isPublicPath(pathname: string): boolean {
 }
 
 /**
+ * Pedido de una Server Action (POST con la cabecera `Next-Action`). El middleware no lo
+ * redirige: sin sesión, la acción responde `SESSION_EXPIRED` y la UI abre el diálogo
+ * 401 (03 §7). No abre nada: cada acción valida la sesión y RLS protege los datos.
+ */
+export function isServerActionRequest(method: string, headers: Headers): boolean {
+  return method === 'POST' && headers.has('next-action');
+}
+
+/**
  * Destino tras el login (`?next=`). Solo rutas internas: evita un *open redirect*
  * (`?next=https://sitio-malo.com` o `//sitio-malo.com` llevarían fuera de la app).
  */

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { isPublicPath, loginPath } from '@/lib/auth-routes';
+import { isPublicPath, isServerActionRequest, loginPath } from '@/lib/auth-routes';
 import { updateSession } from '@/lib/supabase/middleware';
 
 /**
@@ -18,7 +18,11 @@ export async function middleware(request: NextRequest) {
     return target;
   };
 
-  if (!user && !isPublicPath(pathname)) return redirect(loginPath(`${pathname}${search}`));
+  // Una Server Action sin sesión no se redirige: responde 401 y la UI abre el diálogo.
+  const action = isServerActionRequest(request.method, request.headers);
+  if (!user && !action && !isPublicPath(pathname)) {
+    return redirect(loginPath(`${pathname}${search}`));
+  }
   if (user && pathname === '/login') return redirect('/');
   return response;
 }

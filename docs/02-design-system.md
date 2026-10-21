@@ -238,6 +238,10 @@ Se porta la fila de filtros de "02 Proyectos" (Estado con contador por opción, 
 - Los bloques son `aria-hidden`; un único `role="status"` (sr-only) anuncia "Cargando proyectos…", y el contenedor lleva `aria-busy`.
 - El shell (sidebar, header y BottomNav) no se reemplaza: el skeleton ocupa solo el área de la página. Cambiar filtros o pestañas (solo `searchParams`) no muestra skeleton: queda la vista anterior hasta que llega la nueva.
 
+### 8.9 Objetivos táctiles en mobile ✅ T21a
+
+En mobile (< 640px) todo lo que se toca mide al menos 44×44: botones e inputs (ya lo traían), las filas enlazadas de la home (proyectos recientes y los ítems de las tarjetas de resumen) y los enlaces sueltos de la ficha (sitio, CMS, diseño, correo, WhatsApp), con `touchLinkClass`. En desktop se ven igual que en el export. Los enlaces dentro de un párrafo quedan exentos (WCAG 2.5.8), y un input dentro de su label (checkbox, Seg, miniatura) cuenta por el label.
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.

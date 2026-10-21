@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { ExternalLink } from '@/components/ui/ExternalLink';
+import { ExternalLink, touchLinkClass } from '@/components/ui/ExternalLink';
+import { cx } from '@/lib/cx';
 import { mailtoHref, whatsappHref } from '@/lib/links';
 import type { Project } from '@/lib/projects';
 import { DetailRow, DetailRows } from './DetailRows';
@@ -8,11 +9,11 @@ function Value({ text, href }: { text: string | null; href?: string | null }) {
   if (!text) return <span className="text-[17px]">—</span>;
   if (!href) return <span className="text-[17px]">{text}</span>;
   return href.startsWith('mailto:') ? (
-    <a href={href} className="text-[17px]">
+    <a href={href} className={cx('text-[17px]', touchLinkClass)}>
       {text}
     </a>
   ) : (
-    <ExternalLink href={href} className="text-[17px]">
+    <ExternalLink href={href} className={cx('text-[17px]', touchLinkClass)}>
       {text}
     </ExternalLink>
   );

@@ -181,9 +181,14 @@
 
 ## Fase 6 · Calidad
 
-### [ ] T21 · Accesibilidad AA
-- **Objetivo:** auditoría con axe y Lighthouse: contraste, foco, landmarks, `aria-*` del sidebar y los diálogos, y objetivos táctiles de 44px.
-- **Archivos:** los que la auditoría señale.
+### [x] T21a · Auditoría axe y teclado
+- **Objetivo:** Playwright + axe en navegador real (sesión del usuario demo local), auditoría WCAG 2.2 A/AA de todas las rutas y diálogos en light y dark, a 1440 y 375; pruebas de teclado, foco y objetivos táctiles de 44px; arreglar lo que salga.
+- **Archivos:** `playwright.config.ts`, `tests/e2e/{auth.setup,demo-user,a11y.spec,keyboard.spec}.ts`, `src/middleware.ts`, `src/lib/auth-routes.ts` y los componentes con objetivos chicos.
+- **Hecho cuando:** `pnpm test:a11y` pasa sin violaciones en desktop y mobile.
+
+### [ ] T21b · Lighthouse 100
+- **Objetivo:** script `pnpm a11y:lighthouse` (Lighthouse, solo accesibilidad, con el Chromium de Playwright y la sesión demo) sobre las mismas rutas en los dos temas; arreglar lo que baje de 100.
+- **Archivos:** `scripts/lighthouse-a11y.ts` y los que la auditoría señale.
 - **Hecho cuando:** Lighthouse da 100 en accesibilidad en todas las rutas, en light y en dark.
 
 ### [ ] T22 · e2e

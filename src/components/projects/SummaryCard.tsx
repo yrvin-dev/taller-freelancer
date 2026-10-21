@@ -85,7 +85,7 @@ export function SummaryCard({
             <li key={item.id}>
               <Link
                 href={item.href}
-                className="-mx-[calc(var(--space-1)*1.2)] flex items-center gap-2 rounded-md px-[calc(var(--space-1)*1.2)] py-[calc(var(--space-2)*0.8)] text-inherit no-underline hover:bg-state-current-hover hover:text-inherit shell:py-[calc(var(--space-1)*0.8)]"
+                className="-mx-[calc(var(--space-1)*1.2)] flex items-center gap-2 rounded-md px-[calc(var(--space-1)*1.2)] py-[calc(var(--space-2)*0.8)] text-inherit no-underline hover:bg-state-current-hover hover:text-inherit max-sm:min-h-[44px] shell:py-[calc(var(--space-1)*0.8)]"
               >
                 <span className="flex min-w-0 flex-1 flex-col leading-[1.3]">
                   <span className="text-md font-semibold">{item.primary}</span>
