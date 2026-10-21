@@ -142,6 +142,7 @@ describe('deleteAccount', () => {
     await expect(deleteAccount()).resolves.toEqual({
       ok: false,
       error: 'Tu sesión expiró. Vuelve a entrar.',
+      code: 'unauthorized',
     });
   });
 });

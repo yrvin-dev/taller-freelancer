@@ -2,6 +2,7 @@
 
 import { useId, useRef, useState, useTransition, type FormEvent } from 'react';
 import { addNote, deleteNote } from '@/app/(app)/proyectos/[id]/actions';
+import { useActionFeedback } from '@/components/ActionFeedback';
 import { Button } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Select';
 import { Tag } from '@/components/ui/Tag';
@@ -30,6 +31,7 @@ export type NoteLogProps = {
  */
 export function NoteLog({ projectId, initialNotes }: NoteLogProps) {
   const toast = useToast();
+  const { fail } = useActionFeedback();
   const [notes, setNotes] = useState(initialNotes);
   const [kind, setKind] = useState<NoteKind>('pedido');
   const [draft, setDraft] = useState('');
@@ -46,7 +48,7 @@ export function NoteLog({ projectId, initialNotes }: NoteLogProps) {
     startTransition(async () => {
       const result = await addNote({ projectId, kind, body });
       if (!result.ok) {
-        toast.show(result.error, 'warning');
+        fail(result);
         return;
       }
       setNotes((prev) => [result.data, ...prev]);
@@ -59,7 +61,7 @@ export function NoteLog({ projectId, initialNotes }: NoteLogProps) {
     startTransition(async () => {
       const result = await deleteNote(id);
       if (!result.ok) {
-        toast.show(result.error, 'warning');
+        fail(result);
         return;
       }
       setNotes((prev) => prev.filter((note) => note.id !== id));

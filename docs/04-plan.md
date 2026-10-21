@@ -169,10 +169,15 @@
 - **Archivos:** `ProjectFilters.tsx`, `proyectos/page.tsx`, `src/lib/data/projects.ts`.
 - **Hecho cuando:** recargar o compartir la URL conserva los filtros y hay un estado vacío para "sin resultados".
 
-### [ ] T20 · Estados y feedback
-- **Objetivo:** skeletons (`loading.tsx`), toasts, actualizaciones optimistas en notas y pagos, y el diálogo 401.
-- **Archivos:** los `loading.tsx` de cada ruta, `Toast`, `NoteLog`, `PaymentList`.
-- **Hecho cuando:** no hay saltos de layout y toda acción tiene feedback.
+### [x] T20a · Skeletons y diálogo 401
+- **Objetivo:** `loading.tsx` con skeletons en cada ruta de `(app)` (02 §8.8) y el diálogo 401 conectado: las acciones devuelven `code: 'unauthorized'` y `ActionFeedbackProvider` abre `SessionExpiredDialog`.
+- **Archivos:** `src/components/ui/Skeleton.tsx`, `src/components/layout/PageSkeletons.tsx`, los `loading.tsx`, `src/lib/action-result.ts`, `src/components/ActionFeedback.tsx`, los `actions.ts` y los componentes que muestran errores.
+- **Hecho cuando:** no hay saltos de layout al cargar y una sesión vencida abre el diálogo (no un toast).
+
+### [ ] T20b · Pagos y actualizaciones optimistas
+- **Objetivo:** registrar y borrar pagos desde la pestaña Pagos (primero en el 02), con `addPayment`/`deletePayment` (Zod + RLS, probadas en integración), y actualizaciones optimistas (`useOptimistic`) en la bitácora y en los pagos, revirtiendo si falla.
+- **Archivos:** `PaymentsTab` (o un `PaymentList` cliente), `NoteLog`, `proyectos/[id]/actions.ts`, `schemas.ts`.
+- **Hecho cuando:** notas y pagos aparecen al instante, se revierten con aviso si la acción falla, y toda acción tiene feedback.
 
 ## Fase 6 · Calidad
 

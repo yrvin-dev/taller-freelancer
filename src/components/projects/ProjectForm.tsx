@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm, type FieldPath } from 'react-hook-form';
 import { saveProject } from '@/app/(app)/proyectos/actions';
+import { useActionFeedback } from '@/components/ActionFeedback';
 import { Button, buttonClass } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
 import { Icon } from '@/components/ui/Icon';
@@ -63,6 +64,7 @@ export function ProjectForm({
   cancelHref,
 }: ProjectFormProps) {
   const toast = useToast();
+  const { fail } = useActionFeedback();
   const router = useRouter();
   const [saving, startSaving] = useTransition();
   const {
@@ -195,7 +197,7 @@ export function ProjectForm({
         for (const [name, message] of Object.entries(result.fieldErrors ?? {})) {
           setError(name as FieldName, { type: 'server', message }, { shouldFocus: true });
         }
-        toast.show(result.error, 'warning');
+        fail(result);
         return;
       }
       // El toast vive en el layout (app): sobrevive a la navegación a la ficha.

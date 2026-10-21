@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import type { ActionResult } from '@/lib/action-result';
+import { SESSION_EXPIRED, type ActionResult } from '@/lib/action-result';
 import { autoCode, toProjectRow } from '@/lib/data/project-mapper';
 import { todayIn, toISODate } from '@/lib/format';
 import { fieldErrorsOf, projectSchema, type ProjectInput } from '@/lib/schemas';
@@ -36,7 +36,7 @@ export async function saveProject(
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { ok: false, error: 'Tu sesión expiró. Vuelve a entrar.' };
+  if (!user) return SESSION_EXPIRED;
 
   const result = projectId
     ? await updateProject(supabase, projectId, parsed.data)

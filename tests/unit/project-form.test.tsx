@@ -1,8 +1,8 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import EditProjectPage from '@/app/(app)/proyectos/[id]/editar/page';
 import NewProjectPage from '@/app/(app)/proyectos/nuevo/page';
+import { ActionFeedbackProvider } from '@/components/ActionFeedback';
 import { ThumbnailField, thumbnailError } from '@/components/projects/ThumbnailField';
-import { ToastProvider } from '@/components/ui/Toast';
 
 vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
 
@@ -24,7 +24,8 @@ vi.mock('next/navigation', async (importOriginal) => ({
   useRouter: () => ({ push: action.push }),
 }));
 
-const withToast = (ui: React.ReactNode) => render(<ToastProvider>{ui}</ToastProvider>);
+const withToast = (ui: React.ReactNode) =>
+  render(<ActionFeedbackProvider>{ui}</ActionFeedbackProvider>);
 
 async function submit() {
   await act(async () => {

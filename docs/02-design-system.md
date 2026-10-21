@@ -216,7 +216,7 @@ El export solo muestra un tag coral arriba del formulario ("Completa el nombre d
 - **404** (`not-found.tsx`): ícono `search`, "No encontramos esta página", "Puede que el enlace esté mal escrito o que el proyecto ya no exista." · "Ir a mis proyectos" / "Ir al inicio".
 - **Error** (`error.tsx`): ícono `warning`, kicker "ERROR", "Algo salió mal", "No pudimos cargar esta pantalla. Vuelve a intentarlo; si sigue fallando, recarga la página." · "Reintentar" / "Ir al inicio".
 
-`SessionExpiredDialog` porta "08 Sesión expirada (401)": `<dialog>` modal con el fondo al 70% y desenfoque de 8px. **No se cierra con Esc ni con un clic afuera**: con la sesión vencida hay que volver a entrar o salir.
+`SessionExpiredDialog` porta "08 Sesión expirada (401)": `<dialog>` modal con el fondo al 70% y desenfoque de 8px. **No se cierra con Esc ni con un clic afuera**: con la sesión vencida hay que volver a entrar o salir. ✅ T20a · Lo abre `ActionFeedbackProvider` (layout `(app)`) cuando una acción devuelve `code: 'unauthorized'`, en lugar del toast. "Entrar de nuevo con Google" queda en carga y vuelve a la misma página; "Salir" lleva a `/login`. Lo que el usuario estaba escribiendo no se pierde.
 
 ### 8.7 Búsqueda y filtros de Proyectos ✅ T19
 
@@ -225,6 +225,14 @@ Se porta la fila de filtros de "02 Proyectos" (Estado con contador por opción, 
 - Ignora mayúsculas y tildes ("pagina" encuentra "Página").
 - El título del vacío es `h2` con el tamaño de h3 (`text-2xl`): la página ya tiene su `h1`.
 - Sin ningún proyecto no se muestran filtros: se reusa "Tu espacio está listo" de la home.
+
+### 8.8 Skeletons de carga (no están en el export) ✅ T20a
+
+`Skeleton` es un bloque en `neutral-200` con `--radius-md` (los círculos y chips, con su propio radio) y un pulso de opacidad de 1.6 s (1 → 0.55 → 1). Con `prefers-reduced-motion` queda quieto. Reglas:
+- Cada `loading.tsx` repite los contenedores, anchos máximos, `gap` y grillas de su página. Las líneas de texto miden `1lh` y los controles 36px (44px en mobile), como `Input`. Así, al llegar los datos, no salta nada.
+- Los títulos fijos ("Proyectos", "Calendario", "Cuenta") se muestran de verdad; los que dependen de datos (saludo, nombre del proyecto), como bloque.
+- Los bloques son `aria-hidden`; un único `role="status"` (sr-only) anuncia "Cargando proyectos…", y el contenedor lleva `aria-busy`.
+- El shell (sidebar, header y BottomNav) no se reemplaza: el skeleton ocupa solo el área de la página. Cambiar filtros o pestañas (solo `searchParams`) no muestra skeleton: queda la vista anterior hasta que llega la nueva.
 
 ## 9. Reglas anti "look-IA"
 

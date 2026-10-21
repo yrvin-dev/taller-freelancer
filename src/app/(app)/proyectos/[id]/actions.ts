@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import type { ActionResult } from '@/lib/action-result';
+import { SESSION_EXPIRED, type ActionResult } from '@/lib/action-result';
 import { credentialAad, decrypt, encrypt, fromBytea, toBytea } from '@/lib/crypto';
 import { credentialsKeyring } from '@/lib/env-server';
 import { todayIn, toISODate } from '@/lib/format';
@@ -14,8 +14,6 @@ const RevealInput = z.object({ projectId: idSchema, credentialId: idSchema });
 
 // ── Escrituras de la ficha (T16b). Todas con la sesión del usuario: RLS solo deja
 //    tocar lo suyo, y una fila ajena simplemente no aparece (0 filas → error). ──
-
-const EXPIRED = 'Tu sesión expiró. Vuelve a entrar.';
 
 async function session() {
   const supabase = await createSupabaseServerClient();
@@ -34,7 +32,7 @@ export async function deleteProject(projectId: unknown): Promise<ActionResult> {
   const id = idSchema.safeParse(projectId);
   if (!id.success) return { ok: false, error: 'Proyecto inválido.' };
   const supabase = await sessionClient();
-  if (!supabase) return { ok: false, error: EXPIRED };
+  if (!supabase) return SESSION_EXPIRED;
 
   const { data, error } = await supabase.from('projects').delete().eq('id', id.data).select('id');
   if (error || !data?.length) return { ok: false, error: 'No pudimos eliminar el proyecto.' };
@@ -47,7 +45,7 @@ export async function archiveProject(projectId: unknown): Promise<ActionResult> 
   const id = idSchema.safeParse(projectId);
   if (!id.success) return { ok: false, error: 'Proyecto inválido.' };
   const supabase = await sessionClient();
-  if (!supabase) return { ok: false, error: EXPIRED };
+  if (!supabase) return SESSION_EXPIRED;
 
   const { data, error } = await supabase
     .from('projects')
@@ -66,7 +64,7 @@ export async function addNote(input: unknown): Promise<ActionResult<Note>> {
     return { ok: false, error: parsed.error.issues[0]?.message ?? 'Entrada inválida.' };
   }
   const supabase = await sessionClient();
-  if (!supabase) return { ok: false, error: EXPIRED };
+  if (!supabase) return SESSION_EXPIRED;
 
   const { data, error } = await supabase
     .from('notes')
@@ -93,7 +91,7 @@ export async function deleteNote(noteId: unknown): Promise<ActionResult> {
   const id = idSchema.safeParse(noteId);
   if (!id.success) return { ok: false, error: 'Entrada inválida.' };
   const supabase = await sessionClient();
-  if (!supabase) return { ok: false, error: EXPIRED };
+  if (!supabase) return SESSION_EXPIRED;
 
   const { data, error } = await supabase
     .from('notes')
@@ -120,7 +118,7 @@ export async function addCredential(input: unknown): Promise<ActionResult<Creden
     };
   }
   const auth = await session();
-  if (!auth) return { ok: false, error: EXPIRED };
+  if (!auth) return SESSION_EXPIRED;
 
   const { projectId, label, username, url, secret } = parsed.data;
   const encrypted = encrypt(
@@ -158,7 +156,7 @@ export async function revealCredential(input: unknown): Promise<ActionResult<{ s
   const parsed = RevealInput.safeParse(input);
   if (!parsed.success) return { ok: false, error: 'Solicitud inválida.' };
   const auth = await session();
-  if (!auth) return { ok: false, error: EXPIRED };
+  if (!auth) return SESSION_EXPIRED;
 
   const { data } = await auth.supabase
     .from('credentials')
@@ -193,7 +191,7 @@ export async function deleteCredential(credentialId: unknown): Promise<ActionRes
   const id = idSchema.safeParse(credentialId);
   if (!id.success) return { ok: false, error: 'Credencial inválida.' };
   const supabase = await sessionClient();
-  if (!supabase) return { ok: false, error: EXPIRED };
+  if (!supabase) return SESSION_EXPIRED;
 
   const { data, error } = await supabase
     .from('credentials')

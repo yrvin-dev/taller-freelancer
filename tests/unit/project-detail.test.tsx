@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import ProjectPage from '@/app/(app)/proyectos/[id]/page';
+import { ActionFeedbackProvider } from '@/components/ActionFeedback';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { ToastProvider } from '@/components/ui/Toast';
 import { parseProjectTab } from '@/lib/projects';
 
 vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
@@ -18,7 +18,7 @@ async function renderProject(id: string, tab?: string) {
   });
   return render(
     <ThemeProvider initialTheme="light">
-      <ToastProvider>{page}</ToastProvider>
+      <ActionFeedbackProvider>{page}</ActionFeedbackProvider>
     </ThemeProvider>,
   );
 }

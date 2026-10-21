@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useForm, type FieldPath } from 'react-hook-form';
 import { addCredential } from '@/app/(app)/proyectos/[id]/actions';
+import { useActionFeedback } from '@/components/ActionFeedback';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 import { Field } from '@/components/ui/Field';
@@ -27,6 +28,7 @@ export function AddCredentialDialog({ projectId }: { projectId: string }) {
   const [open, setOpen] = useState(false);
   const [saving, startSaving] = useTransition();
   const toast = useToast();
+  const { fail } = useActionFeedback();
   const router = useRouter();
   const {
     register,
@@ -53,7 +55,7 @@ export function AddCredentialDialog({ projectId }: { projectId: string }) {
         for (const [name, message] of Object.entries(result.fieldErrors ?? {})) {
           setError(name as FieldPath<CredentialFormValues>, { type: 'server', message });
         }
-        toast.show(result.error, 'warning');
+        fail(result);
         return;
       }
       close();

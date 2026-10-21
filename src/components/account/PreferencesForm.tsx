@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { savePreferences } from '@/app/(app)/cuenta/actions';
+import { useActionFeedback } from '@/components/ActionFeedback';
 import { useTheme } from '@/components/ThemeProvider';
 import { Field } from '@/components/ui/Field';
 import { Input } from '@/components/ui/Input';
@@ -17,6 +18,7 @@ type Prefs = { displayName: string; basePath: string };
  */
 export function PreferencesForm({ initial }: { initial: Prefs }) {
   const toast = useToast();
+  const { fail } = useActionFeedback();
   const { theme, setTheme } = useTheme();
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof Prefs, string>>>({});
@@ -26,7 +28,8 @@ export function PreferencesForm({ initial }: { initial: Prefs }) {
     if (values[field] === saved.current[field]) return;
     const result = await savePreferences(values);
     if (!result.ok) {
-      setErrors({ [field]: result.fieldErrors?.[field] ?? result.error });
+      if (result.code === 'unauthorized') fail(result);
+      else setErrors({ [field]: result.fieldErrors?.[field] ?? result.error });
       return;
     }
     setErrors({});

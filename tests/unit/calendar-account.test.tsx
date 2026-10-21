@@ -3,8 +3,8 @@ import CalendarPage from '@/app/(app)/calendario/page';
 import { savePreferences } from '@/app/(app)/cuenta/actions';
 import { GET as exportData } from '@/app/(app)/cuenta/exportar/route';
 import AccountPage from '@/app/(app)/cuenta/page';
+import { ActionFeedbackProvider } from '@/components/ActionFeedback';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { ToastProvider } from '@/components/ui/Toast';
 import { formatMonthYear, formatWeekdayShort } from '@/lib/format';
 import { mockProjects } from '../fixtures/projects';
 import { agendaEvents } from '@/lib/summary';
@@ -60,7 +60,7 @@ async function renderAccount() {
 function withProviders(ui: React.ReactNode) {
   return render(
     <ThemeProvider initialTheme="light">
-      <ToastProvider>{ui}</ToastProvider>
+      <ActionFeedbackProvider>{ui}</ActionFeedbackProvider>
     </ThemeProvider>,
   );
 }

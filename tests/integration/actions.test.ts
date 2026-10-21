@@ -247,3 +247,27 @@ describe('archivar y eliminar', () => {
     expect(left.map((r) => r.data)).toEqual([[], [], []]);
   });
 });
+
+describe('sin sesión (401)', () => {
+  it('toda acción devuelve code: unauthorized y no escribe nada', async () => {
+    // Cliente anónimo: como un navegador cuya sesión ya venció.
+    session.client = createClient<Database>(url, anonKey, { auth: { persistSession: false } });
+    const id = randomUUID();
+    const results = await Promise.all([
+      saveProject(form({ name: 'Sin sesión', client: 'X', code: 'EXP-1' })),
+      addNote({ projectId: id, kind: 'nota', body: 'x' }),
+      deleteNote(id),
+      archiveProject(id),
+      deleteProject(id),
+    ]);
+    for (const result of results) {
+      expect(result).toEqual({
+        ok: false,
+        error: 'Tu sesión expiró. Vuelve a entrar.',
+        code: 'unauthorized',
+      });
+    }
+    const { data } = await admin.from('projects').select('id').eq('code', 'EXP-1');
+    expect(data).toEqual([]);
+  });
+});

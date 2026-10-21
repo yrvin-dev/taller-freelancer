@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 import { deleteCredential, revealCredential } from '@/app/(app)/proyectos/[id]/actions';
+import { useActionFeedback } from '@/components/ActionFeedback';
 import { Button, buttonClass } from '@/components/ui/Button';
 import { ExternalLink } from '@/components/ui/ExternalLink';
 import { Icon } from '@/components/ui/Icon';
@@ -24,6 +25,7 @@ export function CredentialRow({
   credential: Credential;
 }) {
   const toast = useToast();
+  const { fail } = useActionFeedback();
   const [secret, setSecret] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const url = externalHref(credential.url);
@@ -39,7 +41,7 @@ export function CredentialRow({
     const result = await revealCredential({ projectId, credentialId: credential.id });
     setBusy(false);
     if (!result.ok) {
-      toast.show(result.error, 'warning');
+      fail(result);
       return null;
     }
     return result.data.secret;
@@ -121,13 +123,14 @@ function DeleteCredential({ credential }: { credential: Credential }) {
   const [asking, setAsking] = useState(false);
   const [pending, startTransition] = useTransition();
   const toast = useToast();
+  const { fail } = useActionFeedback();
   const router = useRouter();
 
   function remove() {
     startTransition(async () => {
       const result = await deleteCredential(credential.id);
       if (!result.ok) {
-        toast.show(result.error, 'warning');
+        fail(result);
         return;
       }
       toast.show('Credencial borrada');

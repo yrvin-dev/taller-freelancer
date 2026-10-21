@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import type { ActionResult } from '@/lib/action-result';
+import { SESSION_EXPIRED, type ActionResult } from '@/lib/action-result';
 import { fieldErrorsOf, preferencesSchema } from '@/lib/schemas';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
@@ -28,7 +28,7 @@ export async function savePreferences(
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { ok: false, error: 'Tu sesión expiró. Vuelve a entrar.' };
+  if (!user) return SESSION_EXPIRED;
 
   const { error } = await supabase
     .from('profiles')
@@ -51,7 +51,7 @@ export async function deleteAccount(): Promise<ActionResult> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { ok: false, error: 'Tu sesión expiró. Vuelve a entrar.' };
+  if (!user) return SESSION_EXPIRED;
 
   const { error } = await createSupabaseAdminClient().auth.admin.deleteUser(user.id);
   if (error) {

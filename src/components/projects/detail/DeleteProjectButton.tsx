@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { archiveProject, deleteProject } from '@/app/(app)/proyectos/[id]/actions';
+import { useActionFeedback } from '@/components/ActionFeedback';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 import { useToast } from '@/components/ui/Toast';
@@ -21,6 +22,7 @@ export function DeleteProjectButton({
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const toast = useToast();
+  const { fail } = useActionFeedback();
   const router = useRouter();
 
   function run(action: 'delete' | 'archive') {
@@ -28,7 +30,7 @@ export function DeleteProjectButton({
       const result =
         action === 'delete' ? await deleteProject(projectId) : await archiveProject(projectId);
       if (!result.ok) {
-        toast.show(result.error, 'warning');
+        fail(result);
         return;
       }
       setOpen(false);

@@ -6,6 +6,8 @@ import { Icon } from '@/components/ui/Icon';
 
 export type SessionExpiredDialogProps = {
   open: boolean;
+  /** Mientras se pide la URL de Google: el botón queda en carga. */
+  relogging?: boolean;
   onRelogin(): void;
   onExit(): void;
 };
@@ -13,9 +15,15 @@ export type SessionExpiredDialogProps = {
 /**
  * "08 Sesión expirada (401)": modal sobre la app con el fondo desenfocado. A
  * diferencia de `Dialog`, no se cierra con Esc ni con un clic afuera: con la sesión
- * vencida solo se puede volver a entrar o salir. Lo dispara la tanda de auth.
+ * vencida solo se puede volver a entrar o salir. Lo abre `ActionFeedbackProvider`
+ * cuando una Server Action devuelve `code: 'unauthorized'` (T20a).
  */
-export function SessionExpiredDialog({ open, onRelogin, onExit }: SessionExpiredDialogProps) {
+export function SessionExpiredDialog({
+  open,
+  relogging = false,
+  onRelogin,
+  onExit,
+}: SessionExpiredDialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const bodyId = useId();
@@ -53,7 +61,7 @@ export function SessionExpiredDialog({ open, onRelogin, onExit }: SessionExpired
           donde te quedaste.
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
-          <Button icon="google" onClick={onRelogin}>
+          <Button icon="google" loading={relogging} onClick={onRelogin}>
             Entrar de nuevo con Google
           </Button>
           <Button variant="ghost" onClick={onExit}>

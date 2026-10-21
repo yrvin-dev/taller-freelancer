@@ -1,10 +1,10 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { ActionFeedbackProvider } from '@/components/ActionFeedback';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { Sidebar } from '@/components/layout/Sidebar';
-import { ToastProvider } from '@/components/ui/Toast';
 import { parseSidebarExpanded, SIDEBAR_COOKIE } from '@/lib/layout-prefs';
 import { listProjects } from '@/lib/data/projects';
 import { getCurrentProfile } from '@/lib/data/profile';
@@ -20,7 +20,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   const activeCount = (await listProjects()).filter((p) => p.status !== 'archivado').length;
 
   return (
-    <ToastProvider aboveNav>
+    <ActionFeedbackProvider aboveNav>
       <div className="flex min-h-screen">
         <Sidebar user={profile} activeCount={activeCount} initialExpanded={expanded} />
         {/* Export: 60px abajo en desktop; en mobile, 96px para no quedar bajo la BottomNav. */}
@@ -30,6 +30,6 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         </main>
       </div>
       <BottomNav />
-    </ToastProvider>
+    </ActionFeedbackProvider>
   );
 }

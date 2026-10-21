@@ -249,6 +249,7 @@ create policy "dueño" on projects for all
 3. `middleware.ts` refresca la sesión en cada request. Si no hay sesión, redirige a `/login`.
    ✅ T15a · Implementado: `src/lib/supabase/{server,client,middleware}.ts` (solo clave pública), `src/middleware.ts` (sin sesión → `/login?next=…`; con sesión, `/login` → `/`), `/auth/callback` (canje del código) y `/auth/signout` (solo POST, 303). "Continuar con Google" es un formulario con la Server Action `signInWithGoogle`. `next` pasa por `safeNextPath` (solo rutas internas: sin *open redirect*). Las variables públicas se validan con Zod en `src/lib/env.ts`.
 4. **401:** si una Server Action recibe un JWT expirado y el refresh falla, devuelve `{ error: 'unauthorized' }` y la UI abre `SessionExpiredDialog`.
+   ✅ T20a · Todas devuelven `SESSION_EXPIRED` (`src/lib/action-result.ts`: `{ ok: false, error, code: 'unauthorized' }`). Los componentes pasan cada error por `useActionFeedback().fail(result)`: con `code` abre el diálogo, si no, toast. Las navegaciones sin sesión las sigue cortando el middleware (→ `/login?next=…`).
 5. **403:** `getProject` devuelve `null` por RLS. Si el id existe pero no es tuyo (comprobado con una función `security definer` que solo devuelve un booleano), redirige a `/403`; si no existe, va a `notFound()`.
 
 **Credenciales de clientes:**

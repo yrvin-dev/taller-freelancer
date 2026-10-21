@@ -2,9 +2,9 @@
 
 import { useState, useTransition } from 'react';
 import { deleteAccount } from '@/app/(app)/cuenta/actions';
+import { useActionFeedback } from '@/components/ActionFeedback';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
-import { useToast } from '@/components/ui/Toast';
 
 /**
  * "Borrar cuenta" del export con su confirmación. Si sale bien, `deleteAccount`
@@ -12,7 +12,7 @@ import { useToast } from '@/components/ui/Toast';
  */
 export function DeleteAccountButton({ projectCount }: { projectCount: number }) {
   const [open, setOpen] = useState(false);
-  const toast = useToast();
+  const { fail } = useActionFeedback();
   const [pending, startTransition] = useTransition();
 
   return (
@@ -36,7 +36,7 @@ export function DeleteAccountButton({ projectCount }: { projectCount: number }) 
                 startTransition(async () => {
                   const result = await deleteAccount();
                   // Solo vuelve si falló: si no, la acción ya redirigió al login.
-                  if (!result.ok) toast.show(result.error, 'warning');
+                  if (!result.ok) fail(result);
                 })
               }
             >

@@ -1,9 +1,9 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import ProjectPage from '@/app/(app)/proyectos/[id]/page';
+import { ActionFeedbackProvider } from '@/components/ActionFeedback';
 import { CredentialRow, REVEAL_MS } from '@/components/projects/detail/CredentialRow';
 import { NoteLog } from '@/components/projects/detail/NoteLog';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { ToastProvider } from '@/components/ui/Toast';
 
 vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
 
@@ -40,7 +40,7 @@ async function renderProject(id: string, tab?: string) {
   });
   return render(
     <ThemeProvider initialTheme="light">
-      <ToastProvider>{page}</ToastProvider>
+      <ActionFeedbackProvider>{page}</ActionFeedbackProvider>
     </ThemeProvider>,
   );
 }
@@ -98,11 +98,11 @@ describe('CredentialRow', () => {
 
   function renderRow() {
     return render(
-      <ToastProvider>
+      <ActionFeedbackProvider>
         <dl>
           <CredentialRow projectId="plv" credential={credential} />
         </dl>
-      </ToastProvider>,
+      </ActionFeedbackProvider>,
     );
   }
 
@@ -188,9 +188,9 @@ describe('NoteLog', () => {
     notes = [{ id: 'n1', kind: 'pedido' as const, body: 'Zoom 360', notedOn: '2026-10-01' }],
   ) {
     return render(
-      <ToastProvider>
+      <ActionFeedbackProvider>
         <NoteLog projectId="p1" initialNotes={notes} />
-      </ToastProvider>,
+      </ActionFeedbackProvider>,
     );
   }
 
@@ -318,9 +318,9 @@ describe('AddCredentialDialog', () => {
     const { AddCredentialDialog } =
       await import('@/components/projects/detail/AddCredentialDialog');
     render(
-      <ToastProvider>
+      <ActionFeedbackProvider>
         <AddCredentialDialog projectId="11111111-1111-4111-8111-111111111111" />
-      </ToastProvider>,
+      </ActionFeedbackProvider>,
     );
     fireEvent.click(screen.getByRole('button', { name: 'Agregar credencial' }));
     return screen.getByRole('dialog', { name: 'Agregar credencial' });
