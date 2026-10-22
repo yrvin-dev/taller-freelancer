@@ -7,6 +7,11 @@ import { NO_CMS_LABEL, NOTE_KINDS, PROJECT_STATUSES, PROJECT_TYPES } from './dom
 import { parseDate, toISODateIn } from './format';
 import { externalHref } from './links';
 
+// Zod 4 prueba `new Function` para compilar los objetos más rápido. La CSP no permite
+// `eval` (T23a): sigue funcionando sin eso, pero la prueba deja una violación en cada
+// formulario. Sin JIT no la hace; la diferencia de velocidad no se nota en formularios.
+z.config({ jitless: true });
+
 const MAX_PEN = 99_999_999.99; // numeric(10,2)
 
 const text = (max: number) => z.string().trim().max(max, `Máximo ${max} caracteres.`);

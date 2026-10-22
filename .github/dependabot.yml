@@ -1,0 +1,18 @@
+# Actualizaciones de dependencias (CLAUDE.md, Seguridad). Las de seguridad llegan aparte,
+# en cuanto se publican. Cada PR pasa por la CI y por el preview de Vercel.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # Menores y parches juntos: un PR por semana en lugar de uno por paquete.
+      menores:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

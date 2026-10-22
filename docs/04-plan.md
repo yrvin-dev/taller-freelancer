@@ -198,12 +198,20 @@
 
 ## Fase 7 · Deploy
 
-### [ ] T23 · CI/CD y producción
+### [x] T23a · CI, cabeceras de seguridad y README
 - **Objetivo:**
-  - GitHub Actions con lint, typecheck, tests unitarios, e2e y build.
-  - Vercel con previews por PR, conectado a dos proyectos de Supabase (Preview y Production).
-  - Cabeceras de seguridad configuradas.
-- **Archivos:** `.github/workflows/ci.yml`, `next.config.ts`, `README.md` (con capturas, el stack y las decisiones, pensado para el portafolio).
+  - GitHub Actions: lint, typecheck, formato, tokens, tests unitarios, `pnpm audit`, y con la Supabase local en el runner, integración y e2e (que incluyen el build).
+  - CSP con nonce por pedido (middleware) y cabeceras fijas (`X-Frame-Options`, `Referrer-Policy`, `nosniff`, `Permissions-Policy`, HSTS). Un e2e falla ante cualquier violación de CSP.
+  - Dependabot y un README para el portafolio (capturas, stack, decisiones, cómo correrlo).
+- **Archivos:** `.github/workflows/ci.yml`, `.github/dependabot.yml`, `src/middleware.ts`, `src/lib/security-headers.ts`, `next.config.ts`, `tests/unit/security-headers.test.ts`, `tests/e2e/csp.spec.ts`, `README.md`, `docs/screenshots/*`.
+- **Hecho cuando:** todo pasa en local, los e2e no ven violaciones de CSP y el workflow es válido (la primera corrida real llega con el push de T23b).
+
+### [ ] T23b · Producción
+- **Objetivo:**
+  - Dos proyectos de Supabase (Preview y Production) con las migraciones y Google OAuth.
+  - Vercel con previews por PR y variables separadas por entorno.
+  - Antes de hacer público el repo: reemplazar la miniatura con datos privados y limpiar el historial.
+- **Archivos:** `README.md` (URL de producción), docs.
 - **Hecho cuando:** un merge a `main` despliega solo y la URL de producción tiene el login de Google funcionando.
 
 ---

@@ -2,3 +2,9 @@ allowBuilds:
   unrs-resolver: true
   supabase: true # descarga el binario de la CLI en el postinstall
   esbuild: true # tsx (scripts/*.ts): verifica su binario en el postinstall
+
+overrides:
+  # Next 15 fija postcss 8.4.31 (vulnerabilidades altas de lectura de archivos vía
+  # sourceMappingURL). Solo corre en el build sobre nuestro CSS, pero `pnpm audit` en CI
+  # no las deja pasar: se fuerza una 8.5 corregida, compatible con la API que usa Next.
+  next>postcss: ^8.5.31

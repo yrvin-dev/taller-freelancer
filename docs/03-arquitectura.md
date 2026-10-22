@@ -264,6 +264,10 @@ create policy "dueño" on projects for all
 - Para verlas: la Server Action `revealCredential(id)` comprueba la sesión, lee el secreto (RLS), lo descifra y lo devuelve solo a ese request. La UI lo muestra 30 s y luego lo oculta. Hay botón de copiar.
 - Nunca se guardan en logs ni en Sentry: se agrega un `beforeSend` que limpia los campos `secret*`.
 
+**Cabeceras de seguridad y CI:**
+- ✅ T23a · CSP con nonce por pedido (`src/lib/security-headers.ts`, aplicada en `src/middleware.ts`): `script-src 'self' 'nonce-…' 'strict-dynamic'` (sin `unsafe-inline` ni `unsafe-eval`; solo en dev se suma `unsafe-eval`), `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`, `form-action` (Supabase y Google, por la cadena del OAuth sin JS), `img-src` y `connect-src` con el origen de Supabase. `style-src` lleva `'unsafe-inline'` por los `style` de `next/image`. El nonce va en la cabecera **del pedido** antes de `updateSession` (Next lo lee de ahí) y en todas las respuestas, redirecciones incluidas. Fijas en `next.config.ts`: `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` y HSTS. `tests/e2e/csp.spec.ts` recorre todas las rutas y falla ante cualquier violación.
+- ✅ T23a · `.github/workflows/ci.yml`, en cada PR y push a `main`. Job `quality`: lint, typecheck, formato, `check:tokens`, unitarios y `pnpm audit --prod --audit-level high`. Job `e2e`: Supabase local en el runner (solo Postgres, Auth, PostgREST y Kong), comprobación de que `database.types.ts` coincide con las migraciones, `.env.local` armado desde `supabase status` con una `CREDENTIALS_KEY` aleatoria por corrida, integración y e2e (que compila el build). Si falla, sube el reporte de Playwright. Dependabot semanal para npm y Actions.
+
 ## 8. Variables de entorno
 
 | Variable | Dónde | Pública |
