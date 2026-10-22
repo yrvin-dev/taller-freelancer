@@ -191,7 +191,7 @@
 - **Archivos:** `scripts/lighthouse-a11y.mts`, `tests/e2e/{demo-session,routes}.ts` (compartidos con axe), `ProjectCard`.
 - **Hecho cuando:** Lighthouse da 100 en accesibilidad en todas las rutas, en light y en dark.
 
-### [ ] T22 · e2e
+### [x] T22 · e2e
 - **Objetivo:** los flujos de Playwright definidos en `03 §9`.
 - **Archivos:** `tests/e2e/*`, `playwright.config.ts`.
 - **Hecho cuando:** los e2e pasan en Chromium, tanto en desktop como en mobile.

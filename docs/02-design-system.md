@@ -234,8 +234,9 @@ Se porta la fila de filtros de "02 Proyectos" (Estado con contador por opción, 
 
 `Skeleton` es un bloque en `neutral-200` con `--radius-md` (los círculos y chips, con su propio radio) y un pulso de opacidad de 1.6 s (1 → 0.55 → 1). Con `prefers-reduced-motion` queda quieto. Reglas:
 - Cada `loading.tsx` repite los contenedores, anchos máximos, `gap` y grillas de su página. Las líneas de texto miden `1lh` y los controles 36px (44px en mobile), como `Input`. Así, al llegar los datos, no salta nada.
-- Los títulos fijos ("Proyectos", "Calendario", "Cuenta") se muestran de verdad; los que dependen de datos (saludo, nombre del proyecto), como bloque.
-- Los bloques son `aria-hidden`; un único `role="status"` (sr-only) anuncia "Cargando proyectos…", y el contenedor lleva `aria-busy`.
+- Llevan skeleton el inicio (`(app)/(inicio)/loading.tsx`), Calendario, Cuenta, Nuevo y Editar. **Proyectos y la ficha no** (T22): un `loading.tsx` por encima de una página que navega solo por `searchParams` cuelga esa navegación en producción (Next 15.5). Al entrar a ellas queda la página anterior hasta que llega la nueva; `tests/unit/loading-boundaries.test.ts` impide volver a ponerlo.
+- Los títulos fijos ("Calendario", "Cuenta") se muestran de verdad; los que dependen de datos (saludo, nombre del proyecto), como bloque.
+- Los bloques son `aria-hidden`; un único `role="status"` (sr-only) anuncia "Cargando el calendario…", y el contenedor lleva `aria-busy`.
 - El shell (sidebar, header y BottomNav) no se reemplaza: el skeleton ocupa solo el área de la página. Cambiar filtros o pestañas (solo `searchParams`) no muestra skeleton: queda la vista anterior hasta que llega la nueva.
 
 ### 8.9 Objetivos táctiles en mobile ✅ T21a

@@ -76,6 +76,56 @@ describe('ProjectFilters', () => {
     expect(nav.replace).toHaveBeenCalledWith('/proyectos?vista=tabla', { scroll: false });
   });
 
+  it('un filtro elegido antes de que responda el servidor no pisa la búsqueda', () => {
+    vi.useFakeTimers();
+    render(ui(NO_FILTERS));
+    fireEvent.change(screen.getByRole('searchbox', { name: 'Buscar' }), {
+      target: { value: 'polera' },
+    });
+    act(() => vi.advanceTimersByTime(SEARCH_DEBOUNCE_MS));
+    expect(nav.replace).toHaveBeenLastCalledWith('/proyectos?q=polera', { scroll: false });
+
+    // Las props siguen sin `q` (el servidor no respondió): igual se conserva la búsqueda.
+    fireEvent.change(screen.getByRole('combobox', { name: 'Estado' }), {
+      target: { value: 'revision' },
+    });
+    expect(nav.replace).toHaveBeenLastCalledWith('/proyectos?q=polera&estado=revision', {
+      scroll: false,
+    });
+    expect(screen.getByRole('combobox', { name: 'Estado' })).toHaveValue('revision');
+  });
+
+  it('un filtro elegido mientras corre el debounce no se pierde', () => {
+    vi.useFakeTimers();
+    render(ui(NO_FILTERS));
+    fireEvent.change(screen.getByRole('searchbox', { name: 'Buscar' }), {
+      target: { value: 'polera' },
+    });
+    fireEvent.change(screen.getByRole('combobox', { name: 'CMS' }), {
+      target: { value: 'Sin CMS' },
+    });
+    act(() => vi.advanceTimersByTime(SEARCH_DEBOUNCE_MS));
+    expect(nav.replace).toHaveBeenLastCalledWith('/proyectos?q=polera&cms=Sin+CMS', {
+      scroll: false,
+    });
+  });
+
+  it('cuando llega la URL pedida, no se reescribe ni se pierde lo elegido después', () => {
+    vi.useFakeTimers();
+    const { rerender } = render(ui(NO_FILTERS));
+    fireEvent.change(screen.getByRole('combobox', { name: 'Estado' }), {
+      target: { value: 'revision' },
+    });
+    fireEvent.change(screen.getByRole('combobox', { name: 'CMS' }), {
+      target: { value: 'Sin CMS' },
+    });
+    // Responde la primera navegación (solo estado): la segunda sigue en camino.
+    rerender(ui({ ...NO_FILTERS, estado: 'revision' }));
+    expect(screen.getByRole('combobox', { name: 'CMS' })).toHaveValue('Sin CMS');
+    act(() => vi.advanceTimersByTime(SEARCH_DEBOUNCE_MS * 2));
+    expect(nav.replace).toHaveBeenCalledTimes(2);
+  });
+
   it('si la URL cambia desde afuera (sidebar), el campo se actualiza sin reescribirla', () => {
     vi.useFakeTimers();
     const { rerender } = render(ui(NO_FILTERS));

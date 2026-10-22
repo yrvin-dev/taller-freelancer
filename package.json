@@ -18,6 +18,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:integration": "vitest run --config vitest.integration.config.ts",
+    "e2e:build": "NEXT_DIST_DIR=.next-e2e next build",
+    "e2e:start": "NEXT_DIST_DIR=.next-e2e next start -p 3100",
     "test:e2e": "playwright test",
     "test:a11y": "playwright test a11y keyboard",
     "a11y:lighthouse": "tsx --env-file-if-exists=.env.local scripts/lighthouse-a11y.mts",

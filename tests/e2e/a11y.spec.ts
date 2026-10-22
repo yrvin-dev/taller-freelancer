@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type BrowserContext, type Page } from '@playwright/test';
 import { seedData } from './demo-user';
+import { hydrated } from './hydration';
 import { PRIVATE_ROUTES, PUBLIC_ROUTES, THEMES, type Theme } from './routes';
 
 // Auditoría WCAG 2.2 A/AA con axe (T21a) en cada ruta, diálogo y estado de la sidebar,
@@ -53,21 +54,21 @@ for (const theme of THEMES) {
 
     test('diálogo: eliminar proyecto', async ({ page }) => {
       await open(page, `/proyectos/${seedData().projectId}`);
-      await page.getByRole('button', { name: 'Eliminar' }).click();
+      await (await hydrated(page.getByRole('button', { name: 'Eliminar' }))).click();
       await expect(page.getByRole('dialog')).toBeVisible();
       await expectNoViolations(page);
     });
 
     test('diálogo: agregar credencial', async ({ page }) => {
       await open(page, `/proyectos/${seedData().projectId}?tab=accesos`);
-      await page.getByRole('button', { name: 'Agregar credencial' }).click();
+      await (await hydrated(page.getByRole('button', { name: 'Agregar credencial' }))).click();
       await expect(page.getByRole('dialog', { name: 'Agregar credencial' })).toBeVisible();
       await expectNoViolations(page);
     });
 
     test('confirmación: borrar cuenta', async ({ page }) => {
       await open(page, '/cuenta');
-      await page.getByRole('button', { name: 'Borrar cuenta' }).click();
+      await (await hydrated(page.getByRole('button', { name: 'Borrar cuenta' }))).click();
       await expectNoViolations(page); // nunca se confirma: solo se audita
     });
 
@@ -77,8 +78,10 @@ for (const theme of THEMES) {
       const theme = (await context.cookies()).filter((c) => c.name.startsWith('tf-'));
       await context.clearCookies();
       await context.addCookies(theme);
-      await page.getByRole('textbox', { name: 'Entrada de la bitácora' }).fill('Prueba 401');
-      await page.getByRole('button', { name: 'Agregar a la bitácora' }).click();
+      await (
+        await hydrated(page.getByRole('textbox', { name: 'Entrada de la bitácora' }))
+      ).fill('Prueba 401');
+      await (await hydrated(page.getByRole('button', { name: 'Agregar a la bitácora' }))).click();
       await expect(page.getByRole('dialog', { name: 'Tu sesión expiró' })).toBeVisible();
       await expectNoViolations(page);
     });

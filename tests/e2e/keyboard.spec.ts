@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { seedData } from './demo-user';
+import { hydrated } from './hydration';
 
 // Lo que axe no mide (T21a): foco visible al tabular, diálogos con Esc y foco de
 // vuelta, y objetivos táctiles de 44px en mobile (CLAUDE.md, regla 8).
@@ -55,7 +56,7 @@ test.describe('teclado', () => {
     page,
   }) => {
     await open(page, `/proyectos/${seedData().projectId}`);
-    const trigger = page.getByRole('button', { name: 'Eliminar' });
+    const trigger = await hydrated(page.getByRole('button', { name: 'Eliminar' }));
     await trigger.focus();
     await page.keyboard.press('Enter');
     const dialog = page.getByRole('dialog');
@@ -77,8 +78,10 @@ test.describe('teclado', () => {
   test('el diálogo 401 no se cierra con Esc', async ({ page, context }) => {
     await open(page, `/proyectos/${seedData().projectId}?tab=notas`);
     await context.clearCookies();
-    await page.getByRole('textbox', { name: 'Entrada de la bitácora' }).fill('Prueba 401');
-    await page.getByRole('button', { name: 'Agregar a la bitácora' }).click();
+    await (
+      await hydrated(page.getByRole('textbox', { name: 'Entrada de la bitácora' }))
+    ).fill('Prueba 401');
+    await (await hydrated(page.getByRole('button', { name: 'Agregar a la bitácora' }))).click();
     const dialog = page.getByRole('dialog', { name: 'Tu sesión expiró' });
     await expect(dialog).toBeVisible();
     await page.keyboard.press('Escape');

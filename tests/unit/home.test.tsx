@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import Home from '@/app/(app)/page';
+import Home from '@/app/(app)/(inicio)/page';
 import { HomeDashboard, homeCards } from '@/components/projects/HomeDashboard';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { mockProjects } from '../fixtures/projects';

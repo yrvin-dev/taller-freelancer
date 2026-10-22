@@ -96,7 +96,9 @@ export function PaymentsPanel({
           pending: true,
         },
       });
-      const result = await addPayment(parsed.data);
+      // Al servidor va la entrada del formulario (texto), no `parsed.data`: la acción la
+      // valida de nuevo con el mismo esquema, que espera texto (como `getValues()` en RHF).
+      const result = await addPayment(form);
       if (!result.ok) {
         setErrors(result.fieldErrors ?? {});
         fail(result);

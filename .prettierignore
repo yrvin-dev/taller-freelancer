@@ -3,6 +3,7 @@ docs/
 CLAUDE.md
 pnpm-lock.yaml
 .next/
+.next-e2e/
 coverage/
 next-env.d.ts
 supabase/.temp/

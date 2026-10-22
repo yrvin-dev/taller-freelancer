@@ -1,3 +1,4 @@
+import { createRequire } from 'module';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
@@ -6,8 +7,14 @@ import prettier from 'eslint-config-prettier';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Los plugins de `next/*` (react-hooks, jsx-a11y…) son dependencias de
+// eslint-config-next: se resuelven desde ahí. pnpm no los publica en la raíz de
+// node_modules (`publicHoistPattern` vacío), así que desde `__dirname` no se encuentran.
 const compat = new FlatCompat({
   baseDirectory: __dirname,
+  resolvePluginsRelativeTo: dirname(
+    createRequire(import.meta.url).resolve('eslint-config-next/package.json'),
+  ),
 });
 
 // Regla dura 1 (CLAUDE.md): cero hex/rgb fuera de src/styles/tokens.css.
@@ -39,6 +46,7 @@ const eslintConfig = [
     ignores: [
       'node_modules/**',
       '.next/**',
+      '.next-e2e/**',
       'out/**',
       'build/**',
       'coverage/**',

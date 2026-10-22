@@ -2,7 +2,8 @@
 // dark, con perfil mobile y desktop (T21b). Sale con error si algo da menos de 100 o si
 // falla alguna auditoría, aunque no pese en el puntaje (p. ej. WCAG 2.5.3).
 //
-// Mide el build de producción: `pnpm build && pnpm start` (con `pnpm dev` apagado).
+// Mide el build de producción de los e2e: `pnpm e2e:build && pnpm e2e:start` (puerto 3100,
+// carpeta `.next-e2e`: puede correr con `pnpm dev` levantado).
 // Usa la sesión del usuario demo local y el Chromium de Playwright.
 //
 // Es `.mts` a propósito: como ESM, tsx no transforma Lighthouse. Si lo hiciera, le
@@ -17,7 +18,7 @@ import desktopConfig from 'lighthouse/core/config/desktop-config.js';
 import { demoSession, type DemoSession } from '../tests/e2e/demo-session';
 import { PRIVATE_ROUTES, PUBLIC_ROUTES, THEMES, type Theme } from '../tests/e2e/routes';
 
-const BASE_URL = process.env.LIGHTHOUSE_BASE_URL ?? 'http://localhost:3000';
+const BASE_URL = process.env.LIGHTHOUSE_BASE_URL ?? 'http://localhost:3100';
 const PORT = 9333;
 
 const FORM_FACTORS: [name: string, config: Config | undefined][] = [
@@ -40,9 +41,12 @@ type Score = { score: number; failed: string[] };
 /** En dev el HTML carga `main-app.js` sin hash; el build le pone hash (`main-app-…js`). */
 async function assertProductionServer() {
   const login = await fetch(`${BASE_URL}/login`).catch(() => null);
-  if (!login) throw new Error(`No hay servidor en ${BASE_URL}: corre pnpm build && pnpm start.`);
+  if (!login)
+    throw new Error(`No hay servidor en ${BASE_URL}: corre pnpm e2e:build && pnpm e2e:start.`);
   if ((await login.text()).includes('/_next/static/chunks/main-app.js')) {
-    throw new Error('Eso es pnpm dev: Lighthouse mide el build (pnpm build && pnpm start).');
+    throw new Error(
+      'Eso es pnpm dev: Lighthouse mide el build (pnpm e2e:build && pnpm e2e:start).',
+    );
   }
 }
 

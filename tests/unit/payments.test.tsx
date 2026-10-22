@@ -119,12 +119,15 @@ describe('PaymentsPanel', () => {
     expect(row).toHaveAttribute('aria-busy', 'true');
     expect(row).toHaveTextContent('Segundo pago (guardando…)');
     expect(figure('Pagado')).toBe('S/ 5,400.00');
-    expect(writes.addPayment).toHaveBeenCalledWith({
+    // Lo que viaja es la entrada del formulario: el servidor la vuelve a validar.
+    const sent = writes.addPayment.mock.calls[0]![0];
+    expect(sent).toEqual({
       projectId: PROJECT,
-      amountPen: 1500,
+      amountPen: '1500',
       paidOn: '2026-10-05',
       concept: 'Segundo pago',
     });
+    expect(paymentInputSchema.safeParse(sent).success).toBe(true);
 
     await act(async () =>
       server.resolve({

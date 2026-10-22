@@ -27,6 +27,10 @@ export type ProjectFiltersProps = {
 
 // Fila de filtros de "02 Proyectos" (export) + el campo Buscar (02 §8.7: en mobile no
 // hay sidebar). Todo escribe en la URL con `replace` (sin llenar el historial).
+//
+// Los filtros aplicados viven aquí y no solo en `value`: las props llegan recién cuando
+// responde el servidor, y armar la URL siguiente con ellas perdía un filtro si el usuario
+// cambiaba otro antes (T22). `value` manda solo cuando la URL cambia desde afuera.
 export function ProjectFilters({
   value,
   view,
@@ -36,28 +40,46 @@ export function ProjectFilters({
 }: ProjectFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const [applied, setApplied] = useState(value);
+  const appliedRef = useRef(value); // lo lee el temporizador del debounce (sin cierre viejo)
   const [query, setQuery] = useState(value.q);
-  const lastSent = useRef(value.q);
+  /** URLs pedidas que todavía no llegaron como `value`, de la más vieja a la más nueva. */
+  const requested = useRef<string[]>([]);
 
-  const go = (next: Filters) =>
+  const apply = (next: Filters) => {
+    appliedRef.current = next;
+    setApplied(next);
+  };
+
+  const go = (next: Filters) => {
+    apply(next);
+    requested.current.push(filtersQuery(next));
     router.replace(`${pathname}${filtersQuery(next, view)}`, { scroll: false });
+  };
 
-  // La URL manda: "Limpiar filtros" o la búsqueda de la sidebar cambian `value.q`.
+  // Llegó una URL nueva. Si la pedimos nosotros, ya está aplicada (y las anteriores,
+  // también). Si no (sidebar, "Limpiar filtros" del vacío), la URL manda.
+  const valueKey = filtersQuery(value);
   useEffect(() => {
+    const index = requested.current.indexOf(valueKey);
+    if (index !== -1) {
+      requested.current = requested.current.slice(index + 1);
+      return;
+    }
+    requested.current = [];
+    apply(value);
     setQuery(value.q);
-    lastSent.current = value.q;
-  }, [value.q]);
+    // `value` cambia de identidad en cada render; lo que importa es su URL.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [valueKey]);
 
   // Debounce: solo se escribe en la URL cuando se deja de teclear.
   useEffect(() => {
     const trimmed = query.trim();
-    if (trimmed === lastSent.current) return;
-    const timer = setTimeout(() => {
-      lastSent.current = trimmed;
-      go({ ...value, q: trimmed });
-    }, SEARCH_DEBOUNCE_MS);
+    if (trimmed === appliedRef.current.q) return;
+    const timer = setTimeout(() => go({ ...appliedRef.current, q: trimmed }), SEARCH_DEBOUNCE_MS);
     return () => clearTimeout(timer);
-    // `go` y `value` cambian en cada render; el efecto depende solo de lo que se teclea.
+    // `go` cambia en cada render; el efecto depende solo de lo que se teclea.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
@@ -75,8 +97,10 @@ export function ProjectFilters({
       </Field>
       <Field label="Estado" htmlFor="filtro-estado" className="flex-[0_1_220px]">
         <Select
-          value={value.estado}
-          onChange={(e) => go({ ...value, estado: e.target.value as Filters['estado'] })}
+          value={applied.estado}
+          onChange={(e) =>
+            go({ ...appliedRef.current, estado: e.target.value as Filters['estado'] })
+          }
         >
           <option value={ALL}>Todos ({counts[ALL]})</option>
           {PROJECT_STATUSES.map((status) => (
@@ -87,7 +111,10 @@ export function ProjectFilters({
         </Select>
       </Field>
       <Field label="Stack" htmlFor="filtro-stack" className="flex-[0_1_220px]">
-        <Select value={value.stack} onChange={(e) => go({ ...value, stack: e.target.value })}>
+        <Select
+          value={applied.stack}
+          onChange={(e) => go({ ...appliedRef.current, stack: e.target.value })}
+        >
           <option value={ALL}>Todos</option>
           {stackOptions.map((tech) => (
             <option key={tech} value={tech}>
@@ -97,7 +124,10 @@ export function ProjectFilters({
         </Select>
       </Field>
       <Field label="CMS" htmlFor="filtro-cms" className="flex-[0_1_220px]">
-        <Select value={value.cms} onChange={(e) => go({ ...value, cms: e.target.value })}>
+        <Select
+          value={applied.cms}
+          onChange={(e) => go({ ...appliedRef.current, cms: e.target.value })}
+        >
           <option value={ALL}>Todos</option>
           {cmsOptions.map((cms) => (
             <option key={cms} value={cms}>
@@ -106,7 +136,7 @@ export function ProjectFilters({
           ))}
         </Select>
       </Field>
-      {hasActiveFilters(value) && (
+      {hasActiveFilters(applied) && (
         <Button
           variant="ghost"
           icon="close"

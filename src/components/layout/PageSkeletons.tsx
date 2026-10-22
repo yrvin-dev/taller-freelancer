@@ -4,7 +4,11 @@ import { cx } from '@/lib/cx';
 
 // Esqueletos de los `loading.tsx` (02 §8.8). Repiten los contenedores, anchos y
 // separaciones de cada página para que al llegar los datos no salte nada. Los títulos
-// fijos ("Proyectos", "Calendario"…) se muestran de verdad.
+// fijos ("Calendario", "Cuenta"…) se muestran de verdad.
+//
+// "Proyectos" y la ficha no tienen esqueleto: un `loading.tsx` por encima de una página
+// que navega solo por `searchParams` (filtros, vista, pestañas) cuelga esa navegación
+// en producción (Next 15.5, T22). Lo vigila `tests/unit/loading-boundaries.test.ts`.
 
 const lines = (n: number) => Array.from({ length: n }, (_, i) => i);
 
@@ -24,23 +28,6 @@ function HeaderSkeleton() {
         <TextLine className="w-[min(260px,70%)]" />
       </div>
     </header>
-  );
-}
-
-function ProjectCardSkeleton() {
-  return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl bg-surface shadow-sm">
-      <Skeleton className="aspect-[16/10] rounded-none" />
-      <div className="flex flex-col gap-3 p-4">
-        <Skeleton className="h-[28px] w-3/4" />
-        <TextLine className="w-1/2" />
-        <div className="flex gap-2">
-          <Skeleton className="h-[32px] w-[72px] rounded-pill" />
-          <Skeleton className="h-[32px] w-[88px] rounded-pill" />
-          <Skeleton className="h-[32px] w-[64px] rounded-pill" />
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -75,63 +62,6 @@ export function HomeSkeleton() {
         ))}
       </div>
       <RowsSkeleton rows={3} lead="w-[88px] h-[55px]" />
-    </div>
-  );
-}
-
-export function ProjectsSkeleton() {
-  return (
-    <div className="flex flex-col gap-6" aria-busy="true">
-      <LoadingStatus label="Cargando proyectos…" />
-      <PageHeader title="Proyectos" description={<TextLine className="w-[140px]" />} />
-      <div className="flex flex-wrap gap-3">
-        {lines(4).map((i) => (
-          <div key={i} className="flex flex-[0_1_220px] flex-col gap-1">
-            <TextLine className="w-[60px] text-xs" />
-            <Skeleton className={CONTROL} />
-          </div>
-        ))}
-      </div>
-      <ul className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-6 p-0">
-        {lines(6).map((i) => (
-          <li key={i}>
-            <ProjectCardSkeleton />
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export function ProjectDetailSkeleton() {
-  return (
-    <div className="flex flex-col gap-6" aria-busy="true">
-      <LoadingStatus label="Cargando el proyecto…" />
-      <div className="flex items-center gap-2">
-        <Skeleton className={cx(CONTROL, 'w-[120px]')} />
-        <span className="ml-auto" />
-        <Skeleton className={cx(CONTROL, 'w-[96px]')} />
-      </div>
-      <div className="flex flex-wrap items-end gap-6">
-        <Skeleton className="aspect-[16/10] min-w-[240px] flex-[0_1_400px] rounded-lg" />
-        <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-2">
-          <TextLine className="w-[120px] text-xs" />
-          <Skeleton className="h-[calc(var(--text-4xl)*var(--leading-tight))] w-[min(420px,90%)]" />
-          <TextLine className="w-[min(280px,70%)]" />
-        </div>
-      </div>
-      <div className="flex gap-1 shadow-[inset_0_-1px_0_var(--color-divider)]">
-        {lines(6).map((i) => (
-          <span key={i} className="flex min-h-[44px] items-center px-3">
-            <TextLine className="w-[64px]" />
-          </span>
-        ))}
-      </div>
-      <div className="flex max-w-[820px] flex-col gap-3">
-        {lines(4).map((i) => (
-          <TextLine key={i} className={i % 2 ? 'w-2/3' : 'w-full'} />
-        ))}
-      </div>
     </div>
   );
 }
