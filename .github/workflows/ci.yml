@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v4 # versión: `packageManager` de package.json
       - uses: actions/setup-node@v4
         with:
@@ -47,7 +47,7 @@ jobs:
       SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID: ci-sin-google
       SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET: ci-sin-google
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
