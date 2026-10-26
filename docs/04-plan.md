@@ -219,7 +219,7 @@
 - **Archivos:** `supabase/migrations/20261026000005_thumbnails_bucket.sql`, `src/lib/{thumbnails,thumbnail-image}.ts`, `proyectos/[id]/actions.ts`, `src/lib/data/{projects,project-mapper}.ts`, `ThumbnailField.tsx`, `ProjectForm.tsx`, las 4 vistas con miniatura, `next.config.ts` (`bodySizeLimit`), `tests/unit/thumbnails.test.ts`, `tests/unit/project-form.test.tsx`, `tests/integration/thumbnails.test.ts`.
 - **Hecho cuando:** subir, reemplazar y quitar funcionan en local; B no lee ni escribe las miniaturas de A (integración).
 
-### [ ] T24b · Miniaturas: limpieza y e2e
+### [x] T24b · Miniaturas: limpieza y e2e
 - **Objetivo:** borrar el proyecto borra su miniatura y borrar la cuenta borra la carpeta del usuario. Un e2e sube una imagen y la ve en la tarjeta y en la ficha. La migración 0005 se aplica en Preview y Production.
 - **Hecho cuando:** no quedan archivos huérfanos y la miniatura funciona en producción.
 
