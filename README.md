@@ -4,6 +4,8 @@
 
 Dashboard para que un freelancer administre sus proyectos de cliente en un solo lugar: stack, accesos, enlaces, pagos, vencimientos de dominio y hosting, y una bitácora por proyecto. Entras con Google y cada usuario ve solo sus datos.
 
+**En producción:** [taller-freelancer.vercel.app](https://taller-freelancer.vercel.app). Se entra con Google y cada cuenta empieza vacía.
+
 ![Inicio en tema claro: entregas próximas, dominios por vencer y pagos pendientes](docs/screenshots/inicio-light.webp)
 
 | Proyectos (tema oscuro)                                                                                     | Ficha · Accesos                                                                                                 |
@@ -18,6 +20,7 @@ Dashboard para que un freelancer administre sus proyectos de cliente en un solo 
 
 - **Proyectos** con búsqueda y filtros (estado, stack, CMS) que viven en la URL: se comparten y sobreviven a la recarga. Vista en tarjetas o en tabla.
 - **Ficha** con pestañas: resumen, cliente, stack, accesos, pagos y notas.
+- **Miniatura** por proyecto en Supabase Storage (bucket privado con política por dueño). El servidor la convierte a WebP sin metadatos y se muestra con URL firmadas.
 - **Credenciales de clientes cifradas** (AES-256-GCM). Solo se descifran en el servidor cuando pulsas "Mostrar".
 - **Pagos** con saldo y avance, y actualizaciones optimistas (la UI responde al instante y se revierte sola si el servidor rechaza).
 - **Calendario** de entregas y vencimientos, y un inicio con lo urgente: entregas próximas, dominios por renovar y saldos por cobrar.
@@ -48,7 +51,7 @@ Dashboard para que un freelancer administre sus proyectos de cliente en un solo 
 
 - **Unitarios** (Vitest): esquemas, formato, cifrado (incluida la manipulación del tag), componentes y páginas.
 - **Integración** contra la Supabase local: políticas de RLS, Server Actions, cifrado de punta a punta y borrado de cuenta.
-- **e2e** (Playwright) contra el build de producción, en desktop (1440 px) y mobile (375 px): crear un proyecto → filtrar → pagos → notas → credencial → eliminar; rutas protegidas y 404; cabeceras y CSP.
+- **e2e** (Playwright) contra el build de producción, en desktop (1440 px) y mobile (375 px): crear un proyecto con miniatura → filtrar → pagos → notas → credencial → eliminar; rutas protegidas y 404; cabeceras y CSP.
 - **Accesibilidad**: axe (WCAG 2.2 AA) en cada ruta y diálogo, en los dos temas; navegación por teclado y objetivos táctiles de 44 px; Lighthouse 100 en accesibilidad.
 
 La CI corre todo en cada PR. Incluye levantar Supabase en el runner y comprobar que `database.types.ts` coincide con las migraciones.
