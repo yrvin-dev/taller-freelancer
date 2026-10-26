@@ -277,7 +277,7 @@ create policy "dueño" on projects for all
 | `SUPABASE_SERVICE_ROLE_KEY` | solo servidor (borrar cuenta) | **no** |
 | `CREDENTIALS_KEY` | solo servidor | **no** |
 | `CREDENTIALS_KEY_PREVIOUS` | solo durante una rotación | **no** |
-| `NEXT_PUBLIC_SITE_URL` | redirect de OAuth | sí |
+| `NEXT_PUBLIC_SITE_URL` | redirect de OAuth (en los Preview de Vercel se omite y se usa el host `*.vercel.app` del pedido, ver `site-url.ts`) | sí |
 | `SENTRY_DSN` (fase 2) | servidor | no |
 
 - Google OAuth (client id y secret) se configura en el **dashboard de Supabase**, no en el repo.

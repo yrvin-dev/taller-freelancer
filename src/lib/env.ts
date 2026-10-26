@@ -6,7 +6,8 @@ import { z } from 'zod';
 const publicEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.url('NEXT_PUBLIC_SUPABASE_URL debe ser una URL.'),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1, 'Falta NEXT_PUBLIC_SUPABASE_ANON_KEY.'),
-  NEXT_PUBLIC_SITE_URL: z.url('NEXT_PUBLIC_SITE_URL debe ser una URL.'),
+  // Opcional solo para los Preview de Vercel: ahí se usa el host del pedido (site-url.ts).
+  NEXT_PUBLIC_SITE_URL: z.url('NEXT_PUBLIC_SITE_URL debe ser una URL.').optional(),
 });
 
 export type PublicEnv = z.infer<typeof publicEnvSchema>;

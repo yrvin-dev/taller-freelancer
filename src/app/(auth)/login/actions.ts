@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { safeNextPath } from '@/lib/auth-routes';
-import { publicEnv } from '@/lib/env';
+import { siteUrl } from '@/lib/site-url';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 /**
@@ -11,7 +11,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
  */
 export async function signInWithGoogle(formData: FormData): Promise<never> {
   const next = safeNextPath(formData.get('next')?.toString());
-  const callback = new URL('/auth/callback', publicEnv().NEXT_PUBLIC_SITE_URL);
+  const callback = new URL('/auth/callback', await siteUrl());
   if (next !== '/') callback.searchParams.set('next', next);
 
   const supabase = await createSupabaseServerClient();
