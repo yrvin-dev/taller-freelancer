@@ -16,6 +16,7 @@ import {
 } from '@/lib/schemas';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { toThumbnailWebp } from '@/lib/thumbnail-image';
+import { removeProjectThumbnails } from '@/lib/thumbnail-storage';
 import {
   isStoragePath,
   THUMBNAIL_BUCKET,
@@ -42,15 +43,28 @@ async function sessionClient() {
   return (await session())?.supabase ?? null;
 }
 
-/** Elimina el proyecto con sus pagos, notas y credenciales (cascada en la base). */
+/**
+ * Elimina el proyecto con sus pagos, notas y credenciales (cascada en la base) y
+ * después sus miniaturas de Storage, que no tiene cascadas.
+ */
 export async function deleteProject(projectId: unknown): Promise<ActionResult> {
   const id = idSchema.safeParse(projectId);
   if (!id.success) return { ok: false, error: 'Proyecto inválido.' };
-  const supabase = await sessionClient();
-  if (!supabase) return SESSION_EXPIRED;
+  const current = await session();
+  if (!current) return SESSION_EXPIRED;
 
-  const { data, error } = await supabase.from('projects').delete().eq('id', id.data).select('id');
+  const { data, error } = await current.supabase
+    .from('projects')
+    .delete()
+    .eq('id', id.data)
+    .select('id');
   if (error || !data?.length) return { ok: false, error: 'No pudimos eliminar el proyecto.' };
+  try {
+    await removeProjectThumbnails(current.supabase, current.userId, id.data);
+  } catch {
+    // El proyecto ya no existe: un archivo que quede no se muestra en ningún lado.
+    console.error('No se pudieron borrar las miniaturas del proyecto', id.data);
+  }
   revalidatePath('/', 'layout');
   return { ok: true, data: undefined };
 }

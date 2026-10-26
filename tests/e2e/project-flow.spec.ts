@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
+import sharp from 'sharp';
 import { demoClient } from './demo-session';
 import { hydrated } from './hydration';
 
@@ -13,6 +14,15 @@ const code = () => `E2E-${randomBytes(3).toString('hex').toUpperCase()}`;
 const figure = (page: Page, label: string) =>
   page.locator('dt', { hasText: label }).locator('xpath=following-sibling::dd');
 const pen = (amount: string) => new RegExp(`^S/\\s${amount.replace('.', '\\.')}$`);
+
+/** Miniatura de Storage (URL firmada), cargada de verdad: no un `<img>` roto. */
+async function expectStorageThumbnail(scope: Locator) {
+  const img = scope.locator('img[src*="/storage/v1/object/sign/thumbnails/"]');
+  await expect(img).toBeVisible();
+  await expect
+    .poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth))
+    .toBe(1600);
+}
 
 let projectCode = '';
 
@@ -36,12 +46,23 @@ test('crear, filtrar, registrar pago, nota y credencial, y eliminar', async ({ p
     await page.getByLabel('Frontend').fill('Next.js, Tailwind');
     await page.getByLabel('Monto total (S/)').fill('1000');
     await page.getByLabel('Adelanto (S/)').fill('300');
+    const png = await sharp({
+      create: { width: 800, height: 500, channels: 3, background: { r: 40, g: 90, b: 160 } },
+    })
+      .png()
+      .toBuffer();
+    await page
+      .getByLabel('Miniatura del proyecto')
+      .setInputFiles({ name: 'captura.png', mimeType: 'image/png', buffer: png });
+    await expect(page.getByAltText('Vista previa de la miniatura')).toBeVisible();
     await page.getByRole('button', { name: 'Guardar proyecto' }).first().click();
 
     // El toast dura 2,2 s: se mira antes de esperar la navegación a la ficha.
     await expect(page.getByRole('status').getByText('Proyecto creado')).toBeVisible();
     await expect(page).toHaveURL(/\/proyectos\/[0-9a-f-]{36}$/);
     await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();
+    // La miniatura se subió a Storage (WebP 1600×1000) y la ficha la muestra firmada.
+    await expectStorageThumbnail(page.locator('main'));
   });
   const projectUrl = page.url();
 
@@ -53,6 +74,7 @@ test('crear, filtrar, registrar pago, nota y credencial, y eliminar', async ({ p
     await page.getByRole('combobox', { name: 'Estado' }).selectOption('en_desarrollo');
     await expect(page).toHaveURL(/estado=en_desarrollo/);
     await expect(page.getByText(/^1 de \d+ proyectos$/)).toBeVisible();
+    await expectStorageThumbnail(page.locator('main'));
 
     await page.reload();
     await expect(page.getByRole('searchbox', { name: 'Buscar', exact: true })).toHaveValue(

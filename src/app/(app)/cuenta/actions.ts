@@ -6,6 +6,7 @@ import { SESSION_EXPIRED, type ActionResult } from '@/lib/action-result';
 import { fieldErrorsOf, preferencesSchema } from '@/lib/schemas';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { removeOwnerThumbnails } from '@/lib/thumbnail-storage';
 
 /**
  * Guarda las preferencias de Cuenta en `profiles`. RLS ("perfil: editar el propio")
@@ -43,8 +44,9 @@ export async function savePreferences(
 
 /**
  * Borra la cuenta del usuario de la sesión y, en cascada, su perfil, proyectos, pagos,
- * notas y credenciales. El id sale SOLO de la sesión (no recibe argumentos): nadie
- * puede borrar otra cuenta. Si sale bien, cierra la sesión y redirige al login.
+ * notas y credenciales; después, su carpeta de miniaturas en Storage. El id sale SOLO
+ * de la sesión (no recibe argumentos): nadie puede borrar otra cuenta. Si sale bien,
+ * cierra la sesión y redirige al login.
  */
 export async function deleteAccount(): Promise<ActionResult> {
   const supabase = await createSupabaseServerClient();
@@ -53,10 +55,17 @@ export async function deleteAccount(): Promise<ActionResult> {
   } = await supabase.auth.getUser();
   if (!user) return SESSION_EXPIRED;
 
-  const { error } = await createSupabaseAdminClient().auth.admin.deleteUser(user.id);
+  const admin = createSupabaseAdminClient();
+  const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) {
     console.error('No se pudo borrar la cuenta', user.id);
     return { ok: false, error: 'No pudimos borrar tu cuenta. Inténtalo de nuevo.' };
+  }
+  // Con el usuario ya borrado, su sesión no sirve: los archivos los borra el admin.
+  try {
+    await removeOwnerThumbnails(admin, user.id);
+  } catch {
+    console.error('No se pudieron borrar las miniaturas de la cuenta', user.id);
   }
 
   // El usuario ya no existe: signOut limpia las cookies de sesión (si falla, igual se van).

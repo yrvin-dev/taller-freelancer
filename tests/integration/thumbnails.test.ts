@@ -19,7 +19,8 @@ vi.mock('@/lib/supabase/server', () => ({
 }));
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
 
-const { saveThumbnail, removeThumbnail } = await import('@/app/(app)/proyectos/[id]/actions');
+const { deleteProject, saveThumbnail, removeThumbnail } =
+  await import('@/app/(app)/proyectos/[id]/actions');
 const { getProject } = await import('@/lib/data/projects');
 
 type User = { id: string; client: SupabaseClient<Database>; projectId: string };
@@ -219,5 +220,31 @@ describe('políticas del bucket thumbnails', () => {
     expect((await anon.storage.from('thumbnails').download(path)).data).toBeNull();
     const response = await fetch(`${url}/storage/v1/object/public/thumbnails/${path}`);
     expect(response.ok).toBe(false);
+  });
+});
+
+describe('deleteProject', () => {
+  it('borra la carpeta del proyecto en Storage (huérfanas incluidas) y nada más', async () => {
+    const c = await newUser();
+    as(c);
+    expect((await saveThumbnail(c.projectId, await pngForm())).ok).toBe(true);
+    // Un archivo huérfano (p. ej., de un reemplazo que no llegó a borrar el anterior).
+    const orphan = await sharp({
+      create: { width: 16, height: 10, channels: 3, background: { r: 0, g: 0, b: 0 } },
+    })
+      .webp()
+      .toBuffer();
+    const { error } = await c.client.storage
+      .from('thumbnails')
+      .upload(`${c.id}/${c.projectId}/huerfana.webp`, orphan, { contentType: 'image/webp' });
+    expect(error).toBeNull();
+    const othersBefore = await admin.storage.from('thumbnails').list(`${a.id}/${a.projectId}`);
+
+    expect(await deleteProject(c.projectId)).toEqual({ ok: true, data: undefined });
+
+    const { data: left } = await admin.storage.from('thumbnails').list(`${c.id}/${c.projectId}`);
+    expect(left).toEqual([]);
+    const othersAfter = await admin.storage.from('thumbnails').list(`${a.id}/${a.projectId}`);
+    expect(othersAfter.data?.map((f) => f.name)).toEqual(othersBefore.data?.map((f) => f.name));
   });
 });

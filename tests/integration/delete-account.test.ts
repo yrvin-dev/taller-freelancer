@@ -1,5 +1,6 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import sharp from 'sharp';
 import type { Database } from '@/lib/database.types';
 
 // Borrar la cuenta (T18) contra la base real: deleteAccount usa el cliente admin real
@@ -22,7 +23,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 const { deleteAccount } = await import('@/app/(app)/cuenta/actions');
-const { addCredential } = await import('@/app/(app)/proyectos/[id]/actions');
+const { addCredential, saveThumbnail } = await import('@/app/(app)/proyectos/[id]/actions');
 const { saveProject } = await import('@/app/(app)/proyectos/actions');
 const { EMPTY_PROJECT_FORM } = await import('@/lib/project-form');
 
@@ -65,7 +66,27 @@ async function userWithData(code: string): Promise<User> {
     secret: 's',
   });
   if (!credential.ok) throw new Error(credential.error);
+  const png = await sharp({
+    create: { width: 32, height: 20, channels: 3, background: { r: 1, g: 2, b: 3 } },
+  })
+    .png()
+    .toBuffer();
+  const thumbnail = new FormData();
+  thumbnail.set('thumbnail', new File([new Uint8Array(png)], 'a.png', { type: 'image/png' }));
+  const saved = await saveThumbnail(created.data.id, thumbnail);
+  if (!saved.ok) throw new Error(saved.error);
   return user;
+}
+
+/** Archivos en la carpeta de miniaturas del usuario (`{owner}/{project}/…`). */
+async function thumbnailsOf(userId: string): Promise<number> {
+  const { data: folders } = await admin.storage.from('thumbnails').list(userId);
+  let count = 0;
+  for (const folder of folders ?? []) {
+    const { data } = await admin.storage.from('thumbnails').list(`${userId}/${folder.name}`);
+    count += data?.length ?? 0;
+  }
+  return count;
 }
 
 async function rowsOf(userId: string) {
@@ -98,6 +119,13 @@ afterAll(async () => {
   for (const id of createdUsers) {
     const { data } = await admin.auth.admin.getUserById(id);
     if (!data.user) continue; // ya lo borró el test
+    const { data: folders } = await admin.storage.from('thumbnails').list(id);
+    for (const folder of folders ?? []) {
+      const { data: files } = await admin.storage.from('thumbnails').list(`${id}/${folder.name}`);
+      const paths = (files ?? []).map((file) => `${id}/${folder.name}/${file.name}`);
+      const removed = paths.length ? await admin.storage.from('thumbnails').remove(paths) : null;
+      if (removed?.error) throw removed.error;
+    }
     const { error } = await admin.auth.admin.deleteUser(id);
     if (error) throw error;
   }
@@ -115,8 +143,12 @@ describe('deleteAccount', () => {
       credentials: 1,
     });
 
+    expect(await thumbnailsOf(target.id)).toBe(1);
+
     session.client = target.client;
     await expect(deleteAccount()).rejects.toThrow('REDIRECT:/login?cuenta=borrada');
+    expect(await thumbnailsOf(target.id)).toBe(0);
+    expect(await thumbnailsOf(bystander.id)).toBe(1);
 
     const { data } = await admin.auth.admin.getUserById(target.id);
     expect(data.user).toBeNull();
