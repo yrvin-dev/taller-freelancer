@@ -161,7 +161,7 @@ create table projects (
   domain_name text, domain_expires date, hosting_expires date,
   domain_pending boolean not null default false, -- dominio por comprar ("Comprar" en Por vencer)
   budget_pen numeric(10,2) check (budget_pen >= 0),
-  thumbnail_path text,                    -- Supabase Storage: thumbnails/{owner}/{id}.webp
+  thumbnail_path text,                    -- Supabase Storage: thumbnails/{owner}/{project}/{aleatorio}.webp
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   unique (owner_id, code)
@@ -238,7 +238,7 @@ create policy "dueño" on projects for all
   - Flujo: validar con Zod → llamar a `data/*` → `revalidatePath` → devolver `ActionResult`.
 - **Búsqueda y filtros:** viven en `searchParams` (`?q=&estado=&stack=&cms=&vista=tabla`). ✅ T19 · Se aplican en el servidor, **en memoria** sobre `listProjects()` (`src/lib/project-filters.ts`, funciones puras): con decenas de proyectos por usuario es una sola query, los contadores por estado salen gratis y la búsqueda ignora tildes sin extensiones de Postgres. Si un usuario llegara a miles, se pasa a SQL (`ilike` o full text con `unaccent`) sin cambiar la URL. Los valores inválidos de la URL se ignoran (quedan en "Todos").
 - **Contenido editable:** todo está en Postgres y es editable desde la UI. No hay CMS externo.
-- **Miniaturas:** se suben a Supabase Storage (bucket privado `thumbnails` con política por dueño). Se sirven con URL firmada y `next/image`, en 1600×1000 y 16:10.
+- ✅ T24a · **Miniaturas:** bucket privado `thumbnails` (solo WebP, 2 MB) con política por dueño en `storage.objects` (migración 0005). El formulario guarda el proyecto y después llama a `saveThumbnail` / `removeThumbnail` (`proyectos/[id]/actions.ts`). El servidor revalida el archivo leyéndolo (no por el `type` del navegador), lo pasa con sharp a WebP 1600×1000 sin metadatos y lo sube con la sesión del usuario a `{owner}/{project}/{aleatorio}.webp`. El nombre cambia en cada subida para que ningún CDN sirva la anterior, y la anterior se borra. Al leer, `src/lib/data/projects.ts` firma todas en una llamada (1 h) y `next/image` las muestra con `unoptimized`.
 - **Exportar datos:** la Server Action `exportData()` devuelve un JSON con proyectos, pagos y notas. Las credenciales van **sin** el secreto.
 - **Borrar cuenta:** una Server Action con `service_role` borra `auth.users`, y por cascada desaparece todo lo del usuario. ✅ T18 · `deleteAccount()` (sin argumentos: el id sale de la sesión) usa `createSupabaseAdminClient()` (`src/lib/supabase/admin.ts`, `server-only`), cierra la sesión y redirige a `/login?cuenta=borrada`. Probado: no queda ninguna fila del usuario en ninguna tabla.
 

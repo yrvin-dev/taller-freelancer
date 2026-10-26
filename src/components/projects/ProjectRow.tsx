@@ -7,6 +7,7 @@ import { Tag } from '@/components/ui/Tag';
 import { NO_CMS_LABEL, TYPE_LABEL } from '@/lib/domain';
 import { formatDate } from '@/lib/format';
 import { stackChips, type Project } from '@/lib/projects';
+import { isStaticThumbnail } from '@/lib/thumbnails';
 
 export type ProjectRowProps = { project: Project };
 
@@ -21,6 +22,7 @@ export function ProjectRow({ project }: ProjectRowProps) {
             {project.thumbnailUrl && (
               <Image
                 src={project.thumbnailUrl}
+                unoptimized={!isStaticThumbnail(project.thumbnailUrl)}
                 alt=""
                 fill
                 sizes="(min-width: 820px) 120px, 60px"

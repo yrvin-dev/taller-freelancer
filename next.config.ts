@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: '/:path*', headers: STATIC_SECURITY_HEADERS }];
   },
+  experimental: {
+    // Una miniatura pesa hasta 2 MB (`THUMBNAIL_MAX_BYTES`) y las Server Actions
+    // aceptan 1 MB por defecto: el margen cubre la codificación del FormData.
+    serverActions: { bodySizeLimit: '3mb' },
+  },
   images: {
     // Foto de perfil de Google (Avatar con `src`).
     remotePatterns: [{ protocol: 'https', hostname: 'lh3.googleusercontent.com' }],

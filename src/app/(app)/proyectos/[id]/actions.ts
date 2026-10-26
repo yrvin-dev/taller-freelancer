@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { SESSION_EXPIRED, type ActionResult } from '@/lib/action-result';
+import { SESSION_EXPIRED, type ActionFailure, type ActionResult } from '@/lib/action-result';
 import { credentialAad, decrypt, encrypt, fromBytea, toBytea } from '@/lib/crypto';
 import { credentialsKeyring } from '@/lib/env-server';
 import { formatPEN, todayIn, toISODate } from '@/lib/format';
@@ -15,11 +15,20 @@ import {
   paymentInputSchema,
 } from '@/lib/schemas';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { toThumbnailWebp } from '@/lib/thumbnail-image';
+import {
+  isStoragePath,
+  THUMBNAIL_BUCKET,
+  thumbnailError,
+  thumbnailObjectPath,
+} from '@/lib/thumbnails';
 
 const RevealInput = z.object({ projectId: idSchema, credentialId: idSchema });
 
 // ── Escrituras de la ficha (T16b). Todas con la sesión del usuario: RLS solo deja
 //    tocar lo suyo, y una fila ajena simplemente no aparece (0 filas → error). ──
+
+type Supabase = Awaited<ReturnType<typeof createSupabaseServerClient>>;
 
 async function session() {
   const supabase = await createSupabaseServerClient();
@@ -277,5 +286,82 @@ export async function deleteCredential(credentialId: unknown): Promise<ActionRes
     .select('project_id');
   if (error || !data?.length) return { ok: false, error: 'No pudimos borrar la credencial.' };
   revalidatePath(`/proyectos/${data[0]!.project_id}`);
+  return { ok: true, data: undefined };
+}
+
+// ── Miniatura (T24a). Va aparte de saveProject: el formulario la manda después de
+//    guardar el proyecto, solo si cambió. Storage tiene su propia política por dueño. ──
+
+type ThumbnailTarget = {
+  supabase: Supabase;
+  userId: string;
+  projectId: string;
+  current: string | null;
+};
+
+/** Sesión + proyecto (leído con RLS) cuya miniatura se va a cambiar. */
+async function thumbnailTarget(projectId: unknown): Promise<ThumbnailTarget | ActionFailure> {
+  const id = idSchema.safeParse(projectId);
+  if (!id.success) return { ok: false, error: 'Proyecto inválido.' };
+  const current = await session();
+  if (!current) return SESSION_EXPIRED;
+
+  const { data } = await current.supabase
+    .from('projects')
+    .select('thumbnail_path')
+    .eq('id', id.data)
+    .maybeSingle();
+  if (!data) return { ok: false, error: 'No encontramos ese proyecto.' };
+  return { ...current, projectId: id.data, current: data.thumbnail_path };
+}
+
+/** Apunta el proyecto a `path` (o a ninguna) y borra la imagen anterior de Storage. */
+async function swapThumbnail(target: ThumbnailTarget, path: string | null): Promise<boolean> {
+  const { data, error } = await target.supabase
+    .from('projects')
+    .update({ thumbnail_path: path })
+    .eq('id', target.projectId)
+    .select('id');
+  if (error || !data?.length) return false;
+  // Si falla, queda un archivo huérfano en la carpeta del usuario: no rompe nada.
+  if (isStoragePath(target.current)) {
+    await target.supabase.storage.from(THUMBNAIL_BUCKET).remove([target.current]);
+  }
+  revalidatePath('/', 'layout');
+  return true;
+}
+
+/** Sube la miniatura nueva (campo `thumbnail` del FormData) y reemplaza la anterior. */
+export async function saveThumbnail(projectId: unknown, formData: FormData): Promise<ActionResult> {
+  const file = formData.get('thumbnail');
+  if (!(file instanceof File)) return { ok: false, error: 'Elige una imagen.' };
+  const invalid = thumbnailError(file);
+  if (invalid) return { ok: false, error: invalid };
+
+  const target = await thumbnailTarget(projectId);
+  if ('ok' in target) return target;
+
+  const webp = await toThumbnailWebp(await file.arrayBuffer());
+  if (!webp) return { ok: false, error: 'No pudimos leer la imagen. Usa un PNG, JPG o WebP.' };
+
+  const path = thumbnailObjectPath(target.userId, target.projectId);
+  const bucket = target.supabase.storage.from(THUMBNAIL_BUCKET);
+  const { error } = await bucket.upload(path, webp, { contentType: 'image/webp' });
+  if (error) return { ok: false, error: 'No pudimos guardar la miniatura.' };
+
+  if (!(await swapThumbnail(target, path))) {
+    await bucket.remove([path]);
+    return { ok: false, error: 'No pudimos guardar la miniatura.' };
+  }
+  return { ok: true, data: undefined };
+}
+
+/** Quita la miniatura del proyecto. */
+export async function removeThumbnail(projectId: unknown): Promise<ActionResult> {
+  const target = await thumbnailTarget(projectId);
+  if ('ok' in target) return target;
+  if (!(await swapThumbnail(target, null))) {
+    return { ok: false, error: 'No pudimos quitar la miniatura.' };
+  }
   return { ok: true, data: undefined };
 }

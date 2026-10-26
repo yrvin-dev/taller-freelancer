@@ -4,6 +4,7 @@
 import type { Database } from '@/lib/database.types';
 import type { Project } from '@/lib/projects';
 import type { ProjectInput } from '@/lib/schemas';
+import { isStoragePath } from '@/lib/thumbnails';
 
 type Tables = Database['public']['Tables'];
 
@@ -25,15 +26,18 @@ export type ProjectRow = Tables['projects']['Row'] & {
 };
 
 /**
- * Miniatura: hoy solo rutas estáticas (`/mock/thumbs/…`, del seed local). Las de
- * Supabase Storage (`thumbnails/{owner}/{id}.webp`) llegan con la subida y usarán
- * URL firmadas.
+ * Miniatura: una ruta de `public/` (seed local) se usa tal cual; una de Storage, con
+ * la URL firmada que preparó la capa de datos (`signedThumbnails`). Sin firma, nada.
  */
-function thumbnailUrl(path: string | null): string | null {
-  return path?.startsWith('/') ? path : null;
+function thumbnailUrl(path: string | null, signed: ReadonlyMap<string, string>): string | null {
+  if (!path) return null;
+  return isStoragePath(path) ? (signed.get(path) ?? null) : path;
 }
 
-export function toProject(row: ProjectRow): Project {
+export function toProject(
+  row: ProjectRow,
+  signedThumbnails: ReadonlyMap<string, string> = new Map(),
+): Project {
   return {
     id: row.id,
     code: row.code,
@@ -73,7 +77,7 @@ export function toProject(row: ProjectRow): Project {
     hostingExpires: row.hosting_expires,
     // numeric llega como number en supabase-js; se normaliza por si llega como texto.
     budgetPen: row.budget_pen === null ? null : Number(row.budget_pen),
-    thumbnailUrl: thumbnailUrl(row.thumbnail_path),
+    thumbnailUrl: thumbnailUrl(row.thumbnail_path, signedThumbnails),
     updatedAt: row.updated_at,
     payments: [...row.payments]
       .sort((a, b) => a.paid_on.localeCompare(b.paid_on))

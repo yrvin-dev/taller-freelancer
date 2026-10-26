@@ -7,6 +7,7 @@ import { Tag } from '@/components/ui/Tag';
 import { TYPE_LABEL } from '@/lib/domain';
 import { formatDate } from '@/lib/format';
 import type { Project } from '@/lib/projects';
+import { isStaticThumbnail } from '@/lib/thumbnails';
 import { DeleteProjectButton } from './DeleteProjectButton';
 
 // Cabecera de "03 Ficha del proyecto": barra de acciones y, debajo, miniatura 16:10
@@ -43,6 +44,7 @@ export function ProjectHeader({ project }: { project: Project }) {
           {project.thumbnailUrl && (
             <Image
               src={project.thumbnailUrl}
+              unoptimized={!isStaticThumbnail(project.thumbnailUrl)}
               alt=""
               fill
               priority

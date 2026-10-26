@@ -4,32 +4,28 @@ import { useEffect, useId, useState, type DragEvent } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
+import { THUMBNAIL_TYPES, thumbnailError, type ThumbnailChange } from '@/lib/thumbnails';
 
-export const THUMBNAIL_TYPES = ['image/png', 'image/jpeg', 'image/webp'] as const;
-export const THUMBNAIL_MAX_BYTES = 2 * 1024 * 1024;
-
-/** Mensaje de error de un archivo, o null si sirve como miniatura. */
-export function thumbnailError(file: Pick<File, 'type' | 'size'>): string | null {
-  if (!(THUMBNAIL_TYPES as readonly string[]).includes(file.type)) {
-    return 'Usa una imagen PNG, JPG o WebP.';
-  }
-  if (file.size > THUMBNAIL_MAX_BYTES) return 'La imagen pesa más de 2 MB.';
-  return null;
-}
+export type ThumbnailFieldProps = {
+  initialUrl: string | null;
+  /** Avisa qué hacer con la miniatura al guardar (`null` = dejarla como está). */
+  onChange: (change: ThumbnailChange) => void;
+};
 
 /**
  * Miniatura del formulario del export (16:10, "PNG o JPG, idealmente 1600 × 1000"):
- * elegir o arrastrar, vista previa y validación. La subida a Supabase Storage
- * (`thumbnails/{owner}/{id}.webp`) llega con la tanda de datos.
+ * elegir o arrastrar, vista previa, validación y quitar la actual. No sube nada: el
+ * formulario manda el archivo con `saveThumbnail` después de guardar el proyecto.
  */
-export function ThumbnailField({ initialUrl }: { initialUrl: string | null }) {
+export function ThumbnailField({ initialUrl, onChange }: ThumbnailFieldProps) {
   const [preview, setPreview] = useState<string | null>(null);
+  const [removed, setRemoved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const inputId = useId();
   const hintId = useId();
   const errorId = useId();
-  const shown = preview ?? initialUrl;
+  const shown = preview ?? (removed ? null : initialUrl);
 
   // Libera el object URL anterior al cambiar de imagen o al desmontar.
   useEffect(() => {
@@ -41,7 +37,10 @@ export function ThumbnailField({ initialUrl }: { initialUrl: string | null }) {
     if (!file) return;
     const problem = thumbnailError(file);
     setError(problem);
-    if (!problem) setPreview(URL.createObjectURL(file));
+    if (problem) return;
+    setPreview(URL.createObjectURL(file));
+    setRemoved(false);
+    onChange({ file });
   }
 
   function drop(event: DragEvent<HTMLLabelElement>) {
@@ -73,7 +72,10 @@ export function ThumbnailField({ initialUrl }: { initialUrl: string | null }) {
           accept={THUMBNAIL_TYPES.join(',')}
           aria-describedby={cx(hintId, error ? errorId : undefined)}
           aria-invalid={error ? true : undefined}
-          onChange={(e) => pick(e.target.files?.[0])}
+          onChange={(e) => {
+            pick(e.target.files?.[0]);
+            e.target.value = ''; // elegir otra vez el mismo archivo también dispara el cambio
+          }}
           className="sr-only"
         />
         {shown ? (
@@ -112,9 +114,24 @@ export function ThumbnailField({ initialUrl }: { initialUrl: string | null }) {
           onClick={() => {
             setPreview(null);
             setError(null);
+            onChange(null);
           }}
         >
           Quitar imagen nueva
+        </Button>
+      )}
+      {!preview && initialUrl && (
+        <Button
+          variant="ghost"
+          size="sm"
+          icon={removed ? 'back' : 'close'}
+          className="self-start"
+          onClick={() => {
+            setRemoved(!removed);
+            onChange(removed ? null : 'remove');
+          }}
+        >
+          {removed ? 'Recuperar miniatura' : 'Quitar miniatura'}
         </Button>
       )}
     </div>

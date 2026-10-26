@@ -5,6 +5,7 @@ import { StatusDot } from '@/components/ui/StatusDot';
 import { chipColor } from '@/lib/chips';
 import { NO_CMS_LABEL, TYPE_LABEL } from '@/lib/domain';
 import { stackChips, type Project } from '@/lib/projects';
+import { isStaticThumbnail } from '@/lib/thumbnails';
 
 export type ProjectCardProps = { project: Project };
 
@@ -23,6 +24,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         {project.thumbnailUrl && (
           <Image
             src={project.thumbnailUrl}
+            unoptimized={!isStaticThumbnail(project.thumbnailUrl)}
             alt=""
             fill
             sizes="(min-width: 820px) 33vw, 100vw"

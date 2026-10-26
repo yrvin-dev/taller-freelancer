@@ -2,7 +2,8 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import EditProjectPage from '@/app/(app)/proyectos/[id]/editar/page';
 import NewProjectPage from '@/app/(app)/proyectos/nuevo/page';
 import { ActionFeedbackProvider } from '@/components/ActionFeedback';
-import { ThumbnailField, thumbnailError } from '@/components/projects/ThumbnailField';
+import { ThumbnailField } from '@/components/projects/ThumbnailField';
+import { thumbnailError } from '@/lib/thumbnails';
 
 vi.mock('@/lib/data/projects', () => import('../fixtures/data-projects'));
 
@@ -17,6 +18,20 @@ vi.mock('@/app/(app)/proyectos/actions', () => ({
   saveProject: async (input: unknown, id: string | null) => {
     action.calls.push([input, id]);
     return action.override ? action.override() : { ok: true, data: { id: 'id-guardado' } };
+  },
+}));
+const thumb = vi.hoisted(() => ({
+  calls: [] as [string, string, File | null][],
+  result: { ok: true, data: undefined } as unknown,
+}));
+vi.mock('@/app/(app)/proyectos/[id]/actions', () => ({
+  saveThumbnail: async (id: string, data: FormData) => {
+    thumb.calls.push(['save', id, data.get('thumbnail') as File]);
+    return thumb.result;
+  },
+  removeThumbnail: async (id: string) => {
+    thumb.calls.push(['remove', id, null]);
+    return thumb.result;
   },
 }));
 vi.mock('next/navigation', async (importOriginal) => ({
@@ -154,10 +169,20 @@ describe('miniatura', () => {
     );
   });
 
-  it('muestra la vista previa o el error', () => {
+  beforeEach(() => {
     URL.createObjectURL = vi.fn(() => 'blob:preview');
     URL.revokeObjectURL = vi.fn();
-    render(<ThumbnailField initialUrl={null} />);
+    thumb.calls = [];
+    thumb.result = { ok: true, data: undefined };
+    action.override = null;
+    action.push.mockClear();
+  });
+
+  const png = () => new File(['x'], 'a.png', { type: 'image/png' });
+
+  it('muestra la vista previa o el error, y avisa solo los archivos válidos', () => {
+    const onChange = vi.fn();
+    render(<ThumbnailField initialUrl={null} onChange={onChange} />);
     const input = screen.getByLabelText('Miniatura del proyecto');
 
     fireEvent.change(input, {
@@ -165,14 +190,75 @@ describe('miniatura', () => {
     });
     expect(screen.getByRole('alert')).toHaveTextContent('Usa una imagen PNG, JPG o WebP.');
     expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(onChange).not.toHaveBeenCalled();
 
-    fireEvent.change(input, {
-      target: { files: [new File(['x'], 'a.png', { type: 'image/png' })] },
-    });
+    const file = png();
+    fireEvent.change(input, { target: { files: [file] } });
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     expect(screen.getByAltText('Vista previa de la miniatura')).toHaveAttribute(
       'src',
       'blob:preview',
     );
+    expect(onChange).toHaveBeenLastCalledWith({ file });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Quitar imagen nueva' }));
+    expect(onChange).toHaveBeenLastCalledWith(null);
+  });
+
+  it('quita la miniatura actual y se puede recuperar', () => {
+    const onChange = vi.fn();
+    render(<ThumbnailField initialUrl="/mock/thumbs/a.webp" onChange={onChange} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Quitar miniatura' }));
+    expect(onChange).toHaveBeenLastCalledWith('remove');
+    expect(screen.queryByAltText('Vista previa de la miniatura')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Recuperar miniatura' }));
+    expect(onChange).toHaveBeenLastCalledWith(null);
+    expect(screen.getByAltText('Vista previa de la miniatura')).toBeInTheDocument();
+  });
+
+  it('al guardar, sube la miniatura con el id del proyecto recién guardado', async () => {
+    withToast(<NewProjectPage />);
+    fireEvent.change(screen.getByLabelText('Nombre del proyecto *'), {
+      target: { value: 'Polera' },
+    });
+    fireEvent.change(screen.getByLabelText('Cliente *'), { target: { value: 'Polera SAC' } });
+    const file = png();
+    fireEvent.change(screen.getByLabelText('Miniatura del proyecto'), {
+      target: { files: [file] },
+    });
+    await submit();
+
+    expect(thumb.calls).toEqual([['save', 'id-guardado', file]]);
+    expect(action.push).toHaveBeenCalledWith('/proyectos/id-guardado');
+    expect(screen.getByText('Proyecto creado')).toBeInTheDocument();
+  });
+
+  it('sin cambios en la miniatura no la toca', async () => {
+    withToast(<NewProjectPage />);
+    fireEvent.change(screen.getByLabelText('Nombre del proyecto *'), {
+      target: { value: 'Polera' },
+    });
+    fireEvent.change(screen.getByLabelText('Cliente *'), { target: { value: 'Polera SAC' } });
+    await submit();
+    expect(thumb.calls).toEqual([]);
+  });
+
+  it('si falla la miniatura, el proyecto ya está guardado: va a la ficha con el error', async () => {
+    thumb.result = { ok: false, error: 'No pudimos guardar la miniatura.' };
+    withToast(<NewProjectPage />);
+    fireEvent.change(screen.getByLabelText('Nombre del proyecto *'), {
+      target: { value: 'Polera' },
+    });
+    fireEvent.change(screen.getByLabelText('Cliente *'), { target: { value: 'Polera SAC' } });
+    fireEvent.change(screen.getByLabelText('Miniatura del proyecto'), {
+      target: { files: [png()] },
+    });
+    await submit();
+
+    expect(screen.getByText('No pudimos guardar la miniatura.')).toBeInTheDocument();
+    expect(screen.queryByText('Proyecto creado')).not.toBeInTheDocument();
+    expect(action.push).toHaveBeenCalledWith('/proyectos/id-guardado');
   });
 });

@@ -3,8 +3,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useTransition } from 'react';
+import { useRef, useTransition } from 'react';
 import { useForm, type FieldPath } from 'react-hook-form';
+import { removeThumbnail, saveThumbnail } from '@/app/(app)/proyectos/[id]/actions';
 import { saveProject } from '@/app/(app)/proyectos/actions';
 import { useActionFeedback } from '@/components/ActionFeedback';
 import { Button, buttonClass } from '@/components/ui/Button';
@@ -24,6 +25,7 @@ import {
   TYPE_LABEL,
 } from '@/lib/domain';
 import { projectSchema, type ProjectFormValues, type ProjectInput } from '@/lib/schemas';
+import type { ThumbnailChange } from '@/lib/thumbnails';
 import { ThumbnailField } from './ThumbnailField';
 
 type FieldName = FieldPath<ProjectFormValues>;
@@ -51,6 +53,12 @@ export type ProjectFormProps = {
 
 const FORM_ID = 'project-form';
 
+function withFile(file: File): FormData {
+  const data = new FormData();
+  data.set('thumbnail', file);
+  return data;
+}
+
 // Portado de "04 Formulario de proyecto": miniatura a la izquierda y las secciones del
 // export a la derecha (Editores CMS es fase 2; Credenciales llegan con el cifrado).
 // Mismo esquema que la Server Action: zodResolver valida aquí y saveProject repite
@@ -67,6 +75,8 @@ export function ProjectForm({
   const { fail } = useActionFeedback();
   const router = useRouter();
   const [saving, startSaving] = useTransition();
+  // Un ref y no estado: elegir una imagen no tiene por qué re-renderizar todo el formulario.
+  const thumbnail = useRef<ThumbnailChange>(null);
   const {
     register,
     handleSubmit,
@@ -200,9 +210,24 @@ export function ProjectForm({
         fail(result);
         return;
       }
+      const id = result.data.id;
+      // La miniatura va después, con el proyecto ya guardado (y creado, si es nuevo).
+      const change = thumbnail.current;
+      const thumbResult =
+        change === null
+          ? null
+          : change === 'remove'
+            ? await removeThumbnail(id)
+            : await saveThumbnail(id, withFile(change.file));
+      if (thumbResult && !thumbResult.ok) {
+        // El proyecto sí se guardó: se va a la ficha igual, con el error de la miniatura.
+        fail(thumbResult);
+        if (thumbResult.code !== 'unauthorized') router.push(`/proyectos/${id}`);
+        return;
+      }
       // El toast vive en el layout (app): sobrevive a la navegación a la ficha.
       toast.show(mode === 'new' ? 'Proyecto creado' : 'Cambios guardados');
-      router.push(`/proyectos/${result.data.id}`);
+      router.push(`/proyectos/${id}`);
     });
   });
 
@@ -271,7 +296,12 @@ export function ProjectForm({
 
       <div className="flex flex-wrap items-start gap-8">
         <div className="max-w-[360px] flex-[1_1_260px]">
-          <ThumbnailField initialUrl={thumbnailUrl} />
+          <ThumbnailField
+            initialUrl={thumbnailUrl}
+            onChange={(change) => {
+              thumbnail.current = change;
+            }}
+          />
         </div>
 
         <form

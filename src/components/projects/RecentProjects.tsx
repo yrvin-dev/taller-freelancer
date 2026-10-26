@@ -6,6 +6,7 @@ import { StatusDot } from '@/components/ui/StatusDot';
 import { TYPE_LABEL } from '@/lib/domain';
 import { formatDateShort, toISODateIn } from '@/lib/format';
 import type { Project } from '@/lib/projects';
+import { isStaticThumbnail } from '@/lib/thumbnails';
 
 /** Miniatura 16:10 (176×110 en desktop, 88×55 en mobile); sin imagen, recuadro neutro. */
 function Thumbnail({ project }: { project: Project }) {
@@ -14,6 +15,7 @@ function Thumbnail({ project }: { project: Project }) {
       {project.thumbnailUrl && (
         <Image
           src={project.thumbnailUrl}
+          unoptimized={!isStaticThumbnail(project.thumbnailUrl)}
           alt=""
           fill
           sizes="(min-width: 820px) 176px, 88px"
