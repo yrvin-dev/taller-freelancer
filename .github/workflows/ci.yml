@@ -55,11 +55,12 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
 
-      # Solo lo que usa la app: Postgres, Auth, PostgREST y Kong (gateway).
+      # Solo lo que usa la app: Postgres, Auth, PostgREST, Storage (miniaturas, T24a) y
+      # Kong (gateway). imgproxy no hace falta: la conversión a WebP la hace sharp.
       - name: Supabase local (migraciones + seed)
         run: >-
           pnpm db:start -x
-          storage-api,imgproxy,realtime,studio,edge-runtime,logflare,vector,supavisor,mailpit,postgres-meta
+          imgproxy,realtime,studio,edge-runtime,logflare,vector,supavisor,mailpit,postgres-meta
 
       - name: database.types.ts al día con las migraciones
         run: pnpm db:types && git diff --exit-code src/lib/database.types.ts

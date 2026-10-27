@@ -214,12 +214,17 @@
 - **Archivos:** `README.md` (URL de producción), docs.
 - **Hecho cuando:** un merge a `main` despliega solo y la URL de producción tiene el login de Google funcionando.
 
+### [x] T23c · Next 15.5.28 (avisos de seguridad)
+- **Objetivo:** `pnpm audit` en la CI marcó dos avisos nuevos de Next 15.5.27: uno crítico (ejecución remota de código en el optimizador de imágenes con SVG, GHSA-2464-fhr4-w9xw) y uno alto (denegación de servicio en las Server Actions, GHSA-p3m5-59mp-jv5r). Se sube `next` y `eslint-config-next` a 15.5.28.
+- **Archivos:** `package.json`, `pnpm-lock.yaml`.
+- **Hecho cuando:** `pnpm audit --prod --audit-level high` queda limpio y todo pasa (unitarios, integración, e2e).
+
 ### [x] T24a · Miniaturas en Storage: subir y mostrar
 - **Objetivo:** la miniatura del formulario se guarda de verdad (T12a solo hacía la vista previa): bucket privado con política por dueño, conversión a WebP 1600×1000 en el servidor, URL firmadas al leer y quitar la miniatura.
 - **Archivos:** `supabase/migrations/20261026000005_thumbnails_bucket.sql`, `src/lib/{thumbnails,thumbnail-image}.ts`, `proyectos/[id]/actions.ts`, `src/lib/data/{projects,project-mapper}.ts`, `ThumbnailField.tsx`, `ProjectForm.tsx`, las 4 vistas con miniatura, `next.config.ts` (`bodySizeLimit`), `tests/unit/thumbnails.test.ts`, `tests/unit/project-form.test.tsx`, `tests/integration/thumbnails.test.ts`.
 - **Hecho cuando:** subir, reemplazar y quitar funcionan en local; B no lee ni escribe las miniaturas de A (integración).
 
-### [ ] T24b · Miniaturas: limpieza y e2e
+### [x] T24b · Miniaturas: limpieza y e2e
 - **Objetivo:** borrar el proyecto borra su miniatura y borrar la cuenta borra la carpeta del usuario. Un e2e sube una imagen y la ve en la tarjeta y en la ficha. La migración 0005 se aplica en Preview y Production.
 - **Hecho cuando:** no quedan archivos huérfanos y la miniatura funciona en producción.
 
