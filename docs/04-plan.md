@@ -206,7 +206,7 @@
 - **Archivos:** `.github/workflows/ci.yml`, `.github/dependabot.yml`, `src/middleware.ts`, `src/lib/security-headers.ts`, `next.config.ts`, `tests/unit/security-headers.test.ts`, `tests/e2e/csp.spec.ts`, `README.md`, `docs/screenshots/*`.
 - **Hecho cuando:** todo pasa en local, los e2e no ven violaciones de CSP y el workflow es válido (la primera corrida real llega con el push de T23b).
 
-### [ ] T23b · Producción
+### [x] T23b · Producción
 - **Objetivo:**
   - Dos proyectos de Supabase (Preview y Production) con las migraciones y Google OAuth.
   - Vercel con previews por PR y variables separadas por entorno.
