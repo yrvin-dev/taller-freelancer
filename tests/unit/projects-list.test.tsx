@@ -52,9 +52,10 @@ describe('ProjectCard', () => {
   it('Producción lleva el punto verde (--status-prod)', () => {
     render(<ProjectCard project={byId('agb')} />);
     const status = screen.getByText('Producción');
-    expect(status.querySelector('[aria-hidden="true"]')).toHaveStyle({
-      background: 'var(--status-prod)',
-    });
+    expect(status.querySelector('[aria-hidden="true"]')).toHaveAttribute(
+      'style',
+      'background: var(--status-prod);',
+    );
   });
 });
 
@@ -94,9 +95,9 @@ describe('/proyectos', () => {
       '/proyectos/agb',
     );
     const row = screen.getByRole('link', { name: 'Abrir Colegio Guillermo Brown' }).closest('tr')!;
-    expect(within(row).getByText('Producción').querySelector('[aria-hidden="true"]')).toHaveStyle({
-      background: 'var(--status-prod)',
-    });
+    expect(
+      within(row).getByText('Producción').querySelector('[aria-hidden="true"]'),
+    ).toHaveAttribute('style', 'background: var(--status-prod);');
   });
 });
 

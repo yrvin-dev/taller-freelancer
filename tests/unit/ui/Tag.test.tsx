@@ -27,7 +27,9 @@ describe('StatusDot', () => {
     const { container } = render(<StatusDot status="mantenimiento" />);
     expect(screen.getByText('Mantenimiento')).toHaveClass('bg-neutral-100');
     const dot = container.querySelector('[aria-hidden="true"]');
-    expect(dot).toHaveStyle({ background: 'var(--status-maint)' });
+    // `toHaveStyle` usa getComputedStyle, y jsdom no resuelve `background` con var():
+    // se compara el estilo escrito (CLAUDE.md, gotcha de T25).
+    expect(dot).toHaveAttribute('style', 'background: var(--status-maint);');
   });
 
   it('"En desarrollo" usa el tono de acento', () => {

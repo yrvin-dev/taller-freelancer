@@ -325,8 +325,8 @@ export type Database = {
         Row: {
           balance_pen: number | null;
           budget_pen: number | null;
-          id: string | null;
-          owner_id: string | null;
+          id: string;
+          owner_id: string;
           paid_pen: number | null;
         };
         ComputedFields: never;
