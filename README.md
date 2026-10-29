@@ -99,3 +99,7 @@ docs/               requerimientos, design system, arquitectura y plan por tanda
 ```
 
 El proyecto se construyó por tandas pequeñas y verificables (`docs/04-plan.md`). Lo aprendido en el camino está en la sección _Gotchas_ de `CLAUDE.md`.
+
+## Licencia
+
+Código publicado como portafolio: se puede leer y revisar, pero todos los derechos están reservados. No se permite copiarlo ni reutilizarlo sin permiso del autor.

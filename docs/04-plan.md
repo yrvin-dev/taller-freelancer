@@ -233,6 +233,11 @@
 - **Archivos:** `package.json`, `pnpm-lock.yaml`, `.github/workflows/ci.yml`, `.github/dependabot.yml`, `src/lib/database.types.ts` (regenerado por la CLI nueva), `tests/unit/{projects-list,ui/Tag}.test.tsx`.
 - **Hecho cuando:** todo pasa (unitarios, integración, e2e, audit) y la CI queda en verde.
 
+### [x] T26 · Repo público y `main` protegida
+- **Objetivo:** revisar el historial completo antes de abrirlo (sin claves, tokens, `.env` ni datos privados de clientes: el proyecto real del colegio solo muestra datos que ya son públicos; el resto de los datos de ejemplo es ficticio), hacer público el repo y proteger `main` con un ruleset: sin borrado ni force push, todo por PR y los 2 checks de la CI obligatorios.
+- **Archivos:** `README.md` (licencia), `docs/04-plan.md`, `CLAUDE.md`.
+- **Hecho cuando:** el repo es público, la API de GitHub muestra las 4 reglas activas en `main` y este PR solo se pudo mergear con la CI en verde.
+
 ---
 
 ## Fase 2+ (fuera del MVP)
