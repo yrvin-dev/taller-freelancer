@@ -30,12 +30,15 @@ async function expectCspHeaders(page: Page, path: string) {
   expect(headers['x-content-type-options']).toBe('nosniff');
   expect(headers['referrer-policy']).toBe('strict-origin-when-cross-origin');
 
-  // Next le pone el nonce a todos sus scripts (el navegador lo oculta del atributo).
-  const scripts = await page
-    .locator('script')
-    .evaluateAll((els) => els.map((el) => (el as HTMLScriptElement).nonce));
-  expect(scripts.length).toBeGreaterThan(0);
-  expect(scripts.every((nonce) => csp?.includes(`'nonce-${nonce}'`))).toBe(true);
+  // Cada <script> del HTML que mandó el servidor lleva el nonce de esta misma respuesta.
+  // Se mira el HTML y no el DOM vivo: React y Next agregan y mueven scripts después de
+  // cargar (los permite 'strict-dynamic'), y leerlos del DOM dependía del momento (en la
+  // CI fallaba a veces solo en mobile, T25). Lo que sí bloquearía el navegador lo
+  // atrapa `watchViolations`.
+  const nonce = csp?.match(/'nonce-([A-Za-z0-9+/]+=*)'/)?.[1];
+  const tags = (await response!.text()).match(/<script\b[^>]*>/g) ?? [];
+  expect(tags.length).toBeGreaterThan(0);
+  expect(tags.filter((tag) => !tag.includes(`nonce="${nonce}"`))).toEqual([]);
 }
 
 test.describe('CSP', () => {
