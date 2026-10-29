@@ -206,7 +206,7 @@
 - **Archivos:** `.github/workflows/ci.yml`, `.github/dependabot.yml`, `src/middleware.ts`, `src/lib/security-headers.ts`, `next.config.ts`, `tests/unit/security-headers.test.ts`, `tests/e2e/csp.spec.ts`, `README.md`, `docs/screenshots/*`.
 - **Hecho cuando:** todo pasa en local, los e2e no ven violaciones de CSP y el workflow es válido (la primera corrida real llega con el push de T23b).
 
-### [ ] T23b · Producción
+### [x] T23b · Producción
 - **Objetivo:**
   - Dos proyectos de Supabase (Preview y Production) con las migraciones y Google OAuth.
   - Vercel con previews por PR y variables separadas por entorno.
@@ -227,6 +227,11 @@
 ### [x] T24b · Miniaturas: limpieza y e2e
 - **Objetivo:** borrar el proyecto borra su miniatura y borrar la cuenta borra la carpeta del usuario. Un e2e sube una imagen y la ve en la tarjeta y en la ficha. La migración 0005 se aplica en Preview y Production.
 - **Hecho cuando:** no quedan archivos huérfanos y la miniatura funciona en producción.
+
+### [x] T25 · Dependencias (PR de Dependabot)
+- **Objetivo:** aplicar en un solo PR lo seguro de Dependabot: el grupo de menores (React 19.3, supabase-js, react-hook-form, Playwright, Vitest, CLI de Supabase…), `@hookform/resolvers` 6 y las acciones de GitHub (`checkout`, `setup-node` y `upload-artifact` v7, `pnpm/action-setup` v6). Next 16, Tailwind 4 y `@types/node` 26 no entran: `dependabot.yml` ignora sus saltos de versión mayor.
+- **Archivos:** `package.json`, `pnpm-lock.yaml`, `.github/workflows/ci.yml`, `.github/dependabot.yml`, `src/lib/database.types.ts` (regenerado por la CLI nueva), `tests/unit/{projects-list,ui/Tag}.test.tsx`.
+- **Hecho cuando:** todo pasa (unitarios, integración, e2e, audit) y la CI queda en verde.
 
 ---
 
