@@ -86,7 +86,7 @@ test.describe('CSP sin sesión', () => {
     test(`${name}: cabeceras y sin violaciones`, async ({ page }) => {
       const violations = await watchViolations(page);
       await expectCspHeaders(page, path);
-      await expect(page.getByRole('button', { name: 'Continuar con Google' })).toBeVisible();
+      await expect(page.locator('h1').first()).toBeVisible();
       await page.waitForLoadState('networkidle');
       expect(await violations()).toEqual([]);
     });

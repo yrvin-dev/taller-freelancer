@@ -31,6 +31,14 @@ describe('Login', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
+  it('enlaza la política de privacidad desde el texto sobre los datos', async () => {
+    await renderLogin();
+    expect(screen.getByRole('link', { name: 'Política de privacidad' })).toHaveAttribute(
+      'href',
+      '/privacidad',
+    );
+  });
+
   it('conserva el destino (?next) en el formulario', async () => {
     const { container } = await renderLogin({ next: '/proyectos/agb' });
     expect(container.querySelector('input[name="next"]')).toHaveValue('/proyectos/agb');
