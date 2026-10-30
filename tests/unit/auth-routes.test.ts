@@ -3,6 +3,7 @@ import { isPublicPath, isServerActionRequest, loginPath, safeNextPath } from '@/
 describe('isPublicPath', () => {
   it.each([
     ['/login', true],
+    ['/privacidad', true],
     ['/auth/callback', true],
     ['/auth/signout', true],
     ['/_ui', true],

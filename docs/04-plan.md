@@ -238,6 +238,11 @@
 - **Archivos:** `README.md` (licencia), `docs/04-plan.md`, `CLAUDE.md`.
 - **Hecho cuando:** el repo es público, la API de GitHub muestra las 4 reglas activas en `main` y este PR solo se pudo mergear con la CI en verde.
 
+### [x] T27 · Política de privacidad
+- **Objetivo:** Google exige una página principal y una política de privacidad, ambas en un dominio autorizado, para publicar el login a cualquier cuenta. Página pública `/privacidad` (02 §8.11) con lo que la app hace de verdad con los datos, enlazada desde el login.
+- **Archivos:** `src/app/(auth)/privacidad/page.tsx`, `src/app/(auth)/login/page.tsx`, `src/lib/auth-routes.ts`, `src/styles/globals.css` (subrayado de enlaces en texto), `tests/e2e/{routes,csp.spec}.ts`, `tests/unit/{privacy,login,auth-routes}.test.ts(x)`, `docs/02-design-system.md`.
+- **Hecho cuando:** la página pasa axe (AA) y CSP en light y dark, desktop y mobile; Google acepta las URL y la app queda **En producción**.
+
 ---
 
 ## Fase 2+ (fuera del MVP)

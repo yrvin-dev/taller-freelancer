@@ -60,6 +60,13 @@
   a:hover {
     color: var(--color-accent);
   }
+  /* Un enlace dentro de un texto no se distingue solo por el color (WCAG 1.4.1, axe
+     link-in-text-block): se subraya. Los enlaces con estilo propio (botones, navegación,
+     tarjetas) siempre llevan clase y no cambian. */
+  :where(p, li) > a:not([class]) {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
 
   /* Íconos UIcons: alineados como en el export */
   i.fi {

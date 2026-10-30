@@ -1,7 +1,7 @@
 // Reglas de rutas de la autenticación (middleware, callback y login).
 
 /** Rutas que se ven sin sesión. Todo lo demás es privado (01 §7). */
-const PUBLIC_PATHS = ['/login', '/auth/callback', '/auth/signout'];
+const PUBLIC_PATHS = ['/login', '/privacidad', '/auth/callback', '/auth/signout'];
 /** Herramientas de desarrollo: en producción responden 404 (T02, T04). */
 const DEV_PATHS = ['/_tokens', '/_ui'];
 

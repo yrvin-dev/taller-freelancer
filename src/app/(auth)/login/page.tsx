@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Icon } from '@/components/ui/Icon';
 import { signInWithGoogle } from './actions';
 import { GoogleButton } from './GoogleButton';
@@ -79,9 +80,10 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             {next && <input type="hidden" name="next" value={next} />}
             <GoogleButton />
           </form>
-          <span className="text-xs text-neutral-700">
-            Solo usamos tu nombre, correo y foto de perfil para identificar tu cuenta.
-          </span>
+          <p className="m-0 text-xs text-neutral-700">
+            Solo usamos tu nombre, correo y foto de perfil para identificar tu cuenta.{' '}
+            <Link href="/privacidad">Política de privacidad</Link>
+          </p>
         </div>
       </div>
     </main>

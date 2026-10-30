@@ -247,6 +247,15 @@ En mobile (< 640px) todo lo que se toca mide al menos 44×44: botones e inputs (
 
 El enlace de `ProjectCard` es solo el nombre (h2) y su `::after` cubre la parte tintada: se toca igual que en el export, pero su nombre accesible coincide con el texto visible (WCAG 2.5.3, *Label in Name*; antes era toda la parte tintada con `aria-labelledby` al título). El anillo de foco va en la tarjeta entera (`has-[:focus-visible]`), porque el `overflow-hidden` de la tarjeta recortaría el del enlace.
 
+### 8.11 Política de privacidad (no está en el export) ✅ T27
+
+Página pública `/privacidad`, que Google exige para publicar el login. Es texto legal: no inventa componentes y se arma con lo que ya existe.
+- Fondo `bg`, columna de 720px como máximo, centrada, con el mismo padding fluido del login (`clamp(28px, 5vw, 64px)`).
+- Arriba, "Volver" (`Button` ghost con el ícono `back`) al inicio, que sin sesión lleva al login.
+- Título `h1` y debajo la fecha de vigencia (13px, `neutral-700`).
+- El texto va en una `Card` `sm`: cada apartado es un `h2` (20px) seguido de párrafos y listas en el cuerpo normal; los enlaces usan el estilo de enlace global.
+- El login enlaza a la página desde la línea "Solo usamos tu nombre, correo y foto de perfil…".
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.

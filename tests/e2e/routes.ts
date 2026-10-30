@@ -23,4 +23,7 @@ export const PRIVATE_ROUTES: [name: string, path: (id: string) => string][] = [
   ['404', () => '/no-existe'],
 ];
 
-export const PUBLIC_ROUTES: [name: string, path: string][] = [['login', '/login']];
+export const PUBLIC_ROUTES: [name: string, path: string][] = [
+  ['login', '/login'],
+  ['privacidad', '/privacidad'],
+];
