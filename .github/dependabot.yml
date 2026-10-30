@@ -8,12 +8,14 @@ updates:
       interval: weekly
     open-pull-requests-limit: 5
     # Saltos de versión mayor que no se aceptan desde un PR automático (T25):
-    # - next y tailwindcss: el stack está fijado en CLAUDE.md (Next 15, Tailwind 3.4).
+    # - next (y eslint-config-next, que la acompaña) y tailwindcss: el stack está fijado en CLAUDE.md (Next 15, Tailwind 3.4).
     #   Migrar es una tanda propia (cambia la config, el mapeo a tokens o el router).
     # - @types/node: los tipos siguen al Node mínimo que soportamos (`engines`), no al último.
     # Las actualizaciones de seguridad no pasan por aquí: llegan igual.
     ignore:
       - dependency-name: next
+        update-types: [version-update:semver-major]
+      - dependency-name: eslint-config-next # va con la versión de next
         update-types: [version-update:semver-major]
       - dependency-name: tailwindcss
         update-types: [version-update:semver-major]

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Nunito, Source_Serif_4 } from 'next/font/google';
+import localFont from 'next/font/local';
 import { cookies } from 'next/headers';
 import type { ReactNode } from 'react';
 // UIcons self-hosted (sin CDN en la CSP): solo los tres sets que usa la UI.
@@ -11,17 +11,22 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { parseTheme, THEME_COOKIE } from '@/lib/theme';
 
 // Las familias se exponen como variables; tokens.css las compone en --font-*.
-const sourceSerif = Source_Serif_4({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'], // 700: botón primario
-  style: ['normal', 'italic'],
+// Fuentes dentro del repo (src/app/fonts, licencia OFL), no `next/font/google`: esa
+// descarga el CSS de Google Fonts al compilar y en Vercel fallaba a veces (T28). Son
+// variables (un archivo cubre todos los grosores) y solo el subconjunto latin, el mismo
+// que se pedía a Google.
+const sourceSerif = localFont({
+  src: [
+    { path: './fonts/source-serif-4-latin-wght-normal.woff2', weight: '200 900', style: 'normal' },
+    { path: './fonts/source-serif-4-latin-wght-italic.woff2', weight: '200 900', style: 'italic' },
+  ],
   variable: '--font-source-serif',
   display: 'swap',
 });
 
-const nunito = Nunito({
-  subsets: ['latin'],
-  weight: ['600', '700', '800'],
+const nunito = localFont({
+  src: './fonts/nunito-latin-wght-normal.woff2',
+  weight: '200 1000',
   variable: '--font-nunito',
   display: 'swap',
 });
