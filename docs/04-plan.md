@@ -243,6 +243,11 @@
 - **Archivos:** `src/app/(auth)/privacidad/page.tsx`, `src/app/(auth)/login/page.tsx`, `src/lib/auth-routes.ts`, `src/styles/globals.css` (subrayado de enlaces en texto), `tests/e2e/{routes,csp.spec}.ts`, `tests/unit/{privacy,login,auth-routes}.test.ts(x)`, `docs/02-design-system.md`.
 - **Hecho cuando:** la página pasa axe (AA) y CSP en light y dark, desktop y mobile; Google acepta las URL y la app queda **En producción**.
 
+### [x] T28 · Fuentes dentro del repo
+- **Objetivo:** el build de Vercel fallaba a veces en `next/font/google` (descarga el CSS de Google Fonts al compilar): 2 de 4 builds, uno de ellos el de producción de T27. Nunito y Source Serif 4 (variables, subconjunto latin, licencia OFL) pasan a `src/app/fonts/` con `next/font/local`; un test impide volver a `next/font/google`. De paso, Dependabot ignora los saltos mayores de `eslint-config-next`.
+- **Archivos:** `src/app/layout.tsx`, `src/app/fonts/*`, `tests/unit/fonts.test.ts`, `.github/dependabot.yml`.
+- **Hecho cuando:** el build no tiene ninguna referencia a Google Fonts, todo pasa y se ve igual que antes.
+
 ---
 
 ## Fase 2+ (fuera del MVP)
