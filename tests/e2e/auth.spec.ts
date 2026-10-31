@@ -22,6 +22,16 @@ test.describe('con sesión', () => {
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   });
 
+  test('Cuenta muestra los recordatorios cuando hay remitente (T30a)', async ({ page }) => {
+    // playwright.config.ts le pasa REMINDERS_FROM al servidor: así axe y Lighthouse
+    // auditan /cuenta con la sección. Solo se mira: activarla cambiaría el perfil demo.
+    await page.goto('/cuenta');
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Recordatorios por correo' }),
+    ).toBeVisible();
+    await expect(page.getByRole('radiogroup', { name: 'Recordatorios por correo' })).toBeVisible();
+  });
+
   test('un proyecto que no existe responde 404', async ({ page }) => {
     // Sin loading.tsx por encima de la ficha (T22), la respuesta no empieza en streaming
     // antes de notFound(): el código HTTP es 404 de verdad, no solo la pantalla.

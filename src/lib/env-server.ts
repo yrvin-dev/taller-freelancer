@@ -61,3 +61,11 @@ export function serviceRoleKey(): string {
   if (!key) throw new Error('Falta SUPABASE_SERVICE_ROLE_KEY en el entorno del servidor.');
   return key;
 }
+
+/**
+ * ¿Está configurado el envío de recordatorios? (T30a). Sin remitente (`REMINDERS_FROM`)
+ * Cuenta no muestra la sección: un interruptor que no envía nada engañaría al usuario.
+ */
+export function remindersAvailable(): boolean {
+  return Boolean(process.env.REMINDERS_FROM?.trim());
+}

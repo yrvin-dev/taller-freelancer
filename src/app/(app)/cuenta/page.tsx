@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { DeleteAccountButton } from '@/components/account/DeleteAccountButton';
 import { PreferencesForm } from '@/components/account/PreferencesForm';
+import { ReminderSettings } from '@/components/account/ReminderSettings';
 import { Avatar } from '@/components/ui/Avatar';
 import { buttonClass } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { formatMonthYear } from '@/lib/format';
 import { listProjects } from '@/lib/data/projects';
 import { getCurrentProfile } from '@/lib/data/profile';
+import { remindersAvailable } from '@/lib/env-server';
 
 export const metadata: Metadata = { title: 'Cuenta · Taller Freelancer' };
 
@@ -60,6 +62,19 @@ export default async function AccountPage() {
           initial={{ displayName: profile.displayName, basePath: profile.basePath }}
         />
       </section>
+
+      {/* Solo con el envío configurado (T30a): sin remitente, el interruptor no haría nada. */}
+      {remindersAvailable() && (
+        <section aria-labelledby="recordatorios" className="flex flex-col gap-3">
+          <h2 id="recordatorios" className="m-0 text-xl">
+            Recordatorios por correo
+          </h2>
+          <ReminderSettings
+            email={profile.email}
+            initial={{ enabled: profile.remindersEnabled, days: profile.reminderDays }}
+          />
+        </section>
+      )}
 
       <section aria-labelledby="tus-datos" className="flex flex-col gap-3">
         <h2 id="tus-datos" className="m-0 text-xl">

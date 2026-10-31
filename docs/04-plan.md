@@ -248,8 +248,17 @@
 - **Archivos:** `src/app/layout.tsx`, `src/app/fonts/*`, `tests/unit/fonts.test.ts`, `.github/dependabot.yml`.
 - **Hecho cuando:** el build no tiene ninguna referencia a Google Fonts, todo pasa y se ve igual que antes.
 
+### [x] T30a · Recordatorios por correo: preferencias y lógica
+- **Objetivo:** primera función de la Fase 2+. Preferencias en el perfil (desactivados por defecto; anticipación de 3, 7 o 14 días) y `reminder_log` para no repetir avisos (migración 0006, RLS de solo lectura). La lógica de qué avisar (`reminders.ts`), la plantilla del correo (`reminder-email.ts`) y la sección en Cuenta (02 §8.12), visible solo con `REMINDERS_FROM`. Todavía no se envía nada.
+- **Archivos:** `supabase/migrations/20261031000006_reminders.sql`, `src/lib/{reminders,reminder-email,domain,schemas,profile,env-server}.ts`, `src/lib/data/profile.ts`, `src/app/(app)/cuenta/page.tsx` y `actions.ts`, `src/components/account/ReminderSettings.tsx`, `playwright.config.ts`, tests unitarios, de integración y e2e.
+- **Hecho cuando:** todo pasa y la sección se ve bien en Cuenta (light/dark, 375 y 1440).
+
+### [ ] T30b · Recordatorios por correo: envío diario
+- **Objetivo:** dominio propio verificado en Resend, ruta `/api/cron/recordatorios` protegida con `CRON_SECRET` que Vercel Cron llama a las 8:00 de Lima, un correo por usuario con todo lo pendiente, `reminder_log`, botón "Enviar correo de prueba" y la política de privacidad actualizada.
+- **Hecho cuando:** llega un recordatorio real a tu correo desde producción y no se repite al día siguiente.
+
 ---
 
 ## Fase 2+ (fuera del MVP)
 
-Kanban por estado · adjuntos · recordatorios por correo de entregas y dominios · checklist de tandas por proyecto · integración con la API de Vercel para traer el estado del deploy · Sentry.
+Kanban por estado · adjuntos · ~~recordatorios por correo de entregas y dominios~~ (T30) · checklist de tandas por proyecto · integración con la API de Vercel para traer el estado del deploy · Sentry.

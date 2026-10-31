@@ -3,7 +3,13 @@
 // servidor: lo que pasa uno, pasa el otro.
 
 import { z } from 'zod';
-import { NO_CMS_LABEL, NOTE_KINDS, PROJECT_STATUSES, PROJECT_TYPES } from './domain';
+import {
+  NO_CMS_LABEL,
+  NOTE_KINDS,
+  PROJECT_STATUSES,
+  PROJECT_TYPES,
+  REMINDER_DAYS_OPTIONS,
+} from './domain';
 import { parseDate, toISODateIn } from './format';
 import { externalHref } from './links';
 
@@ -168,6 +174,14 @@ export const preferencesSchema = z.object({
 });
 
 export type PreferencesValues = z.input<typeof preferencesSchema>;
+
+/** Recordatorios por correo (Cuenta, T30a). Los días, los mismos que acepta la base. */
+export const reminderPrefsSchema = z.object({
+  enabled: z.boolean(),
+  days: z.literal(REMINDER_DAYS_OPTIONS, 'Elige 3, 7 o 14 días.'),
+});
+
+export type ReminderPrefs = z.output<typeof reminderPrefsSchema>;
 
 /** Ids que llegan del cliente a una Server Action: UUID o nada. */
 export const idSchema = z.uuid('Identificador inválido.');

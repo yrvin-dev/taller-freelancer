@@ -22,7 +22,9 @@ const session = vi.hoisted(() => ({
     displayName: 'Yrvins',
     basePath: '',
     memberSince: '2026-10-18',
-  } as null | Record<string, string>,
+    remindersEnabled: false,
+    reminderDays: 7,
+  } as null | Record<string, unknown>,
   update: vi.fn(),
   user: { id: 'u1' } as null | { id: string },
   updateError: null as null | { message: string },
@@ -42,10 +44,11 @@ vi.mock('@/lib/supabase/server', () => ({
   }),
 }));
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
-const account = vi.hoisted(() => ({ deleteAccount: vi.fn() }));
+const account = vi.hoisted(() => ({ deleteAccount: vi.fn(), saveReminders: vi.fn() }));
 vi.mock('@/app/(app)/cuenta/actions', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/app/(app)/cuenta/actions')>()),
   deleteAccount: account.deleteAccount,
+  saveReminders: account.saveReminders,
 }));
 vi.mock('next/navigation', () => ({
   redirect: (url: string) => {
@@ -184,6 +187,51 @@ describe('/cuenta', () => {
     expect(account.deleteAccount).toHaveBeenCalledTimes(1);
     expect(screen.getByRole('status')).toHaveTextContent('No pudimos borrar tu cuenta.');
     expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  describe('recordatorios por correo (T30a)', () => {
+    afterEach(() => vi.unstubAllEnvs());
+
+    it('sin remitente configurado, la sección no aparece', async () => {
+      vi.stubEnv('REMINDERS_FROM', '');
+      await renderAccount();
+      expect(
+        screen.queryByRole('heading', { name: 'Recordatorios por correo' }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('vienen desactivados; al activarlos se guarda y aparece la anticipación', async () => {
+      vi.stubEnv('REMINDERS_FROM', 'Taller Freelancer <recordatorios@ejemplo.com>');
+      account.saveReminders.mockResolvedValue({ ok: true, data: undefined });
+      await renderAccount();
+      expect(
+        screen.getByRole('heading', { level: 2, name: 'Recordatorios por correo' }),
+      ).toBeInTheDocument();
+      expect(screen.getByText(/Te escribimos a/)).toHaveTextContent('yrvins@example.com');
+      expect(screen.getByRole('radio', { name: 'Desactivados' })).toBeChecked();
+      expect(screen.queryByLabelText('Avisarme con')).not.toBeInTheDocument();
+
+      await act(async () => fireEvent.click(screen.getByRole('radio', { name: 'Activados' })));
+      expect(account.saveReminders).toHaveBeenLastCalledWith({ enabled: true, days: 7 });
+      expect(screen.getByRole('status')).toHaveTextContent('Recordatorios activados');
+
+      await act(async () =>
+        fireEvent.change(screen.getByLabelText('Avisarme con'), { target: { value: '14' } }),
+      );
+      expect(account.saveReminders).toHaveBeenLastCalledWith({ enabled: true, days: 14 });
+    });
+
+    it('si guardar falla, vuelve al valor anterior y avisa', async () => {
+      vi.stubEnv('REMINDERS_FROM', 'Taller Freelancer <recordatorios@ejemplo.com>');
+      account.saveReminders.mockResolvedValue({
+        ok: false,
+        error: 'No pudimos guardar los recordatorios.',
+      });
+      await renderAccount();
+      await act(async () => fireEvent.click(screen.getByRole('radio', { name: 'Activados' })));
+      expect(screen.getByRole('radio', { name: 'Desactivados' })).toBeChecked();
+      expect(screen.getByRole('status')).toHaveTextContent('No pudimos guardar los recordatorios.');
+    });
   });
 
   it('borrar cuenta pide confirmación', async () => {

@@ -78,3 +78,17 @@ export const CMS_OPTIONS = [
   'Otro',
 ] as const;
 export const NO_CMS_LABEL = 'Sin CMS';
+
+/** Recordatorios por correo (T30a): qué se avisa y con cuánta anticipación. */
+export const REMINDER_KINDS = ['entrega', 'dominio', 'hosting'] as const;
+export type ReminderKind = (typeof REMINDER_KINDS)[number];
+
+export const REMINDER_KIND_LABEL: Record<ReminderKind, string> = {
+  entrega: 'Entrega',
+  dominio: 'Dominio',
+  hosting: 'Hosting',
+};
+
+/** Días de anticipación que se pueden elegir en Cuenta (mismo `check` que la base). */
+export const REMINDER_DAYS_OPTIONS = [3, 7, 14] as const;
+export type ReminderDays = (typeof REMINDER_DAYS_OPTIONS)[number];

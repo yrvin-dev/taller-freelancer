@@ -278,6 +278,9 @@ create policy "dueño" on projects for all
 | `CREDENTIALS_KEY` | solo servidor | **no** |
 | `CREDENTIALS_KEY_PREVIOUS` | solo durante una rotación | **no** |
 | `NEXT_PUBLIC_SITE_URL` | redirect de OAuth (en los Preview de Vercel se omite y se usa el host `*.vercel.app` del pedido, ver `site-url.ts`) | sí |
+| `REMINDERS_FROM` | remitente de los recordatorios (`Taller Freelancer <recordatorios@dominio>`); sin ella, Cuenta no muestra la sección | no |
+| `RESEND_API_KEY` (T30b) | solo servidor (envío de correos) | **no** |
+| `CRON_SECRET` (T30b) | solo servidor (protege la tarea diaria) | **no** |
 | `SENTRY_DSN` (fase 2) | servidor | no |
 
 - Google OAuth (client id y secret) se configura en el **dashboard de Supabase**, no en el repo.
