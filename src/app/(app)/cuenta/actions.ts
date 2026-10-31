@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { SESSION_EXPIRED, type ActionResult } from '@/lib/action-result';
-import { fieldErrorsOf, preferencesSchema } from '@/lib/schemas';
+import { fieldErrorsOf, preferencesSchema, reminderPrefsSchema } from '@/lib/schemas';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { removeOwnerThumbnails } from '@/lib/thumbnail-storage';
@@ -40,6 +40,37 @@ export async function savePreferences(
   // El saludo de la home y la sidebar leen el perfil.
   revalidatePath('/', 'layout');
   return { ok: true, data: { persisted: true } };
+}
+
+/**
+ * Guarda los recordatorios por correo (T30a): activados o no y con cuántos días de
+ * anticipación. Como las preferencias, RLS solo deja tocar el perfil propio.
+ */
+export async function saveReminders(input: unknown): Promise<ActionResult> {
+  const parsed = reminderPrefsSchema.safeParse(input);
+  if (!parsed.success) {
+    return {
+      ok: false,
+      error: 'Revisa los recordatorios.',
+      fieldErrors: fieldErrorsOf(parsed.error),
+    };
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return SESSION_EXPIRED;
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({ reminders_enabled: parsed.data.enabled, reminder_days: parsed.data.days })
+    .eq('id', user.id)
+    .select('id');
+  if (error || !data?.length) return { ok: false, error: 'No pudimos guardar los recordatorios.' };
+
+  revalidatePath('/cuenta');
+  return { ok: true, data: undefined };
 }
 
 /**

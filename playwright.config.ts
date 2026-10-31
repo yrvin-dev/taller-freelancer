@@ -27,6 +27,12 @@ export default defineConfig({
     url: `${BASE_URL}/login`,
     reuseExistingServer: false,
     timeout: 300_000,
+    // Con un remitente, /cuenta muestra los recordatorios (T30a) y axe, Lighthouse y la
+    // prueba de 44px también los auditan. No se envía nada: el envío es de T30b.
+    env: {
+      ...process.env,
+      REMINDERS_FROM: process.env.REMINDERS_FROM || 'Taller Freelancer <recordatorios@e2e.local>',
+    } as Record<string, string>,
   },
   projects: [
     { name: 'setup', testMatch: /auth\.setup\.ts/ },

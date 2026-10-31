@@ -256,6 +256,16 @@ Página pública `/privacidad`, que Google exige para publicar el login. Es text
 - El texto va en una `Card` `sm`: cada apartado es un `h2` (20px) seguido de párrafos y listas en el cuerpo normal; los enlaces usan el estilo de enlace global.
 - El login enlaza a la página desde la línea "Solo usamos tu nombre, correo y foto de perfil…".
 
+### 8.12 Recordatorios por correo en Cuenta (no está en el export) ✅ T30a
+
+Sección "Recordatorios por correo" en Cuenta, entre Preferencias y Tus datos. Solo aparece si el envío está configurado (`REMINDERS_FROM`). Se arma con piezas que ya existen:
+- Un párrafo en `neutral-700` que explica a qué correo se escribe (el correo en `text` y negrita), cuándo, y que es un solo correo al día.
+- `Seg` "Desactivados / Activados", con el mismo label pequeño que el `Seg` de Tema. Viene en **Desactivados**.
+- Con los recordatorios activados aparece un `Select` "Avisarme con" (3, 7 o 14 días de anticipación), de 260px como máximo.
+- Igual que el resto de Preferencias, sin botón: cada cambio se guarda al instante con un toast; si falla, vuelve al valor anterior.
+
+El correo en sí no lleva colores propios: un cliente de correo no lee `tokens.css` y la regla 1 prohíbe escribir hex fuera de ahí.
+
 ## 9. Reglas anti "look-IA"
 
 1. **Una sola card destacada por pantalla** (la de amarillo a naranja). El resto va en surface plano.

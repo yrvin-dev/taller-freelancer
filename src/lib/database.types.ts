@@ -182,6 +182,8 @@ export type Database = {
           created_at: string;
           display_name: string;
           id: string;
+          reminder_days: number;
+          reminders_enabled: boolean;
           theme: string;
         };
         ComputedFields: never;
@@ -193,6 +195,8 @@ export type Database = {
           created_at?: string;
           display_name: string;
           id: string;
+          reminder_days?: number;
+          reminders_enabled?: boolean;
           theme?: string;
         };
         Update: {
@@ -203,6 +207,8 @@ export type Database = {
           created_at?: string;
           display_name?: string;
           id?: string;
+          reminder_days?: number;
+          reminders_enabled?: boolean;
           theme?: string;
         };
         Relationships: [];
@@ -318,6 +324,49 @@ export type Database = {
           updated_at?: string;
         };
         Relationships: [];
+      };
+      reminder_log: {
+        Row: {
+          due_on: string;
+          id: string;
+          kind: string;
+          owner_id: string;
+          project_id: string;
+          sent_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          due_on: string;
+          id?: string;
+          kind: string;
+          owner_id: string;
+          project_id: string;
+          sent_at?: string;
+        };
+        Update: {
+          due_on?: string;
+          id?: string;
+          kind?: string;
+          owner_id?: string;
+          project_id?: string;
+          sent_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'reminder_log_project_id_owner_id_fkey';
+            columns: ['project_id', 'owner_id'];
+            isOneToOne: false;
+            referencedRelation: 'project_summary';
+            referencedColumns: ['id', 'owner_id'];
+          },
+          {
+            foreignKeyName: 'reminder_log_project_id_owner_id_fkey';
+            columns: ['project_id', 'owner_id'];
+            isOneToOne: false;
+            referencedRelation: 'projects';
+            referencedColumns: ['id', 'owner_id'];
+          },
+        ];
       };
     };
     Views: {
