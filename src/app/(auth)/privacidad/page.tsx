@@ -31,7 +31,7 @@ export default function PrivacyPage() {
             Volver
           </Link>
           <h1 className="m-0">Política de privacidad</h1>
-          <p className="m-0 text-sm text-neutral-700">Vigente desde el 29 de octubre de 2026.</p>
+          <p className="m-0 text-sm text-neutral-700">Vigente desde el 1 de noviembre de 2026.</p>
         </div>
 
         <Card>
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
             </Section>
 
             <Section title="Qué datos usamos">
-              <ul className="m-0 flex flex-col gap-1 pl-6">
+              <ul className="m-0 flex list-disc flex-col gap-1 pl-6">
                 <li>
                   <strong>De tu cuenta de Google:</strong> solo tu nombre, tu correo y tu foto de
                   perfil. Google no nos da tu contraseña ni acceso a tu Gmail, tu Drive ni a ningún
@@ -66,17 +66,21 @@ export default function PrivacyPage() {
 
             <Section title="Para qué los usamos">
               <p className="m-0">
-                Únicamente para identificarte y mostrarte tu espacio de trabajo. No vendemos ni
+                Únicamente para identificarte, mostrarte tu espacio de trabajo y, si activas los
+                recordatorios en Cuenta, avisarte por correo de entregas y vencimientos. Esos
+                correos vienen desactivados y los puedes apagar en cualquier momento. No vendemos ni
                 compartimos tus datos con nadie, no mostramos publicidad y no usamos herramientas de
                 analítica de terceros.
               </p>
             </Section>
 
             <Section title="Dónde se guardan y cómo se protegen">
-              <ul className="m-0 flex flex-col gap-1 pl-6">
+              <ul className="m-0 flex list-disc flex-col gap-1 pl-6">
                 <li>
                   Los datos se guardan en Supabase (base de datos y archivos), en servidores de São
-                  Paulo, Brasil. La app se sirve desde Vercel.
+                  Paulo, Brasil. La app se sirve desde Vercel. Los recordatorios se envían con
+                  Resend, que solo recibe tu correo, tu nombre y el aviso (nombre del proyecto y
+                  fecha).
                 </li>
                 <li>
                   Cada cuenta solo puede leer y modificar sus propios datos: la base de datos lo
@@ -90,7 +94,7 @@ export default function PrivacyPage() {
             </Section>
 
             <Section title="Tus derechos">
-              <ul className="m-0 flex flex-col gap-1 pl-6">
+              <ul className="m-0 flex list-disc flex-col gap-1 pl-6">
                 <li>
                   <strong>Llevarte tus datos:</strong> en Cuenta, &ldquo;Exportar datos&rdquo;
                   descarga todos tus proyectos en un archivo JSON.

@@ -84,3 +84,43 @@ ${items
 
   return { subject: subjectFor(reminders), html, text };
 }
+
+/**
+ * Correo de prueba (botón de Cuenta, T30b): lo que el usuario recibiría hoy, marcado como
+ * prueba. Si no hay nada pendiente, se lo dice en vez de inventar un aviso.
+ */
+export function buildTestReminderEmail({
+  name,
+  reminders,
+  leadDays,
+  siteUrl,
+}: {
+  name: string;
+  reminders: DueReminder[];
+  leadDays: number;
+  siteUrl: string;
+}): ReminderEmail {
+  const note = 'Este es un correo de prueba que pediste desde Cuenta en Taller Freelancer.';
+  if (reminders.length) {
+    const email = buildReminderEmail({ name, reminders, siteUrl });
+    return {
+      subject: `[Prueba] ${email.subject}`,
+      text: `${note}\n\n${email.text}`,
+      html: email.html.replace(/(<body[^>]*>)/, `$1\n  <p><em>${note}</em></p>`),
+    };
+  }
+  const nothing = `No tienes entregas ni vencimientos en los próximos ${leadDays} días, así que hoy no recibirías ningún recordatorio. Cuando haya algo, te llegará un correo como este.`;
+  return {
+    subject: '[Prueba] Recordatorios de Taller Freelancer',
+    text: `${note}\n\nHola, ${name}:\n\n${nothing}\n\n${siteUrl}`,
+    html: `<!doctype html>
+<html lang="es">
+<body style="font-family: Georgia, serif; line-height: 1.5; max-width: 560px; margin: 0 auto; padding: 24px;">
+  <p><em>${note}</em></p>
+  <p>Hola, ${escapeHtml(name)}:</p>
+  <p>${nothing}</p>
+  <p><a href="${siteUrl}">Abrir Taller Freelancer</a></p>
+</body>
+</html>`,
+  };
+}

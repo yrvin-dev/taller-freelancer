@@ -92,3 +92,10 @@ export const REMINDER_KIND_LABEL: Record<ReminderKind, string> = {
 /** Días de anticipación que se pueden elegir en Cuenta (mismo `check` que la base). */
 export const REMINDER_DAYS_OPTIONS = [3, 7, 14] as const;
 export type ReminderDays = (typeof REMINDER_DAYS_OPTIONS)[number];
+
+/** Lo que guarda la base (`smallint`) → anticipación válida; cualquier otro valor vuelve a 7. */
+export function toReminderDays(value: number | null | undefined): ReminderDays {
+  return (REMINDER_DAYS_OPTIONS as readonly number[]).includes(value ?? 0)
+    ? (value as ReminderDays)
+    : 7;
+}

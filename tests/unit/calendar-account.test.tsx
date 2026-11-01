@@ -44,11 +44,16 @@ vi.mock('@/lib/supabase/server', () => ({
   }),
 }));
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
-const account = vi.hoisted(() => ({ deleteAccount: vi.fn(), saveReminders: vi.fn() }));
+const account = vi.hoisted(() => ({
+  deleteAccount: vi.fn(),
+  saveReminders: vi.fn(),
+  sendTestReminder: vi.fn(),
+}));
 vi.mock('@/app/(app)/cuenta/actions', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/app/(app)/cuenta/actions')>()),
   deleteAccount: account.deleteAccount,
   saveReminders: account.saveReminders,
+  sendTestReminder: account.sendTestReminder,
 }));
 vi.mock('next/navigation', () => ({
   redirect: (url: string) => {
@@ -219,6 +224,46 @@ describe('/cuenta', () => {
         fireEvent.change(screen.getByLabelText('Avisarme con'), { target: { value: '14' } }),
       );
       expect(account.saveReminders).toHaveBeenLastCalledWith({ enabled: true, days: 14 });
+    });
+
+    it('con los recordatorios activados, se puede pedir un correo de prueba (T30b)', async () => {
+      vi.stubEnv('REMINDERS_FROM', 'Taller Freelancer <recordatorios@ejemplo.com>');
+      account.saveReminders.mockResolvedValue({ ok: true, data: undefined });
+      account.sendTestReminder.mockResolvedValue({ ok: true, data: undefined });
+      await renderAccount();
+      expect(
+        screen.queryByRole('button', { name: 'Enviar correo de prueba' }),
+      ).not.toBeInTheDocument();
+
+      await act(async () => fireEvent.click(screen.getByRole('radio', { name: 'Activados' })));
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: 'Enviar correo de prueba' })),
+      );
+      expect(account.sendTestReminder).toHaveBeenCalledTimes(1);
+      await waitFor(() =>
+        expect(screen.getByRole('status')).toHaveTextContent(
+          'Te enviamos un correo de prueba a yrvins@example.com',
+        ),
+      );
+    });
+
+    it('si el correo de prueba no sale (límite diario), avisa con el motivo', async () => {
+      vi.stubEnv('REMINDERS_FROM', 'Taller Freelancer <recordatorios@ejemplo.com>');
+      session.profile = { ...session.profile, remindersEnabled: true };
+      account.sendTestReminder.mockResolvedValue({
+        ok: false,
+        error: 'Ya enviaste 3 correos de prueba hoy. Vuelve a intentarlo mañana.',
+      });
+      await renderAccount();
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: 'Enviar correo de prueba' })),
+      );
+      await waitFor(() =>
+        expect(screen.getByRole('status')).toHaveTextContent(
+          'Ya enviaste 3 correos de prueba hoy.',
+        ),
+      );
+      session.profile = { ...session.profile, remindersEnabled: false };
     });
 
     it('si guardar falla, vuelve al valor anterior y avisa', async () => {

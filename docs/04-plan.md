@@ -258,12 +258,13 @@
 - **Archivos:** `next.config.ts`, `tests/unit/next-config.test.ts`, `README.md`, docs.
 - **Hecho cuando:** el login con Google funciona en `tallerfreelance.com` y la URL de Vercel lleva al dominio.
 
-### [ ] T30b · Recordatorios por correo: envío diario
-- **Objetivo:** dominio propio verificado en Resend, ruta `/api/cron/recordatorios` protegida con `CRON_SECRET` que Vercel Cron llama a las 8:00 de Lima, un correo por usuario con todo lo pendiente, `reminder_log`, botón "Enviar correo de prueba" y la política de privacidad actualizada.
-- **Hecho cuando:** llega un recordatorio real a tu correo desde producción y no se repite al día siguiente.
+### [x] T30b · Recordatorios por correo: envío diario
+- **Objetivo:** envío con Resend desde `recordatorios@tallerfreelance.com` (dominio verificado, DKIM/SPF/DMARC). Ruta `/api/cron/recordatorios` que Vercel Cron llama a las 13:00 UTC (8:00 de Lima), protegida con `CRON_SECRET`: un correo por usuario con todo lo pendiente; solo lo enviado queda en `reminder_log`. Botón "Enviar correo de prueba" en Cuenta (máximo 3 al día, contados en `reminder_test_sends`, migración 0007). Política de privacidad con Resend.
+- **Archivos:** `src/lib/{email,reminder-job,reminder-email,env-server,domain,auth-routes}.ts`, `src/app/api/cron/recordatorios/route.ts`, `src/app/(app)/cuenta/actions.ts`, `src/components/account/ReminderSettings.tsx`, `src/app/(auth)/privacidad/page.tsx`, `vercel.json`, `supabase/migrations/20261101000007_reminder_test_sends.sql`, tests.
+- **Hecho cuando:** el correo de prueba llega desde producción y la tarea diaria no repite avisos.
 
 ---
 
 ## Fase 2+ (fuera del MVP)
 
-Kanban por estado · adjuntos · ~~recordatorios por correo de entregas y dominios~~ (T30) · checklist de tandas por proyecto · integración con la API de Vercel para traer el estado del deploy · Sentry.
+Kanban por estado · adjuntos · ~~recordatorios por correo de entregas y dominios~~ (T30a/b) · checklist de tandas por proyecto · integración con la API de Vercel para traer el estado del deploy · Sentry.
