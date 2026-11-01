@@ -99,7 +99,7 @@ describe('correo de recordatorios', () => {
     days: 3,
     ...over,
   });
-  const SITE = 'https://taller-freelancer.vercel.app';
+  const SITE = 'https://tallerfreelance.com';
 
   it('describe cada aviso en castellano', () => {
     expect(describeReminder(reminder())).toBe('vence el 3 nov 2026 (en 3 días)');
