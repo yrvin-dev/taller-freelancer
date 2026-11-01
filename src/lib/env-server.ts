@@ -54,7 +54,8 @@ export function credentialsKeyring(): Keyring {
 
 /**
  * `service_role` de Supabase: se salta RLS. Solo para tareas de admin documentadas
- * (CLAUDE.md regla 5): borrar la cuenta propia (`deleteAccount`) y rotar la clave.
+ * (CLAUDE.md regla 5): borrar la cuenta propia (`deleteAccount`), rotar la clave y los
+ * recordatorios por correo (la tarea diaria y el límite del correo de prueba, T30b).
  */
 export function serviceRoleKey(): string {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -68,4 +69,18 @@ export function serviceRoleKey(): string {
  */
 export function remindersAvailable(): boolean {
   return Boolean(process.env.REMINDERS_FROM?.trim());
+}
+
+/** Envío de correos con Resend (T30b). Falla nombrando la variable, nunca su valor. */
+export function emailConfig(): { apiKey: string; from: string } {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const from = process.env.REMINDERS_FROM?.trim();
+  if (!apiKey) throw new Error('Falta RESEND_API_KEY en el entorno del servidor.');
+  if (!from) throw new Error('Falta REMINDERS_FROM en el entorno del servidor.');
+  return { apiKey, from };
+}
+
+/** Clave que Vercel Cron manda como `Authorization: Bearer …` (T30b). */
+export function cronSecret(): string | undefined {
+  return process.env.CRON_SECRET?.trim() || undefined;
 }

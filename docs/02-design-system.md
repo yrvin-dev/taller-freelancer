@@ -263,6 +263,7 @@ Sección "Recordatorios por correo" en Cuenta, entre Preferencias y Tus datos. S
 - `Seg` "Desactivados / Activados", con el mismo label pequeño que el `Seg` de Tema. Viene en **Desactivados**.
 - Con los recordatorios activados aparece un `Select` "Avisarme con" (3, 7 o 14 días de anticipación), de 260px como máximo.
 - Igual que el resto de Preferencias, sin botón: cada cambio se guarda al instante con un toast; si falla, vuelve al valor anterior.
+- ✅ T30b · Con los recordatorios activados, junto a "Avisarme con" hay un `Button` secundario **Enviar correo de prueba** (sin ícono: `icons.ts` no tiene uno de correo). Mientras envía dice "Enviando…" y queda en carga; al terminar, un toast con el correo de destino, o el motivo si no salió (por ejemplo, el límite de 3 al día).
 
 El correo en sí no lleva colores propios: un cliente de correo no lee `tokens.css` y la regla 1 prohíbe escribir hex fuera de ahí.
 

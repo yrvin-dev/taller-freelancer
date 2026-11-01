@@ -2,8 +2,9 @@ import { randomUUID } from 'node:crypto';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/lib/database.types';
 
-// Recordatorios por correo (T30a) contra la Supabase local: preferencias en el perfil
-// (migración 0006) y `reminder_log`, que el usuario solo puede leer.
+// Recordatorios por correo contra la Supabase local: preferencias en el perfil y
+// `reminder_log` (T30a); la tarea diaria y el correo de prueba con su límite (T30b).
+// El envío se simula: nunca sale un correo real.
 
 const url = process.env.SUPABASE_TEST_URL!;
 const anonKey = process.env.SUPABASE_TEST_ANON_KEY!;
@@ -17,10 +18,26 @@ vi.mock('@/lib/supabase/server', () => ({
 }));
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
 vi.mock('next/navigation', () => ({ redirect: vi.fn() }));
+const mail = vi.hoisted(() => ({ sent: [] as { to: string; subject: string }[], fail: false }));
+vi.mock('@/lib/email', () => ({
+  sendEmail: async (email: { to: string; subject: string }) => {
+    if (mail.fail) return { ok: false, error: 'Resend caído' };
+    mail.sent.push(email);
+    return { ok: true, id: `email_${mail.sent.length}` };
+  },
+}));
 
-const { saveReminders } = await import('@/app/(app)/cuenta/actions');
+const { saveReminders, sendTestReminder } = await import('@/app/(app)/cuenta/actions');
+const { runReminderJob } = await import('@/lib/reminder-job');
+const { sendEmail } = await import('@/lib/email');
+const { todayIn, toISODate } = await import('@/lib/format');
 
-type User = { id: string; client: SupabaseClient<Database>; projectId: string };
+type User = {
+  id: string;
+  email: string;
+  client: SupabaseClient<Database>;
+  projectId: string;
+};
 const createdUsers: string[] = [];
 
 async function newUser(): Promise<User> {
@@ -48,7 +65,7 @@ async function newUser(): Promise<User> {
     .select('id')
     .single();
   if (projectError) throw projectError;
-  return { id: data.user.id, client, projectId: project.id };
+  return { id: data.user.id, email, client, projectId: project.id };
 }
 
 async function profileOf(userId: string) {
@@ -66,9 +83,15 @@ let b: User;
 beforeAll(async () => {
   a = await newUser();
   b = await newUser();
+  vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', url);
+  vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', anonKey);
+  vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://tallerfreelance.com');
+  vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', process.env.SUPABASE_TEST_SERVICE_ROLE_KEY!);
+  vi.stubEnv('REMINDERS_FROM', 'Taller Freelancer <recordatorios@tallerfreelance.com>');
 });
 
 afterAll(async () => {
+  vi.unstubAllEnvs();
   for (const id of createdUsers) {
     const { error } = await admin.auth.admin.deleteUser(id);
     if (error) throw error;
@@ -147,5 +170,119 @@ describe('reminder_log', () => {
     expect(error).toBeNull();
     const { data } = await admin.from('reminder_log').select('id').eq('owner_id', a.id);
     expect(data).toEqual([]);
+  });
+});
+
+describe('tarea diaria (runReminderJob)', () => {
+  const today = todayIn();
+  const inDays = (n: number) =>
+    toISODate(new Date(today.getFullYear(), today.getMonth(), today.getDate() + n));
+  let c: User;
+  let off: User;
+  const run = () =>
+    runReminderJob({
+      admin,
+      send: sendEmail,
+      today,
+      siteUrl: 'https://tallerfreelance.com',
+      userIds: [c.id, off.id],
+    });
+
+  beforeAll(async () => {
+    c = await newUser();
+    off = await newUser();
+    // c: activados, 7 días; una entrega en 2 días y un dominio fuera de la ventana.
+    await admin.from('profiles').update({ reminders_enabled: true }).eq('id', c.id);
+    await admin
+      .from('projects')
+      .update({ name: 'Colegio Monteazul', delivery_date: inDays(2), domain_expires: inDays(20) })
+      .eq('id', c.projectId);
+    // off: desactivados (por defecto), con una entrega mañana.
+    await admin
+      .from('projects')
+      .update({ delivery_date: inDays(1) })
+      .eq('id', off.projectId);
+  });
+
+  beforeEach(() => {
+    mail.sent = [];
+    mail.fail = false;
+  });
+
+  it('si el envío falla, no anota nada y lo cuenta como fallido', async () => {
+    mail.fail = true;
+    expect(await run()).toEqual({ users: 1, sent: 0, failed: 1 });
+    const { data } = await admin.from('reminder_log').select('id').eq('owner_id', c.id);
+    expect(data).toEqual([]);
+  });
+
+  it('escribe solo a quien los activó, con lo que vence dentro de su anticipación', async () => {
+    expect(await run()).toEqual({ users: 1, sent: 1, failed: 0 });
+    expect(mail.sent).toHaveLength(1);
+    expect(mail.sent[0]).toMatchObject({
+      to: c.email,
+      subject: expect.stringMatching(
+        /^Entrega de Colegio Monteazul: se entrega el .* \(en 2 días\)$/,
+      ),
+    });
+    const { data } = await admin.from('reminder_log').select('kind, due_on').eq('owner_id', c.id);
+    expect(data).toEqual([{ kind: 'entrega', due_on: inDays(2) }]);
+  });
+
+  it('al día siguiente no repite el mismo aviso', async () => {
+    expect(await run()).toEqual({ users: 1, sent: 0, failed: 0 });
+    expect(mail.sent).toEqual([]);
+  });
+});
+
+describe('correo de prueba (sendTestReminder)', () => {
+  beforeEach(() => {
+    mail.sent = [];
+    mail.fail = false;
+  });
+
+  it('se envía al correo de la sesión y no toca reminder_log', async () => {
+    session.client = b.client;
+    const logOf = async () =>
+      (await admin.from('reminder_log').select('id').eq('owner_id', b.id)).data;
+    const before = await logOf();
+    expect(await sendTestReminder()).toEqual({ ok: true, data: undefined });
+    expect(mail.sent).toEqual([
+      expect.objectContaining({ to: b.email, subject: expect.stringMatching(/^\[Prueba\]/) }),
+    ]);
+    expect(await logOf()).toEqual(before);
+  });
+
+  it('como máximo 3 por día', async () => {
+    session.client = b.client;
+    expect((await sendTestReminder()).ok).toBe(true);
+    expect((await sendTestReminder()).ok).toBe(true);
+    expect(await sendTestReminder()).toMatchObject({
+      ok: false,
+      error: 'Ya enviaste 3 correos de prueba hoy. Vuelve a intentarlo mañana.',
+    });
+    expect(mail.sent).toHaveLength(2);
+  });
+
+  it('el usuario no puede leer ni borrar su registro de pruebas (el límite no se salta)', async () => {
+    const read = await b.client.from('reminder_test_sends').select('id');
+    expect(read.data ?? []).toEqual([]);
+    await b.client.from('reminder_test_sends').delete().eq('owner_id', b.id);
+    const { count } = await admin
+      .from('reminder_test_sends')
+      .select('id', { count: 'exact', head: true })
+      .eq('owner_id', b.id);
+    expect(count).toBe(3);
+  });
+
+  it('si el envío falla, no cuenta para el límite', async () => {
+    session.client = a.client;
+    mail.fail = true;
+    expect(await sendTestReminder()).toMatchObject({ ok: false });
+    const { count } = await admin
+      .from('reminder_test_sends')
+      .select('id', { count: 'exact', head: true })
+      .eq('owner_id', a.id);
+    expect(count).toBe(0);
   });
 });

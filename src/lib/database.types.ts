@@ -368,6 +368,25 @@ export type Database = {
           },
         ];
       };
+      reminder_test_sends: {
+        Row: {
+          id: string;
+          owner_id: string;
+          sent_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          id?: string;
+          owner_id: string;
+          sent_at?: string;
+        };
+        Update: {
+          id?: string;
+          owner_id?: string;
+          sent_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       project_summary: {

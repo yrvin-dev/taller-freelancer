@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { saveReminders } from '@/app/(app)/cuenta/actions';
+import { useState, useTransition } from 'react';
+import { saveReminders, sendTestReminder } from '@/app/(app)/cuenta/actions';
 import { useActionFeedback } from '@/components/ActionFeedback';
+import { Button } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
 import { Seg } from '@/components/ui/Seg';
 import { Select } from '@/components/ui/Select';
@@ -12,12 +13,22 @@ import type { ReminderPrefs } from '@/lib/schemas';
 
 /**
  * Recordatorios por correo en Cuenta (02 §8.12, T30a). Como el resto de Preferencias,
- * sin botón: cada cambio se guarda al instante. Si falla, vuelve al valor guardado.
+ * cada cambio se guarda al instante; si falla, vuelve al valor guardado. Con los
+ * recordatorios activados se puede pedir un correo de prueba (T30b).
  */
 export function ReminderSettings({ initial, email }: { initial: ReminderPrefs; email: string }) {
   const toast = useToast();
   const { fail } = useActionFeedback();
   const [prefs, setPrefs] = useState(initial);
+  const [sending, startSending] = useTransition();
+
+  function sendTest() {
+    startSending(async () => {
+      const result = await sendTestReminder();
+      if (!result.ok) return fail(result);
+      toast.show(`Te enviamos un correo de prueba a ${email}`, 'success');
+    });
+  }
 
   async function save(next: ReminderPrefs, message: string) {
     const previous = prefs;
@@ -58,24 +69,29 @@ export function ReminderSettings({ initial, email }: { initial: ReminderPrefs; e
         </div>
       </div>
       {prefs.enabled && (
-        <div className="max-w-[260px]">
-          <Field label="Avisarme con" htmlFor="reminder-days">
-            <Select
-              value={String(prefs.days)}
-              onChange={(e) =>
-                save(
-                  { ...prefs, days: Number(e.target.value) as ReminderDays },
-                  'Anticipación guardada',
-                )
-              }
-            >
-              {REMINDER_DAYS_OPTIONS.map((days) => (
-                <option key={days} value={days}>
-                  {days} días de anticipación
-                </option>
-              ))}
-            </Select>
-          </Field>
+        <div className="flex flex-wrap items-end gap-4">
+          <div className="w-full max-w-[260px]">
+            <Field label="Avisarme con" htmlFor="reminder-days">
+              <Select
+                value={String(prefs.days)}
+                onChange={(e) =>
+                  save(
+                    { ...prefs, days: Number(e.target.value) as ReminderDays },
+                    'Anticipación guardada',
+                  )
+                }
+              >
+                {REMINDER_DAYS_OPTIONS.map((days) => (
+                  <option key={days} value={days}>
+                    {days} días de anticipación
+                  </option>
+                ))}
+              </Select>
+            </Field>
+          </div>
+          <Button variant="secondary" loading={sending} onClick={sendTest}>
+            {sending ? 'Enviando…' : 'Enviar correo de prueba'}
+          </Button>
         </div>
       )}
     </div>
