@@ -35,7 +35,7 @@ function subjectFor(reminders: DueReminder[]): string {
 
 /**
  * Un solo correo por usuario con todo lo pendiente, lo más urgente primero. `siteUrl`
- * sin barra final (`https://taller-freelancer.vercel.app`).
+ * sin barra final (`https://tallerfreelance.com`).
  */
 export function buildReminderEmail({
   name,

@@ -253,6 +253,11 @@
 - **Archivos:** `supabase/migrations/20261031000006_reminders.sql`, `src/lib/{reminders,reminder-email,domain,schemas,profile,env-server}.ts`, `src/lib/data/profile.ts`, `src/app/(app)/cuenta/page.tsx` y `actions.ts`, `src/components/account/ReminderSettings.tsx`, `playwright.config.ts`, tests unitarios, de integración y e2e.
 - **Hecho cuando:** todo pasa y la sección se ve bien en Cuenta (light/dark, 375 y 1440).
 
+### [x] T31 · Dominio propio
+- **Objetivo:** la app pasa a `tallerfreelance.com` (Cloudflare → Vercel, DNS only). Supabase Production (Site URL y Redirect URLs), `NEXT_PUBLIC_SITE_URL` y Google Auth Platform (página principal, privacidad y dominio autorizado, verificado en Search Console) apuntan al dominio. `taller-freelancer.vercel.app` redirige con 308 (`next.config.ts`); los Preview no cambian.
+- **Archivos:** `next.config.ts`, `tests/unit/next-config.test.ts`, `README.md`, docs.
+- **Hecho cuando:** el login con Google funciona en `tallerfreelance.com` y la URL de Vercel lleva al dominio.
+
 ### [ ] T30b · Recordatorios por correo: envío diario
 - **Objetivo:** dominio propio verificado en Resend, ruta `/api/cron/recordatorios` protegida con `CRON_SECRET` que Vercel Cron llama a las 8:00 de Lima, un correo por usuario con todo lo pendiente, `reminder_log`, botón "Enviar correo de prueba" y la política de privacidad actualizada.
 - **Hecho cuando:** llega un recordatorio real a tu correo desde producción y no se repite al día siguiente.

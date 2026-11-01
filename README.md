@@ -4,7 +4,7 @@
 
 Dashboard para que un freelancer administre sus proyectos de cliente en un solo lugar: stack, accesos, enlaces, pagos, vencimientos de dominio y hosting, y una bitácora por proyecto. Entras con Google y cada usuario ve solo sus datos.
 
-**En producción:** [taller-freelancer.vercel.app](https://taller-freelancer.vercel.app). Se entra con Google y cada cuenta empieza vacía.
+**En producción:** [tallerfreelance.com](https://tallerfreelance.com). Se entra con Google y cada cuenta empieza vacía.
 
 ![Inicio en tema claro: entregas próximas, dominios por vencer y pagos pendientes](docs/screenshots/inicio-light.webp)
 
