@@ -263,6 +263,11 @@
 - **Archivos:** `src/lib/{email,reminder-job,reminder-email,env-server,domain,auth-routes}.ts`, `src/app/api/cron/recordatorios/route.ts`, `src/app/(app)/cuenta/actions.ts`, `src/components/account/ReminderSettings.tsx`, `src/app/(auth)/privacidad/page.tsx`, `vercel.json`, `supabase/migrations/20261101000007_reminder_test_sends.sql`, tests.
 - **Hecho cuando:** el correo de prueba llega desde producción y la tarea diaria no repite avisos.
 
+### [x] T32 · Dependencias menores (reemplaza el PR #17 de Dependabot)
+- **Objetivo:** el PR #17 estaba atrasado respecto de `main` (su CI probó una versión vieja). Las mismas 4 actualizaciones en una rama propia: `@hookform/resolvers` 6.0.1, `autoprefixer` 10.6.2, `postcss` 8.5.32 y `lighthouse` 13.6.0 (solo desarrollo; trae Puppeteer y otras dependencias, de ahí el lockfile grande).
+- **Archivos:** `package.json`, `pnpm-lock.yaml`.
+- **Hecho cuando:** pasan unitarios, integración y e2e, y `pnpm a11y:lighthouse` sigue en 100 en todas las rutas (72/72).
+
 ---
 
 ## Fase 2+ (fuera del MVP)
